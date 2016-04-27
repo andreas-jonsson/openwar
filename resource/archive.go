@@ -21,7 +21,7 @@ var (
 	macShareware = [...]byte{0x0, 0x0, 0x0, 0x19}
 )
 
-var Logger = os.Stdout
+var Logger io.Writer = os.Stdout
 
 type Archive struct {
 	Files map[string][]byte
