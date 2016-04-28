@@ -6,14 +6,13 @@ package main
 import (
 	"flag"
 	"fmt"
-	"image/png"
 	"io/ioutil"
 	"os"
-	"path"
 	"path/filepath"
 	"strings"
 
 	"github.com/andreas-jonsson/openwar/resource"
+	"github.com/andreas-jonsson/openwar/resource/debug"
 )
 
 const logo = `________                       __      __
@@ -57,45 +56,18 @@ func main() {
 		panic(err)
 	}
 
+	fmt.Println("Loading palettes...")
+	_, err = resource.LoadPal(arch)
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Println("Loading images...")
 	images, err := resource.LoadImg(arch)
 	if err != nil {
 		panic(err)
 	}
 
-	for file, image := range images {
-		outfile, err := os.Create(path.Join("img", file) + ".png")
-		if err != nil {
-			panic(err)
-		}
-		if err := png.Encode(outfile, image); err != nil {
-			panic(err)
-		}
-		outfile.Close()
-	}
-
-	var (
-		num        int
-		outputPath string
-	)
-
-	for {
-		outputPath = fmt.Sprintf("DATA%v.WAR", num)
-		if _, err = os.Stat(outputPath); err != nil {
-			os.Mkdir(outputPath, 0755)
-			break
-		}
-		num++
-	}
-
-	for fileName, data := range arch.Files {
-		fp, err := os.Create(path.Join(outputPath, fileName))
-		if err != nil {
-			panic(err)
-		}
-
-		if num, err := fp.Write(data); num != len(data) || err != nil {
-			panic(err)
-		}
-		fp.Close()
-	}
+	debug.DumpImg(images, "")
+	debug.DumpArchive(arch, "")
 }

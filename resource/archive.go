@@ -21,7 +21,10 @@ var (
 	macShareware = [...]byte{0x0, 0x0, 0x0, 0x19}
 )
 
-var Logger io.Writer = os.Stdout
+var (
+	ErrUnsupportedVersion           = errors.New("unsupported version")
+	Logger                io.Writer = os.Stdout
+)
 
 type Archive struct {
 	Files map[string][]byte
@@ -64,9 +67,9 @@ func OpenArchive(file string) (*Archive, error) {
 		case macShareware:
 			fmt.Fprintln(Logger, "Mac Shareware")
 		default:
-			return nil, errors.New("Unknown version!")
+			return nil, errors.New("unknown version")
 		}
-		return nil, errors.New("Unsupported version!")
+		return nil, ErrUnsupportedVersion
 	}
 
 	var numFiles uint32
@@ -76,7 +79,7 @@ func OpenArchive(file string) (*Archive, error) {
 	fmt.Fprintln(Logger, "Number of files in archive: ", numFiles)
 
 	if int(numFiles) != len(fileMap) {
-		return nil, errors.New("Table mapping mismatch!")
+		return nil, errors.New("table mapping mismatch")
 	}
 
 	fileTable := make([]uint32, numFiles)

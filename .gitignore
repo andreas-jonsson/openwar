@@ -23,6 +23,9 @@ _testmain.go
 *.test
 *.prof
 
-*.WAR
+img/**
+archive/**
 
 openwar
+
+*.WAR
