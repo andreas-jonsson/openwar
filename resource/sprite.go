@@ -92,6 +92,8 @@ func LoadSprites(arch *Archive, images Images) (Sprites, error) {
 				if uint32(frame.Width)*uint32(frame.Height) > nextOffset-frame.Offset {
 					fmt.Fprintln(Logger, "Compressed frame:", file, i)
 
+					// TODO Implement this.
+
 				} else {
 					img := image.NewPaletted(rect, palette.Plan9)
 					if err := binary.Read(bytes.NewReader(data[frame.Offset:]), binary.LittleEndian, &img.Pix); err != nil {
@@ -99,7 +101,7 @@ func LoadSprites(arch *Archive, images Images) (Sprites, error) {
 					}
 
 					sprite.Imgs[i] = img
-					images[fmt.Sprintf("%s,%d", file, i)] = img
+					images[fmt.Sprintf("%s,%d", file, i)] = Image{X: int(frame.X), Y: int(frame.Y), Data: img}
 				}
 			}
 

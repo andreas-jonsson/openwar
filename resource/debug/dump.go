@@ -24,7 +24,7 @@ func DumpImg(images resource.Images, p string) {
 		if err != nil {
 			panic(err)
 		}
-		if err := png.Encode(outfile, image); err != nil {
+		if err := png.Encode(outfile, image.Data); err != nil {
 			panic(err)
 		}
 		outfile.Close()

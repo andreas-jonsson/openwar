@@ -9,6 +9,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"time"
 
 	"github.com/andreas-jonsson/openwar/platform"
 	"github.com/andreas-jonsson/openwar/resource"
@@ -86,12 +87,6 @@ func main() {
 		panic(err)
 	}
 
-	fmt.Println("Loading cursors...")
-	_, err = resource.LoadCursors(arch, images)
-	if err != nil {
-		panic(err)
-	}
-
 	fmt.Println("Loading sprites...")
 	_, err = resource.LoadSprites(arch, images)
 	if err != nil {
@@ -123,6 +118,8 @@ func main() {
 		}
 
 		rend.Clear()
+
+		time.Sleep(16 * time.Millisecond)
 
 		rend.Present()
 	}

@@ -4,6 +4,9 @@
 /*
 Image files start with a 2 byte width and a 2 byte height, followed by the
 pixels of the image as 1 byte color indices from the corresponding palette.
+
+Cursors start with x and y offset, each as 2 byte integer, followed by the
+usual structure of an .IMG file.
 */
 
 package resource
@@ -16,21 +19,52 @@ import (
 	"path"
 )
 
-type Images map[string]*image.Paletted
+type (
+	Image struct {
+		X, Y int
+		Data *image.Paletted
+	}
+
+	Images map[string]Image
+)
 
 func LoadImages(arch *Archive) (Images, error) {
-	images := make(map[string]*image.Paletted)
+	images := make(map[string]Image)
 
 	for file, data := range arch.Files {
-		if path.Ext(file) == ".IMG" {
+		var (
+			err       error
+			x, y      uint16
+			imageData *image.Paletted
+		)
+
+		switch path.Ext(file) {
+		case ".IMG":
 			reader, _ := arch.Open(file)
 
-			img, err := loadImageData(reader, data[4:])
+			imageData, err = loadImageData(reader, data[4:])
 			if err != nil {
 				return images, err
 			}
+		case ".CUR":
+			reader, _ := arch.Open(file)
 
-			images[file] = img
+			if err = binary.Read(reader, binary.LittleEndian, &x); err != nil {
+				return images, err
+			}
+
+			if err = binary.Read(reader, binary.LittleEndian, &y); err != nil {
+				return images, err
+			}
+
+			imageData, err = loadImageData(reader, data[8:])
+			if err != nil {
+				return images, err
+			}
+		}
+
+		if imageData != nil {
+			images[file] = Image{X: int(x), Y: int(y), Data: imageData}
 		}
 	}
 
