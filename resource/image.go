@@ -18,14 +18,14 @@ import (
 
 type Images map[string]*image.Paletted
 
-func LoadImg(arch *Archive) (Images, error) {
+func LoadImages(arch *Archive) (Images, error) {
 	images := make(map[string]*image.Paletted)
 
 	for file, data := range arch.Files {
 		if path.Ext(file) == ".IMG" {
 			reader, _ := arch.Open(file)
 
-			img, err := loadImgData(reader, data[4:])
+			img, err := loadImageData(reader, data[4:])
 			if err != nil {
 				return images, err
 			}
@@ -37,7 +37,7 @@ func LoadImg(arch *Archive) (Images, error) {
 	return images, nil
 }
 
-func loadImgData(reader io.Reader, pix []byte) (*image.Paletted, error) {
+func loadImageData(reader io.Reader, pix []byte) (*image.Paletted, error) {
 	var (
 		img           *image.Paletted
 		width, height uint16

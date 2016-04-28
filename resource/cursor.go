@@ -14,38 +14,39 @@ import (
 	"path"
 )
 
-type Cursor struct {
-	X, Y int
-	Img  *image.Paletted
-}
+type (
+	Cursor struct {
+		X, Y uint16
+		Img  *image.Paletted
+	}
 
-type Cursors map[string]Cursor
+	Cursors map[string]Cursor
+)
 
-func LoadCur(arch *Archive, images Images) (Cursors, error) {
+func LoadCursors(arch *Archive, images Images) (Cursors, error) {
 	cursors := make(map[string]Cursor)
 
 	for file, data := range arch.Files {
 		if path.Ext(file) == ".CUR" {
-			var (
-				x, y uint16
-			)
-
 			reader, _ := arch.Open(file)
-			if err := binary.Read(reader, binary.LittleEndian, &x); err != nil {
+
+			var cursor Cursor
+			if err := binary.Read(reader, binary.LittleEndian, &cursor.X); err != nil {
 				return cursors, err
 			}
 
-			if err := binary.Read(reader, binary.LittleEndian, &y); err != nil {
+			if err := binary.Read(reader, binary.LittleEndian, &cursor.Y); err != nil {
 				return cursors, err
 			}
 
-			img, err := loadImgData(reader, data[8:])
+			img, err := loadImageData(reader, data[8:])
 			if err != nil {
 				return cursors, err
 			}
 
+			cursor.Img = img
 			images[file] = img
-			cursors[file] = Cursor{X: int(x), Y: int(y), Img: img}
+			cursors[file] = cursor
 		}
 	}
 
