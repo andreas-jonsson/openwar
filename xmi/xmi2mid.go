@@ -22,7 +22,7 @@ const (
 	GS127ToGS       = C.XMIDI_CONVERT_GS127_TO_GS
 )
 
-func ToMid(xmiFile []byte, convFlag uint32) ([]byte, error) {
+func ToMidi(xmiFile []byte, convFlag uint32) ([]byte, error) {
 	var (
 		outputData *C.uint8_t
 		outputSize C.uint32_t

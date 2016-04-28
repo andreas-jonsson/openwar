@@ -100,11 +100,6 @@ func main() {
 		panic(err)
 	}
 
-	debug.DumpImg(images, "")
-	debug.DumpArchive(arch, "")
-
-	arch.Close()
-
 	if err = platform.Init(); err != nil {
 		panic(err)
 	}
@@ -116,6 +111,22 @@ func main() {
 	}
 	defer rend.Shutdown()
 
+	player, err := platform.NewAudioPlayer()
+	if err != nil {
+		panic(err)
+	}
+	defer player.Shutdown()
+
+	fmt.Println("Loading audio...")
+	if err = loadAudio(arch, player); err != nil {
+		panic(err)
+	}
+
+	debug.DumpImg(images, "")
+	debug.DumpArchive(arch, "")
+	arch.Close()
+
+	fmt.Println("Running...")
 	for {
 		for event := platform.PollEvent(); event != nil; event = platform.PollEvent() {
 			switch event.(type) {
@@ -135,11 +146,27 @@ func main() {
 func convertXMI(arch *resource.Archive) error {
 	for file, data := range arch.Files {
 		if path.Ext(file) == ".XMI" {
-			mid, err := xmi.ToMid(data, xmi.NoConversion)
+			mid, err := xmi.ToMidi(data, xmi.NoConversion)
 			if err != nil {
 				return err
 			}
 			arch.Files[file] = mid
+		}
+	}
+	return nil
+}
+
+func loadAudio(arch *resource.Archive, player platform.AudioPlayer) error {
+	for file, data := range arch.Files {
+		switch path.Ext(file) {
+		case ".XMI":
+			if err := player.LoadMusic(file, data); err != nil {
+				return err
+			}
+		case ".VOC", ".WAV":
+			if err := player.LoadSound(file, data); err != nil {
+				return err
+			}
 		}
 	}
 	return nil
