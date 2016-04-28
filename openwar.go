@@ -7,6 +7,7 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"path"
 	"path/filepath"
 	"strings"
 	"time"
@@ -14,6 +15,7 @@ import (
 	"github.com/andreas-jonsson/openwar/platform"
 	"github.com/andreas-jonsson/openwar/resource"
 	"github.com/andreas-jonsson/openwar/resource/debug"
+	"github.com/andreas-jonsson/openwar/xmi"
 )
 
 const versionString = "0.0.1"
@@ -93,6 +95,11 @@ func main() {
 		panic(err)
 	}
 
+	fmt.Println("Converting XMI...")
+	if err = convertXMI(arch); err != nil {
+		panic(err)
+	}
+
 	debug.DumpImg(images, "")
 	debug.DumpArchive(arch, "")
 
@@ -123,4 +130,17 @@ func main() {
 
 		rend.Present()
 	}
+}
+
+func convertXMI(arch *resource.Archive) error {
+	for file, data := range arch.Files {
+		if path.Ext(file) == ".XMI" {
+			mid, err := xmi.ToMid(data, xmi.NoConversion)
+			if err != nil {
+				return err
+			}
+			arch.Files[file] = mid
+		}
+	}
+	return nil
 }

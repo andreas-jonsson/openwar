@@ -12,7 +12,7 @@ import (
 	"github.com/veandco/go-sdl2/sdl"
 )
 
-type sdlRender struct {
+type sdlRenderer struct {
 	window           *sdl.Window
 	backBuffer       *image.RGBA
 	internalHWBuffer *sdl.Texture
@@ -21,7 +21,7 @@ type sdlRender struct {
 
 func NewRenderer(w, h int, data ...interface{}) (Renderer, error) {
 	var (
-		r   sdlRender
+		r   sdlRenderer
 		err error
 	)
 
@@ -49,27 +49,27 @@ func NewRenderer(w, h int, data ...interface{}) (Renderer, error) {
 	return &r, nil
 }
 
-func (p *sdlRender) Clear() {
+func (p *sdlRenderer) Clear() {
 	p.internalRenderer.Clear()
 	draw.Draw(p.backBuffer, p.backBuffer.Bounds(), &image.Uniform{color.RGBA{0, 0, 0, 255}}, image.ZP, draw.Src)
 }
 
-func (p *sdlRender) Present() {
+func (p *sdlRenderer) Present() {
 	p.internalHWBuffer.Update(nil, unsafe.Pointer(&p.backBuffer.Pix[0]), p.backBuffer.Stride)
 	p.internalRenderer.Copy(p.internalHWBuffer, nil, nil)
 	p.internalRenderer.Present()
 }
 
-func (p *sdlRender) Shutdown() {
+func (p *sdlRenderer) Shutdown() {
 	p.window.Destroy()
 	p.internalHWBuffer.Destroy()
 	p.internalRenderer.Destroy()
 }
 
-func (p *sdlRender) BackBuffer() draw.Image {
+func (p *sdlRenderer) BackBuffer() draw.Image {
 	return p.backBuffer
 }
 
-func (p *sdlRender) Blit(src image.Image, sp image.Point) {
+func (p *sdlRenderer) Blit(src image.Image, sp image.Point) {
 	draw.Draw(p.backBuffer, p.backBuffer.Bounds(), src, sp, draw.Src)
 }
