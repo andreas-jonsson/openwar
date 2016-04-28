@@ -1,6 +1,23 @@
 /* Any copyright is dedicated to the Public Domain.
  * http://creativecommons.org/publicdomain/zero/1.0/ */
 
+/*
+The header is pretty short and consists of an Archive ID and the number of file entries
+that are to be found in the File Table. PreRelease archives to not feature the Archive ID.
+
+The File Table holds offsets to all the files that are stored inside the Data section. Files
+are not named, so their index in the File Table has to be fixed, which means that stripped
+down versions of the game have placeholders. Placeholders in the PreRelease demos and
+DOS Shareware are FF FF FF FF and under Mac they are 00 00 00 00. In the retail version
+they are marked by a follwing offset just 1 greater.
+
+Each non-placeholder data entry begins with its unpacked size as a 4 byte integer. If
+the third highest bit (20 00 00 00) is set, the file is compressed, else it’s just raw data.
+filesize & 0x1FFFFFFF returns the correct size of the file. The length of the data
+is calculated as offsets[n+1]-offsets[n]-4, using the size of the .WAR file as final
+offset, as usual.
+*/
+
 package resource
 
 import (
@@ -10,6 +27,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"os"
 	"path"
 )
@@ -22,8 +40,8 @@ var (
 )
 
 var (
-	ErrUnsupportedVersion           = errors.New("unsupported version")
-	Logger                io.Writer = os.Stdout
+	ErrUnsupportedVersion = errors.New("unsupported version")
+	Logger                = ioutil.Discard
 )
 
 type Archive struct {
@@ -176,6 +194,12 @@ func readShort(reader io.Reader) (uint16, error) {
 	}
 	return short, nil
 }
+
+/*
+The DOS version archives of WarCraft are compressed using a sort of LZ compression.
+This means that at compression time, the algorithm checked if there was the exact same
+sequence of bytes previously written, as is being written now.
+*/
 
 func uncompressData(reader io.Reader, fileSize, dataSize int) ([]byte, error) {
 	const bufferSize = 4096

@@ -6,7 +6,6 @@ package main
 import (
 	"flag"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strings"
@@ -48,9 +47,6 @@ func main() {
 		return
 	}
 
-	// No logging.
-	resource.Logger = ioutil.Discard
-
 	arch, err := resource.OpenArchive(warFile[0])
 	if err != nil {
 		panic(err)
@@ -64,6 +60,12 @@ func main() {
 
 	fmt.Println("Loading images...")
 	images, err := resource.LoadImg(arch)
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Println("Loading cursors...")
+	_, err = resource.LoadCur(arch, images)
 	if err != nil {
 		panic(err)
 	}
