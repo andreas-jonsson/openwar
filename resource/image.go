@@ -29,7 +29,7 @@ type (
 )
 
 func LoadImages(arch *Archive) (Images, error) {
-	images := make(map[string]Image)
+	images := make(Images)
 
 	for file, data := range arch.Files {
 		var (

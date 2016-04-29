@@ -38,7 +38,7 @@ type (
 )
 
 func LoadSprites(arch *Archive, images Images) (Sprites, error) {
-	sprites := make(map[string]Sprite)
+	sprites := make(Sprites)
 
 	for file, data := range arch.Files {
 		if path.Ext(file) == ".SPR" {

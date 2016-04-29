@@ -73,7 +73,6 @@ func main() {
 		return
 	}
 
-	resource.LoadUnsupported = true
 	arch, err := resource.OpenArchive(warFile[0])
 	if err != nil {
 		panic(err)

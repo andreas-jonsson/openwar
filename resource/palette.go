@@ -23,7 +23,7 @@ import (
 type Palettes map[string]color.Palette
 
 func LoadPalettes(arch *Archive) (Palettes, error) {
-	palettes := make(map[string]color.Palette)
+	palettes := make(Palettes)
 
 	for file, data := range arch.Files {
 		if path.Ext(file) == ".PAL" {
