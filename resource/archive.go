@@ -42,6 +42,7 @@ var (
 var (
 	ErrUnsupportedVersion = errors.New("unsupported version")
 	Logger                = ioutil.Discard
+	LoadUnsupported       = false
 )
 
 type Archive struct {
@@ -146,6 +147,10 @@ func OpenArchive(file string) (*Archive, error) {
 
 		fileName := fileMap[i]
 		if fileName == "" {
+			if !LoadUnsupported {
+				continue
+			}
+
 			fmt.Fprintf(Logger, "Warning: Filename table is incomplete! Missing file with id %v.\n", i)
 			fileName = fmt.Sprintf("%s.%v", path.Base(fp.Name()), i)
 		}

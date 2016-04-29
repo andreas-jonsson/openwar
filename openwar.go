@@ -126,6 +126,10 @@ func main() {
 	debug.DumpArchive(arch, "")
 	arch.Close()
 
+	//if err = player.PlayMusic("MUSIC01.XMI", 0, 0); err != nil {
+	//	panic(err)
+	//}
+
 	fmt.Println("Running...")
 	for {
 		for event := platform.PollEvent(); event != nil; event = platform.PollEvent() {
@@ -164,7 +168,7 @@ func loadAudio(arch *resource.Archive, player platform.AudioPlayer) error {
 				return err
 			}
 		case ".VOC", ".WAV":
-			if err := player.LoadSound(file, data); err != nil {
+			if _, err := player.LoadSound(file, data); err != nil {
 				return err
 			}
 		}
