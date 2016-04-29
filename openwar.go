@@ -6,11 +6,12 @@ package main
 import (
 	"flag"
 	"fmt"
+	"image"
+	"image/color"
 	"os"
 	"path"
 	"path/filepath"
 	"strings"
-	"time"
 
 	"github.com/andreas-jonsson/openwar/platform"
 	"github.com/andreas-jonsson/openwar/resource"
@@ -72,13 +73,14 @@ func main() {
 		return
 	}
 
+	resource.LoadUnsupported = true
 	arch, err := resource.OpenArchive(warFile[0])
 	if err != nil {
 		panic(err)
 	}
 
 	fmt.Println("Loading palettes...")
-	_, err = resource.LoadPalettes(arch)
+	palettes, err := resource.LoadPalettes(arch)
 	if err != nil {
 		panic(err)
 	}
@@ -122,7 +124,9 @@ func main() {
 		panic(err)
 	}
 
-	debug.DumpImg(images, "")
+	pal := combinePalettes(palettes["FOREST.PAL"], palettes["SPRITE0.PAL"])
+
+	debug.DumpImg(images, pal, "")
 	debug.DumpArchive(arch, "")
 	arch.Close()
 
@@ -141,7 +145,10 @@ func main() {
 
 		rend.Clear()
 
-		time.Sleep(16 * time.Millisecond)
+		img := images["TITLE.IMG"]
+		pal := palettes["TITLE.PAL"]
+
+		rend.BlitPal(img.Data, pal, image.Point{})
 
 		rend.Present()
 	}
@@ -174,4 +181,15 @@ func loadAudio(arch *resource.Archive, player platform.AudioPlayer) error {
 		}
 	}
 	return nil
+}
+
+func combinePalettes(low, high color.Palette) color.Palette {
+	if len(low)+len(high) != 256 {
+		return nil
+	}
+
+	pal := make([]color.Color, 256)
+	copy(pal, low)
+	copy(pal[128:], high)
+	return pal
 }

@@ -5,6 +5,7 @@ package platform
 
 import (
 	"image"
+	"image/color"
 	"image/draw"
 )
 
@@ -14,4 +15,5 @@ type Renderer interface {
 	Shutdown()
 	BackBuffer() draw.Image
 	Blit(src image.Image, sp image.Point)
+	BlitPal(src *image.Paletted, pal color.Palette, sp image.Point)
 }

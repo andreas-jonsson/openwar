@@ -73,3 +73,12 @@ func (p *sdlRenderer) BackBuffer() draw.Image {
 func (p *sdlRenderer) Blit(src image.Image, sp image.Point) {
 	draw.Draw(p.backBuffer, p.backBuffer.Bounds(), src, sp, draw.Src)
 }
+
+func (p *sdlRenderer) BlitPal(src *image.Paletted, pal color.Palette, sp image.Point) {
+	orgPal := src.Palette
+	src.Palette = pal
+
+	draw.Draw(p.backBuffer, p.backBuffer.Bounds(), src, sp, draw.Src)
+
+	src.Palette = orgPal
+}

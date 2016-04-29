@@ -4,6 +4,7 @@
 package debug
 
 import (
+	"image/color"
 	"image/png"
 	"os"
 	"path"
@@ -11,7 +12,7 @@ import (
 	"github.com/andreas-jonsson/openwar/resource"
 )
 
-func DumpImg(images resource.Images, p string) {
+func DumpImg(images resource.Images, pal color.Palette, p string) {
 	outputPath := "img"
 	if p != "" {
 		outputPath = p
@@ -24,10 +25,16 @@ func DumpImg(images resource.Images, p string) {
 		if err != nil {
 			panic(err)
 		}
+
+		orgPal := image.Data.Palette
+		image.Data.Palette = pal
+
 		if err := png.Encode(outfile, image.Data); err != nil {
 			panic(err)
 		}
+
 		outfile.Close()
+		image.Data.Palette = orgPal
 	}
 }
 
