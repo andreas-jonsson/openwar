@@ -13,10 +13,10 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/andreas-jonsson/openwar/platform"
-	"github.com/andreas-jonsson/openwar/resource"
-	"github.com/andreas-jonsson/openwar/resource/debug"
-	"github.com/andreas-jonsson/openwar/xmi"
+	"github.com/openwar-hq/openwar/platform"
+	"github.com/openwar-hq/openwar/resource"
+	"github.com/openwar-hq/openwar/resource/debug"
+	"github.com/openwar-hq/openwar/xmi"
 )
 
 const versionString = "0.0.1"
