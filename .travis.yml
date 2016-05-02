@@ -3,8 +3,9 @@ go:
  - tip
 
 before_install:
- - sudo apt-get install libsdl2-dev
- - sudo apt-get install libsdl2-mixer-dev
+ - sudo apt-get -qq update
+ - sudo apt-get install -y libsdl2-dev
+ - sudo apt-get install -y libsdl2-mixer-dev
 
 install:
  - go get github.com/veandco/go-sdl2/sdl

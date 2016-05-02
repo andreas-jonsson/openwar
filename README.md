@@ -1,6 +1,6 @@
 # OpenWar
 
-[![Build](https://drone.io/github.com/andreas-jonsson/openwar/status.png)](https://drone.io/github.com/andreas-jonsson/openwar/latest)
+[![Build](https://travis-ci.org/openwar-hq/openwar.svg?branch=master)](https://travis-ci.org/openwar-hq/openwar)
 [![Chat](https://img.shields.io/badge/chat-GITTER-blue.svg)](https://gitter.im/openwar-hq/openwar)
 [![Bountysource](https://api.bountysource.com/badge/team?team_id=144507)](https://www.bountysource.com/teams/openwar)
 
