@@ -9,7 +9,7 @@ import (
 	"os"
 	"path"
 
-	"github.com/andreas-jonsson/openwar/resource"
+	"github.com/openwar-hq/openwar/resource"
 )
 
 func DumpImg(images resource.Images, pal color.Palette, p string) {

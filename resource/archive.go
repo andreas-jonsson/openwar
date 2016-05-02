@@ -157,10 +157,12 @@ func OpenArchive(file string) (*Archive, error) {
 
 		var data []byte
 		if isCompressed {
+			fmt.Fprintf(Logger, "Compressed entry: #%v %s\n", i, fileName)
 			if data, err = uncompressData(fp, int(size), int(dataLength)); err != nil {
 				return nil, err
 			}
 		} else {
+			fmt.Fprintf(Logger, "Uncompressed entry: #%v %s\n", i, fileName)
 			data = make([]byte, size)
 			if num, err := fp.Read(data); num != len(data) || err != nil {
 				return nil, err

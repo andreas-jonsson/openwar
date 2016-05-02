@@ -73,6 +73,7 @@ func main() {
 		return
 	}
 
+	//resource.Logger = os.Stdout
 	arch, err := resource.OpenArchive(warFile[0])
 	if err != nil {
 		panic(err)
@@ -92,6 +93,12 @@ func main() {
 
 	fmt.Println("Loading sprites...")
 	_, err = resource.LoadSprites(arch, images)
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Println("Loading tilesets...")
+	_, err = resource.LoadTilesets(arch, images, palettes)
 	if err != nil {
 		panic(err)
 	}
