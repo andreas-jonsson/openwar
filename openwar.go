@@ -6,13 +6,13 @@ package main
 import (
 	"flag"
 	"fmt"
-	"image"
 	"image/color"
 	"os"
 	"path"
 	"path/filepath"
 	"strings"
 
+	"github.com/openwar-hq/openwar/game"
 	"github.com/openwar-hq/openwar/platform"
 	"github.com/openwar-hq/openwar/resource"
 	"github.com/openwar-hq/openwar/resource/debug"
@@ -92,13 +92,13 @@ func main() {
 	}
 
 	fmt.Println("Loading sprites...")
-	_, err = resource.LoadSprites(arch, images)
+	sprites, err := resource.LoadSprites(arch, images)
 	if err != nil {
 		panic(err)
 	}
 
 	fmt.Println("Loading tilesets...")
-	_, err = resource.LoadTilesets(arch, images, palettes)
+	tilesets, err := resource.LoadTilesets(arch, images, palettes)
 	if err != nil {
 		panic(err)
 	}
@@ -113,7 +113,7 @@ func main() {
 	}
 	defer platform.Shutdown()
 
-	rend, err := platform.NewRenderer(640, 360, "OpenWar")
+	rend, err := platform.NewRenderer(640, 480, "OpenWar")
 	if err != nil {
 		panic(err)
 	}
@@ -140,23 +140,27 @@ func main() {
 	//	panic(err)
 	//}
 
-	fmt.Println("Running...")
-	for {
-		for event := platform.PollEvent(); event != nil; event = platform.PollEvent() {
-			switch event.(type) {
-			case *platform.QuitEvent:
-				return
-			}
+	res := resource.Resources{Palettes: palettes, Images: images, Sprites: sprites, Tilesets: tilesets}
+	g := game.NewGame(rend, player, res)
+	defer g.Shutdown()
+
+	if err := g.SwitchState("menu"); err != nil {
+		panic(err)
+	}
+
+	for g.Running() {
+		currentState := g.CurrentState()
+		rend.Clear()
+		if err := currentState.Update(); err != nil {
+			panic(err)
 		}
 
-		rend.Clear()
-
-		img := images["TITLE.IMG"]
-		pal := palettes["TITLE.PAL"]
-
-		rend.BlitPal(img.Data, pal, image.Point{})
-
-		rend.Present()
+		if currentState == g.CurrentState() {
+			if err := currentState.Render(); err != nil {
+				panic(err)
+			}
+			rend.Present()
+		}
 	}
 }
 

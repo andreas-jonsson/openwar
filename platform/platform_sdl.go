@@ -14,10 +14,14 @@ var keyMapping = map[sdl.Keycode]int{
 	sdl.K_DOWN:  KEY_DOWN,
 	sdl.K_LEFT:  KEY_LEFT,
 	sdl.K_RIGHT: KEY_RIGHT,
+	sdl.K_SPACE: KEY_SPACE,
+}
+
+func init() {
+	runtime.LockOSThread()
 }
 
 func Init() error {
-	runtime.LockOSThread()
 	return sdl.Init(sdl.INIT_EVERYTHING)
 }
 

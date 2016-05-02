@@ -8,6 +8,7 @@ const (
 	KEY_DOWN
 	KEY_LEFT
 	KEY_RIGHT
+	KEY_SPACE
 )
 
 type (

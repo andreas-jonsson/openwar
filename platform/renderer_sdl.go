@@ -29,7 +29,7 @@ func NewRenderer(w, h int, data ...interface{}) (Renderer, error) {
 	if err != nil {
 		panic(err)
 	}
-	r.backBuffer = image.NewRGBA(image.Rect(0, 0, 640, 300))
+	r.backBuffer = image.NewRGBA(image.Rect(0, 0, 320, 200))
 
 	renderer, err := sdl.CreateRenderer(r.window, -1, sdl.RENDERER_ACCELERATED)
 	if err != nil {
@@ -38,15 +38,26 @@ func NewRenderer(w, h int, data ...interface{}) (Renderer, error) {
 	r.internalRenderer = renderer
 
 	sdl.SetHint(sdl.HINT_RENDER_SCALE_QUALITY, "linear")
-	renderer.SetLogicalSize(640, 360)
+	renderer.SetLogicalSize(320, 240)
 	renderer.SetDrawColor(0, 0, 0, 255)
 
-	r.internalHWBuffer, err = renderer.CreateTexture(sdl.PIXELFORMAT_ABGR8888, sdl.TEXTUREACCESS_STREAMING, 640, 300)
+	r.internalHWBuffer, err = renderer.CreateTexture(sdl.PIXELFORMAT_ABGR8888, sdl.TEXTUREACCESS_STREAMING, 320, 200)
 	if err != nil {
 		return nil, err
 	}
 
 	return &r, nil
+}
+
+func (p *sdlRenderer) ToggleFullscreen() {
+	isFullscreen := (p.window.GetFlags() & sdl.WINDOW_FULLSCREEN) != 0
+	if isFullscreen {
+		p.window.SetFullscreen(0)
+		sdl.ShowCursor(1)
+	} else {
+		p.window.SetFullscreen(sdl.WINDOW_FULLSCREEN_DESKTOP)
+		sdl.ShowCursor(0)
+	}
 }
 
 func (p *sdlRenderer) Clear() {
