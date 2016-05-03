@@ -8,9 +8,9 @@ import (
 	"time"
 	"unsafe"
 
-	"github.com/andreas-jonsson/go-sdl2/sdl"
-	"github.com/andreas-jonsson/go-sdl2/sdl_mixer"
-	"github.com/openwar-hq/openwar/xmi"
+	"github.com/openwar-hq/openwar/platform/xmi"
+	"github.com/veandco/go-sdl2/sdl"
+	"github.com/veandco/go-sdl2/sdl_mixer"
 )
 
 const MaxVolume = mix.MAX_VOLUME
