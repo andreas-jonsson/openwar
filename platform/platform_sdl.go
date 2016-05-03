@@ -6,7 +6,7 @@ package platform
 import (
 	"runtime"
 
-	"github.com/veandco/go-sdl2/sdl"
+	"github.com/andreas-jonsson/go-sdl2/sdl"
 )
 
 var keyMapping = map[sdl.Keycode]int{

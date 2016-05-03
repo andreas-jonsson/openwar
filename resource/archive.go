@@ -56,11 +56,6 @@ func (a *Archive) Open(file string) (io.Reader, error) {
 	return nil, os.ErrNotExist
 }
 
-func (a *Archive) Close() {
-	// No real need to close anything...
-	a.Files = nil
-}
-
 func OpenArchive(file string) (*Archive, error) {
 	fp, err := os.Open(file)
 	if err != nil {

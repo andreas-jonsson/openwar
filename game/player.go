@@ -5,20 +5,11 @@ package game
 
 import "image/color"
 
-type (
-	playerRace      int
-	environmentType int
-)
+type playerRace int
 
 const (
 	humanRace playerRace = iota
 	orcRace
-)
-
-const (
-	environmentForest environmentType = iota
-	environmentSwamp
-	environmentDungeon
 )
 
 type player struct {

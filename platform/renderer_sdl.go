@@ -9,7 +9,7 @@ import (
 	"image/draw"
 	"unsafe"
 
-	"github.com/veandco/go-sdl2/sdl"
+	"github.com/andreas-jonsson/go-sdl2/sdl"
 )
 
 type sdlRenderer struct {

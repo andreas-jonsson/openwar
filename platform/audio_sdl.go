@@ -5,12 +5,12 @@ package platform
 
 import (
 	"errors"
-	"os"
 	"time"
 	"unsafe"
 
-	"github.com/veandco/go-sdl2/sdl"
-	"github.com/veandco/go-sdl2/sdl_mixer"
+	"github.com/andreas-jonsson/go-sdl2/sdl"
+	"github.com/andreas-jonsson/go-sdl2/sdl_mixer"
+	"github.com/openwar-hq/openwar/xmi"
 )
 
 const MaxVolume = mix.MAX_VOLUME
@@ -55,11 +55,41 @@ func NewAudioPlayer() (AudioPlayer, error) {
 		sounds: make(map[string]*sdlSound),
 	}
 
-	wd, _ := os.Getwd()
-	os.Setenv("TIMIDITY_CFG", wd+"data/timidity/timidity.cfg")
-
-	if err := mix.OpenAudio(mix.DEFAULT_FREQUENCY, mix.DEFAULT_FORMAT, 2, mix.DEFAULT_CHUNKSIZE); err != nil {
+	if err := mix.OpenAudio(mix.DEFAULT_FREQUENCY, mix.DEFAULT_FORMAT, mix.DEFAULT_CHANNELS, mix.DEFAULT_CHUNKSIZE); err != nil {
 		return player, err
+	}
+
+	hasTimidity := false
+	for i := mix.GetNumMusicDecoders(); -1 < i; i-- {
+		if mix.GetMusicDecoder(i) == "TIMIDITY" {
+			hasTimidity = true
+			break
+		}
+	}
+
+	if !hasTimidity {
+		return player, errors.New("missing timidity music decoder")
+	}
+
+	hasWave := false
+	hasVoc := false
+	for i := mix.GetNumChunkDecoders(); -1 < i; i-- {
+		switch mix.GetChunkDecoder(i) {
+		case "VOC":
+			hasVoc = true
+			break
+		case "WAVE":
+			hasWave = true
+			break
+		}
+	}
+
+	if !hasVoc {
+		return player, errors.New("missing voc sound decoder")
+	}
+
+	if !hasWave {
+		return player, errors.New("missing wave sound decoder")
 	}
 
 	return player, nil
@@ -117,8 +147,13 @@ func (player *sdlAudioPlayer) PlayMusic(name string, fade time.Duration, loops i
 }
 
 func (player *sdlAudioPlayer) LoadMusic(name string, data []byte) error {
-	rwops := sdl.RWFromMem(unsafe.Pointer(&data[0]), len(data))
-	mus, err := mix.LoadMUSType_RW(rwops, mix.MID, 0)
+	mid, err := xmi.ToMidi(data, xmi.NoConversion)
+	if err != nil {
+		return err
+	}
+
+	rwops := sdl.RWFromMem(unsafe.Pointer(&mid[0]), len(mid))
+	mus, err := mix.LoadMUS_RW(rwops, 0)
 	if err != nil {
 		return err
 	}

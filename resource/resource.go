@@ -8,4 +8,5 @@ type Resources struct {
 	Images   Images
 	Sprites  Sprites
 	Tilesets Tilesets
+	Archive  *Archive
 }

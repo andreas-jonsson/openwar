@@ -15,7 +15,6 @@ import (
 	"github.com/openwar-hq/openwar/platform"
 	"github.com/openwar-hq/openwar/resource"
 	"github.com/openwar-hq/openwar/resource/debug"
-	"github.com/openwar-hq/openwar/xmi"
 )
 
 const versionString = "0.0.1"
@@ -103,11 +102,6 @@ func main() {
 		panic(err)
 	}
 
-	fmt.Println("Converting XMI...")
-	if err = convertXMI(arch); err != nil {
-		panic(err)
-	}
-
 	if err = platform.Init(); err != nil {
 		panic(err)
 	}
@@ -134,13 +128,12 @@ func main() {
 
 	debug.DumpImg(images, pal, "")
 	debug.DumpArchive(arch, "")
-	arch.Close()
 
-	//if err = player.PlayMusic("MUSIC01.XMI", 0, 0); err != nil {
-	//	panic(err)
-	//}
+	if err = player.PlayMusic("MUSIC01.XMI", 0, 0); err != nil {
+		panic(err)
+	}
 
-	res := resource.Resources{Palettes: palettes, Images: images, Sprites: sprites, Tilesets: tilesets}
+	res := resource.Resources{Palettes: palettes, Images: images, Sprites: sprites, Tilesets: tilesets, Archive: arch}
 	g := game.NewGame(rend, player, res)
 	defer g.Shutdown()
 
@@ -162,19 +155,6 @@ func main() {
 			rend.Present()
 		}
 	}
-}
-
-func convertXMI(arch *resource.Archive) error {
-	for file, data := range arch.Files {
-		if path.Ext(file) == ".XMI" {
-			mid, err := xmi.ToMidi(data, xmi.NoConversion)
-			if err != nil {
-				return err
-			}
-			arch.Files[file] = mid
-		}
-	}
-	return nil
 }
 
 func loadAudio(arch *resource.Archive, player platform.AudioPlayer) error {
