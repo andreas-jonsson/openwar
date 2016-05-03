@@ -15,6 +15,8 @@ type Renderer interface {
 	Shutdown()
 	ToggleFullscreen()
 	BackBuffer() draw.Image
-	Blit(src image.Image, sp image.Point)
-	BlitPal(src *image.Paletted, pal color.Palette, sp image.Point)
+
+	BlitPaletted(dp image.Point, src *image.Paletted)
+	BlitImage(dp image.Point, src *image.Paletted, pal color.Palette)
+	Blit(dp image.Point, src *image.Paletted, sr image.Rectangle, pal color.Palette)
 }

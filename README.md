@@ -10,6 +10,9 @@ OpenWar is an alternative Warcraft: Orcs & Humans game engine. So unless you hav
 
 Since OpenWar is a different game engine, not all things will work 100% the same as they did in the original Warcraft, if you want the original unchanged Warcraft experience, you will still have to use the original game.
 
+![screenshot](/doc/screenshot1.png)
+![screenshot](/doc/screenshot2.png)
+
 ### Disclaimer
 
 OpenWar is *not* an official Blizzard product, its a Warcraft: Orcs & Humans modification, by Warcraft fans for Warcraft fans. You need a copy of the original Warcraft: Orcs & Humans MS-DOS version to make use of OpenWar. *Warcraft* is a registered trademark of [Blizzard Entertainment](https://www.blizzard.com).

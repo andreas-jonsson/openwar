@@ -81,15 +81,23 @@ func (p *sdlRenderer) BackBuffer() draw.Image {
 	return p.backBuffer
 }
 
-func (p *sdlRenderer) Blit(src image.Image, sp image.Point) {
-	draw.Draw(p.backBuffer, p.backBuffer.Bounds(), src, sp, draw.Src)
+func (p *sdlRenderer) BlitPaletted(dp image.Point, src *image.Paletted) {
+	p.BlitImage(dp, src, src.Palette)
 }
 
-func (p *sdlRenderer) BlitPal(src *image.Paletted, pal color.Palette, sp image.Point) {
-	orgPal := src.Palette
-	src.Palette = pal
+func (p *sdlRenderer) BlitImage(dp image.Point, src *image.Paletted, pal color.Palette) {
+	p.Blit(dp, src, src.Bounds(), pal)
+}
 
-	draw.Draw(p.backBuffer, p.backBuffer.Bounds(), src, sp, draw.Src)
+func (p *sdlRenderer) Blit(dp image.Point, src *image.Paletted, sr image.Rectangle, pal color.Palette) {
+	min := sr.Min
+	max := sr.Max
 
-	src.Palette = orgPal
+	for y, dy := min.Y, 0; y < max.Y; y++ {
+		for x, dx := min.X, 0; x < max.X; x++ {
+			p.backBuffer.Set(dx+dp.X, dy+dp.Y, pal[src.ColorIndexAt(x, y)])
+			dx++
+		}
+		dy++
+	}
 }

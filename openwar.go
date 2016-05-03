@@ -107,7 +107,7 @@ func main() {
 	}
 	defer platform.Shutdown()
 
-	rend, err := platform.NewRenderer(640, 480, "OpenWar")
+	rend, err := platform.NewRenderer(320, 240, "OpenWar")
 	if err != nil {
 		panic(err)
 	}

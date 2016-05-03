@@ -28,10 +28,10 @@ func newGameHud(g *Game, race playerRace, envPal color.Palette) *gameHud {
 	hud := &gameHud{g: g, race: race}
 	hud.images = make(resource.Images)
 	hud.humanGfx = map[string]image.Point{
-		"IHRESBAR.IMG": {-72, 0},
-		"IHRIGBAR.IMG": {-312, 0},
-		"IHBOTBAR.IMG": {-72, -188},
-		"IHLPANEL.IMG": {0, -72},
+		"IHRESBAR.IMG": {72, 0},
+		"IHRIGBAR.IMG": {312, 0},
+		"IHBOTBAR.IMG": {72, 188},
+		"IHLPANEL.IMG": {0, 72},
 		"IHMMAP01.IMG": {0, 0},
 		"IHMMAP02.IMG": {0, 0},
 	}
@@ -74,5 +74,5 @@ func (hud *gameHud) render() error {
 
 func (hud *gameHud) renderImage(name string, gfx map[string]image.Point) {
 	img := hud.images[name]
-	hud.g.renderer.BlitPal(img.Data, hud.pal, gfx[name].Add(image.Point{img.X, img.Y}))
+	hud.g.renderer.BlitImage(gfx[name].Add(image.Point{img.X, img.Y}), img.Data, hud.pal)
 }

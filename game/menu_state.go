@@ -50,6 +50,6 @@ func (s *menuState) Render() error {
 	img := s.res.Images["TITLE.IMG"]
 	pal := s.res.Palettes["TITLE.PAL"]
 
-	s.g.renderer.BlitPal(img.Data, pal, image.Point{})
+	s.g.renderer.BlitImage(image.Point{}, img.Data, pal)
 	return nil
 }
