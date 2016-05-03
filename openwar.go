@@ -6,7 +6,6 @@ package main
 import (
 	"flag"
 	"fmt"
-	"image/color"
 	"os"
 	"path"
 	"path/filepath"
@@ -74,6 +73,7 @@ func main() {
 	}
 
 	//resource.Logger = os.Stdout
+	//resource.LoadUnsupported = true
 	arch, err := resource.OpenArchive(warFile[0])
 	if err != nil {
 		panic(err)
@@ -130,7 +130,7 @@ func main() {
 		panic(err)
 	}
 
-	pal := combinePalettes(palettes["FOREST.PAL"], palettes["SPRITE0.PAL"])
+	pal := resource.CombinePalettes(palettes["FOREST.PAL"], palettes["SPRITE0.PAL"])
 
 	debug.DumpImg(images, pal, "")
 	debug.DumpArchive(arch, "")
@@ -191,15 +191,4 @@ func loadAudio(arch *resource.Archive, player platform.AudioPlayer) error {
 		}
 	}
 	return nil
-}
-
-func combinePalettes(low, high color.Palette) color.Palette {
-	if len(low)+len(high) != 256 {
-		return nil
-	}
-
-	pal := make([]color.Color, 256)
-	copy(pal, low)
-	copy(pal[128:], high)
-	return pal
 }

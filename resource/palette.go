@@ -51,3 +51,20 @@ func LoadPalettes(arch *Archive) (Palettes, error) {
 
 	return palettes, nil
 }
+
+func ClonePalette(p color.Palette) color.Palette {
+	pal := make([]color.Color, 256)
+	copy(pal, p)
+	return pal
+}
+
+func CombinePalettes(low, high color.Palette) color.Palette {
+	if len(low)+len(high) != 256 {
+		return nil
+	}
+
+	pal := make([]color.Color, 256)
+	copy(pal, low)
+	copy(pal[128:], high)
+	return pal
+}

@@ -7,11 +7,12 @@ import "github.com/openwar-hq/openwar/resource"
 
 type playState struct {
 	g   *Game
+	p   *player
 	res resource.Resources
 }
 
 func NewPlayState(g *Game) GameState {
-	return &playState{g: g, res: g.resources}
+	return &playState{g: g, p: newPlay(g, orcRace, g.resources.Palettes["FOREST.PAL"]), res: g.resources}
 }
 
 func (s *playState) Name() string {
@@ -21,6 +22,7 @@ func (s *playState) Name() string {
 func (s *playState) Enter(from GameState, args ...interface{}) error {
 	snd, _ := s.g.player.Sound("OREADY.VOC")
 	snd.Play(-1, 0, 0)
+
 	return nil
 }
 
@@ -45,10 +47,7 @@ func (s *playState) Update() error {
 	return nil
 }
 
-func (s *playState) Render() error { /*
-		img := s.res.Images["TITLE.IMG"]
-		pal := s.res.Palettes["TITLE.PAL"]
-
-		s.g.renderer.BlitPal(img.Data, pal, image.Point{})*/
+func (s *playState) Render() error {
+	s.p.render()
 	return nil
 }
