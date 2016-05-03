@@ -10,8 +10,8 @@ OpenWar is an alternative Warcraft: Orcs & Humans game engine. So unless you hav
 
 Since OpenWar is a different game engine, not all things will work 100% the same as they did in the original Warcraft, if you want the original unchanged Warcraft experience, you will still have to use the original game.
 
-![screenshot](/doc/screenshot1.png)
-![screenshot](/doc/screenshot2.png)
+<img src="https://raw.githubusercontent.com/openwar-hq/openwar/master/doc/screenshot1.png" width="200">
+<img src="https://raw.githubusercontent.com/openwar-hq/openwar/master/doc/screenshot2.png" width="200">
 
 ### Disclaimer
 
