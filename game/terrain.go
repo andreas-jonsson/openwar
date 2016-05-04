@@ -5,6 +5,7 @@ package game
 
 import (
 	"encoding/binary"
+	"errors"
 	"image"
 	"image/color"
 	"math"
@@ -29,18 +30,38 @@ type terrain struct {
 	pal       color.Palette
 }
 
-func newTerrain(g *Game) (*terrain, error) {
-	ter := &terrain{g: g}
-	ter.tileset = g.resources.Tilesets["SWAMP.TIL"]
-	ter.pal = g.resources.Palettes["SWAMP.PAL"]
+var mapsEnvironment = map[string]environmentType{
+	"ORC01.TER": environmentSwamp,
 
-	file := "ORC01.TER"
-	reader, err := g.resources.Archive.Open(file)
+	"HUMAN01.TER": environmentForest,
+}
+
+func newTerrain(g *Game, name string) (*terrain, error) {
+	ter := &terrain{g: g}
+
+	env, ok := mapsEnvironment[name]
+	if !ok {
+		return nil, errors.New("invalid terrain name")
+	}
+
+	switch env {
+	case environmentForest:
+		ter.tileset = g.resources.Tilesets["FOREST.TIL"]
+		ter.pal = g.resources.Palettes["FOREST.PAL"]
+	case environmentSwamp:
+		ter.tileset = g.resources.Tilesets["SWAMP.TIL"]
+		ter.pal = g.resources.Palettes["SWAMP.PAL"]
+	case environmentDungeon:
+		ter.tileset = g.resources.Tilesets["DUNGEON.TIL"]
+		ter.pal = g.resources.Palettes["DUNGEON.PAL"]
+	}
+
+	reader, err := g.resources.Archive.Open(name)
 	if err != nil {
 		return nil, err
 	}
 
-	size := len(g.resources.Archive.Files[file]) / 2
+	size := len(g.resources.Archive.Files[name]) / 2
 	ter.tileIndex = make([]uint16, size)
 	ter.mapSize = int(math.Sqrt(float64(size)))
 

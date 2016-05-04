@@ -12,6 +12,7 @@ Since OpenWar is a different game engine, not all things will work 100% the same
 
 <img src="https://raw.githubusercontent.com/openwar-hq/openwar/master/doc/screenshot1.png" width="250">
 <img src="https://raw.githubusercontent.com/openwar-hq/openwar/master/doc/screenshot2.png" width="250">
+<img src="https://raw.githubusercontent.com/openwar-hq/openwar/master/doc/screenshot3.gif" width="250">
 
 ### Disclaimer
 

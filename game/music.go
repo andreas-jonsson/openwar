@@ -28,6 +28,8 @@ func newMusicPlayer(arch *resource.Archive, player platform.AudioPlayer) (*music
 			p.list = append(p.list, file)
 		}
 	}
+
+	player.VolumeMusic(platform.MaxVolume / 2)
 	return p, nil
 }
 
@@ -39,7 +41,7 @@ func (p *musicPlayer) random(fadein time.Duration) {
 	p.player.PlayMusic(p.list[rand.Intn(len(p.list)-1)], fadein, 0)
 	p.player.MusicCallback(func() {
 		if !p.stopping {
-			p.random(1 * time.Second)
+			p.random(fadein)
 		}
 	})
 }

@@ -90,6 +90,11 @@ func NewGame(rend platform.Renderer, player platform.AudioPlayer, res resource.R
 	return g, err
 }
 
+func (g *Game) PollAll() {
+	for g.PollEvent() != nil {
+	}
+}
+
 func (g *Game) PollEvent() platform.Event {
 	for {
 		event := platform.PollEvent()

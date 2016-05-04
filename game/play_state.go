@@ -21,11 +21,11 @@ type playState struct {
 }
 
 func NewPlayState(g *Game) GameState {
-	ter, _ := newTerrain(g)
+	ter, _ := newTerrain(g, "HUMAN01.TER")
 
 	return &playState{
 		g:   g,
-		p:   newPlay(g, orcRace, g.resources.Palettes["FOREST.PAL"]),
+		p:   newPlay(g, humanRace, ter.pal),
 		res: g.resources,
 		ter: ter,
 	}
@@ -36,7 +36,7 @@ func (s *playState) Name() string {
 }
 
 func (s *playState) Enter(from GameState, args ...interface{}) error {
-	s.g.musicPlayer.random(1 * time.Second)
+	s.g.musicPlayer.random(10 * time.Second)
 
 	snd, _ := s.g.soundPlayer.Sound("OREADY.VOC")
 	snd.Play(-1, 0, 0)
@@ -49,24 +49,13 @@ func (s *playState) Exit(to GameState) error {
 }
 
 func (s *playState) Update() error {
-	for {
-		event := s.g.PollEvent()
-		if event == nil {
-			break
-		}
-
-		/*
-			switch event.(type) {
-			case *platform.QuitEvent:
-				s.g.running = false
-			}
-		*/
-	}
+	s.g.PollAll()
 	return nil
 }
 
 func (s *playState) Render() error {
 	s.scroll += s.g.dt * 0.005
+
 	s.ter.render(image.Rect(0, 0, 320, 200), image.Point{int(s.scroll), 0})
 	s.p.render()
 	return nil
