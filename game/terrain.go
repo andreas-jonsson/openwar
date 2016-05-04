@@ -51,23 +51,29 @@ func newTerrain(g *Game) (*terrain, error) {
 	return ter, nil
 }
 
-func (ter *terrain) render(cullRect image.Rectangle) {
+func (ter *terrain) render(cullRect image.Rectangle, cameraPos image.Point) {
 	renderer := ter.g.renderer
-	min := cullRect.Min
-	max := cullRect.Max
 
-	for y := min.Y; y < ter.mapSize && y < max.Y; y++ {
-		for x := min.X; x < ter.mapSize && x < max.X; x++ {
+	min := cullRect.Min.Add(cameraPos).Div(16)
+	max := cullRect.Max.Add(cameraPos).Div(16)
+
+	max.X++
+	max.Y++
+
+	for y, dy := min.Y, 0; y < ter.mapSize && y < max.Y; y++ {
+		for x, dx := min.X, 0; x < ter.mapSize && x < max.X; x++ {
 			idx := int(ter.tileIndex[y*ter.mapSize+x])
 			if idx > ter.tileset.NumTiles-1 {
 				panic("index out of range")
 			}
 
-			rect := image.Rect(16*idx, 0, 16*idx+16, 16)
+			rect := image.Rect(0, 16*idx, 16, 16*idx+16)
 			src := ter.tileset.Data
-			tilePos := image.Point{x * 16, y * 16}
+			tilePos := image.Point{dx*16 - (cameraPos.X % 16), dy*16 - (cameraPos.Y % 16)}
 
 			renderer.Blit(tilePos, src, rect, ter.pal)
+			dx++
 		}
+		dy++
 	}
 }

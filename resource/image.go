@@ -28,6 +28,10 @@ type (
 	Images map[string]Image
 )
 
+func (img *Image) Point() image.Point {
+	return image.Point{img.X, img.Y}
+}
+
 func LoadImages(arch *Archive) (Images, error) {
 	images := make(Images)
 

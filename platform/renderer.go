@@ -14,6 +14,7 @@ type Renderer interface {
 	Present()
 	Shutdown()
 	ToggleFullscreen()
+	SetWindowTitle(title string)
 	BackBuffer() draw.Image
 
 	BlitPaletted(dp image.Point, src *image.Paletted)

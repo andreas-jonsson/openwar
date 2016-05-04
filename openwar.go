@@ -6,15 +6,16 @@ package main
 import (
 	"flag"
 	"fmt"
+	"math/rand"
 	"os"
 	"path"
 	"path/filepath"
 	"strings"
+	"time"
 
 	"github.com/openwar-hq/openwar/game"
 	"github.com/openwar-hq/openwar/platform"
 	"github.com/openwar-hq/openwar/resource"
-	"github.com/openwar-hq/openwar/resource/debug"
 )
 
 const versionString = "0.0.1"
@@ -71,6 +72,8 @@ func main() {
 		return
 	}
 
+	rand.Seed(time.Now().UnixNano())
+
 	//resource.Logger = os.Stdout
 	//resource.LoadUnsupported = true
 	arch, err := resource.OpenArchive(warFile[0])
@@ -107,7 +110,7 @@ func main() {
 	}
 	defer platform.Shutdown()
 
-	rend, err := platform.NewRenderer(320, 240, "OpenWar")
+	rend, err := platform.NewRenderer(640, 480, "OpenWar")
 	if err != nil {
 		panic(err)
 	}
@@ -124,17 +127,14 @@ func main() {
 		panic(err)
 	}
 
-	pal := resource.CombinePalettes(palettes["FOREST.PAL"], palettes["SPRITE0.PAL"])
-
-	debug.DumpImg(images, pal, "")
-	debug.DumpArchive(arch, "")
-
-	if err = player.PlayMusic("MUSIC01.XMI", 0, 0); err != nil {
-		panic(err)
-	}
+	//debug.DumpImg(images, resource.CombinePalettes(palettes["FOREST.PAL"], palettes["SPRITE0.PAL"]), "")
+	//debug.DumpArchive(arch, "")
 
 	res := resource.Resources{Palettes: palettes, Images: images, Sprites: sprites, Tilesets: tilesets, Archive: arch}
-	g := game.NewGame(rend, player, res)
+	g, err := game.NewGame(rend, player, res)
+	if err != nil {
+		panic(err)
+	}
 	defer g.Shutdown()
 
 	if err := g.SwitchState("menu"); err != nil {
@@ -142,18 +142,16 @@ func main() {
 	}
 
 	for g.Running() {
-		currentState := g.CurrentState()
 		rend.Clear()
-		if err := currentState.Update(); err != nil {
+
+		if err := g.Update(); err != nil {
+			panic(err)
+		}
+		if err := g.Render(); err != nil {
 			panic(err)
 		}
 
-		if currentState == g.CurrentState() {
-			if err := currentState.Render(); err != nil {
-				panic(err)
-			}
-			rend.Present()
-		}
+		rend.Present()
 	}
 }
 

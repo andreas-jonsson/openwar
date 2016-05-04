@@ -5,6 +5,7 @@ package game
 
 import (
 	"image"
+	"time"
 
 	"github.com/openwar-hq/openwar/platform"
 	"github.com/openwar-hq/openwar/resource"
@@ -24,10 +25,12 @@ func (s *menuState) Name() string {
 }
 
 func (s *menuState) Enter(from GameState, args ...interface{}) error {
+	s.g.musicPlayer.play("MUSIC01.XMI", 3*time.Second)
 	return nil
 }
 
 func (s *menuState) Exit(to GameState) error {
+	s.g.musicPlayer.stop()
 	return nil
 }
 
@@ -39,7 +42,7 @@ func (s *menuState) Update() error {
 		}
 
 		switch event.(type) {
-		case *platform.KeyDownEvent:
+		case *platform.KeyDownEvent, *platform.MouseButtonEvent:
 			return s.g.SwitchState("play")
 		}
 	}

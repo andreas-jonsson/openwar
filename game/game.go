@@ -5,7 +5,10 @@ package game
 
 import (
 	"fmt"
+	"image"
+	"image/color"
 	"log"
+	"time"
 
 	"github.com/openwar-hq/openwar/platform"
 	"github.com/openwar-hq/openwar/resource"
@@ -24,25 +27,67 @@ type Game struct {
 	running      bool
 	states       map[string]GameState
 
-	renderer  platform.Renderer
-	player    platform.AudioPlayer
-	resources resource.Resources
+	currentCursor int
+	cursorPos     image.Point
+	cursors       []resource.Image
+	cursorPal     color.Palette
+
+	renderer    platform.Renderer
+	resources   resource.Resources
+	musicPlayer *musicPlayer
+	soundPlayer platform.AudioPlayer
+
+	t, ft time.Time
+	dt    float64
+
+	numFrames, fps int
 }
 
-func NewGame(rend platform.Renderer, player platform.AudioPlayer, res resource.Resources) *Game {
+func NewGame(rend platform.Renderer, player platform.AudioPlayer, res resource.Resources) (*Game, error) {
+	var err error
+
 	g := new(Game)
 	g.running = true
 
 	g.renderer = rend
-	g.player = player
 	g.resources = res
+	g.soundPlayer = player
+	g.musicPlayer, err = newMusicPlayer(res.Archive, player)
 
-	s := make(map[string]GameState)
-	s["menu"] = NewMenuState(g)
-	s["play"] = NewPlayState(g)
+	g.cursorPal = resource.ClonePalette(res.Palettes["CURSORS.PAL"])
+	for i := 0; i < len(g.cursorPal); i++ {
+		if cr, cg, cb, _ := g.cursorPal[i].RGBA(); cr == 0 && cg == 0 && cb == 0 {
+			g.cursorPal[i] = color.RGBA{}
+		}
+	}
+
+	g.cursors = []resource.Image{
+		res.Images["NORMAL.CUR"],
+		res.Images["NOPE.CUR"],
+		res.Images["CROSHAIR.CUR"],
+		res.Images["TARGET01.CUR"],
+		res.Images["TARGET02.CUR"],
+		res.Images["TARGET03.CUR"],
+		res.Images["INSPECT.CUR"],
+		res.Images["TIME.CUR"],
+
+		res.Images["SCROLLT.CUR"],
+		res.Images["SCROLLTR.CUR"],
+		res.Images["SCROLLR.CUR"],
+		res.Images["SCROLLBR.CUR"],
+		res.Images["SCROLLB.CUR"],
+		res.Images["SCROLLBL.CUR"],
+		res.Images["SCROLLL.CUR"],
+		res.Images["SCROLLTL.CUR"],
+	}
+
+	s := map[string]GameState{
+		"menu": NewMenuState(g),
+		"play": NewPlayState(g),
+	}
 
 	g.states = s
-	return g
+	return g, err
 }
 
 func (g *Game) PollEvent() platform.Event {
@@ -56,18 +101,21 @@ func (g *Game) PollEvent() platform.Event {
 		case *platform.QuitEvent:
 			g.running = false
 		case *platform.KeyDownEvent:
-			if t.Key == platform.KEY_SPACE {
+			switch t.Key {
+			case platform.KeyEsc:
+				g.running = false
+				continue
+			case platform.KeySpace:
 				g.renderer.ToggleFullscreen()
 			}
+			return event
+		case *platform.MouseMotionEvent:
+			g.cursorPos = image.Point{t.X, t.Y}
 			return event
 		default:
 			return event
 		}
 	}
-}
-
-func (g *Game) CurrentState() GameState {
-	return g.currentState
 }
 
 func (g *Game) SwitchState(to string, args ...interface{}) error {
@@ -94,6 +142,35 @@ func (g *Game) SwitchState(to string, args ...interface{}) error {
 
 func (g *Game) Running() bool {
 	return g.running
+}
+
+func (g *Game) Update() error {
+	now := time.Now()
+	g.dt = float64(now.Sub(g.t).Nanoseconds() / int64(time.Millisecond))
+	g.t = now
+
+	err := g.currentState.Update()
+
+	g.numFrames++
+	if time.Since(g.ft).Nanoseconds()/int64(time.Millisecond) >= 1000 {
+		g.fps = g.numFrames
+		g.ft = now
+		g.numFrames = 0
+
+		g.renderer.SetWindowTitle(fmt.Sprintf("OpenWar - %d fps", g.fps))
+	}
+
+	return err
+}
+
+func (g *Game) Render() error {
+	if err := g.currentState.Render(); err != nil {
+		return err
+	}
+
+	cur := g.cursors[g.currentCursor]
+	g.renderer.BlitImage(g.cursorPos.Add(cur.Point()), cur.Data, g.cursorPal)
+	return nil
 }
 
 func (g *Game) Shutdown() {

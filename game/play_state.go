@@ -5,13 +5,17 @@ package game
 
 import (
 	"image"
+	"time"
 
 	"github.com/openwar-hq/openwar/resource"
 )
 
 type playState struct {
-	g   *Game
-	p   *player
+	g *Game
+	p *player
+
+	scroll float64
+
 	ter *terrain
 	res resource.Resources
 }
@@ -32,7 +36,9 @@ func (s *playState) Name() string {
 }
 
 func (s *playState) Enter(from GameState, args ...interface{}) error {
-	snd, _ := s.g.player.Sound("OREADY.VOC")
+	s.g.musicPlayer.random(1 * time.Second)
+
+	snd, _ := s.g.soundPlayer.Sound("OREADY.VOC")
 	snd.Play(-1, 0, 0)
 
 	return nil
@@ -60,7 +66,8 @@ func (s *playState) Update() error {
 }
 
 func (s *playState) Render() error {
-	s.ter.render(image.Rect(0, 0, 320, 200))
+	s.scroll += s.g.dt * 0.005
+	s.ter.render(image.Rect(0, 0, 320, 200), image.Point{int(s.scroll), 0})
 	s.p.render()
 	return nil
 }

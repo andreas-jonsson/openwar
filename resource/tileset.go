@@ -49,7 +49,7 @@ func LoadTilesets(arch *Archive, images Images, palettes Palettes) (Tilesets, er
 				return tilesets, err
 			}
 
-			img := image.NewPaletted(image.Rect(0, 0, numTiles*16, 16), pal)
+			img := image.NewPaletted(image.Rect(0, 0, 16, numTiles*16), pal)
 			for i := 0; i < numTiles; i++ {
 				makeTile(img, i, data, megaTile[i*4:])
 			}
@@ -98,7 +98,7 @@ func makeTile(img *image.Paletted, tileIndex int, miniTile []byte, megaTile []ui
 
 	for y := 0; y < 16; y++ {
 		for x := 0; x < 16; x++ {
-			img.SetColorIndex(tileIndex*16+x, y, tile[y*16+x])
+			img.SetColorIndex(x, tileIndex*16+y, tile[y*16+x])
 		}
 	}
 }

@@ -46,6 +46,7 @@ func NewRenderer(w, h int, data ...interface{}) (Renderer, error) {
 		return nil, err
 	}
 
+	sdl.ShowCursor(0)
 	return &r, nil
 }
 
@@ -53,10 +54,9 @@ func (p *sdlRenderer) ToggleFullscreen() {
 	isFullscreen := (p.window.GetFlags() & sdl.WINDOW_FULLSCREEN) != 0
 	if isFullscreen {
 		p.window.SetFullscreen(0)
-		sdl.ShowCursor(1)
 	} else {
-		p.window.SetFullscreen(sdl.WINDOW_FULLSCREEN_DESKTOP)
-		sdl.ShowCursor(0)
+		//p.window.SetFullscreen(sdl.WINDOW_FULLSCREEN_DESKTOP)
+		p.window.SetFullscreen(sdl.WINDOW_FULLSCREEN)
 	}
 }
 
@@ -77,6 +77,10 @@ func (p *sdlRenderer) Shutdown() {
 	p.internalRenderer.Destroy()
 }
 
+func (p *sdlRenderer) SetWindowTitle(title string) {
+	p.window.SetTitle(title)
+}
+
 func (p *sdlRenderer) BackBuffer() draw.Image {
 	return p.backBuffer
 }
@@ -95,7 +99,10 @@ func (p *sdlRenderer) Blit(dp image.Point, src *image.Paletted, sr image.Rectang
 
 	for y, dy := min.Y, 0; y < max.Y; y++ {
 		for x, dx := min.X, 0; x < max.X; x++ {
-			p.backBuffer.Set(dx+dp.X, dy+dp.Y, pal[src.ColorIndexAt(x, y)])
+			c := pal[src.ColorIndexAt(x, y)]
+			if _, _, _, a := c.RGBA(); a > 0 {
+				p.backBuffer.Set(dx+dp.X, dy+dp.Y, c)
+			}
 			dx++
 		}
 		dy++
