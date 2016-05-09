@@ -8,7 +8,7 @@ import (
 	"time"
 	"unsafe"
 
-	"github.com/openwar-hq/openwar/platform/xmi"
+	"github.com/andreas-jonsson/openwar/platform/xmi"
 	"github.com/veandco/go-sdl2/sdl"
 	"github.com/veandco/go-sdl2/sdl_mixer"
 )

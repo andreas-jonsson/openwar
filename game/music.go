@@ -8,8 +8,8 @@ import (
 	"path"
 	"time"
 
-	"github.com/openwar-hq/openwar/platform"
-	"github.com/openwar-hq/openwar/resource"
+	"github.com/andreas-jonsson/openwar/platform"
+	"github.com/andreas-jonsson/openwar/resource"
 )
 
 type musicPlayer struct {

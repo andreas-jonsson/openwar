@@ -8,7 +8,7 @@ import (
 	"image/color"
 	"strings"
 
-	"github.com/openwar-hq/openwar/resource"
+	"github.com/andreas-jonsson/openwar/resource"
 )
 
 type gameHud struct {

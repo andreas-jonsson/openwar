@@ -10,7 +10,7 @@ import (
 	"image/color"
 	"math"
 
-	"github.com/openwar-hq/openwar/resource"
+	"github.com/andreas-jonsson/openwar/resource"
 )
 
 type environmentType int

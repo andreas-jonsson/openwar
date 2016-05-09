@@ -7,7 +7,7 @@ import (
 	"image"
 	"time"
 
-	"github.com/openwar-hq/openwar/resource"
+	"github.com/andreas-jonsson/openwar/resource"
 )
 
 type playState struct {
