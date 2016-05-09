@@ -18,6 +18,18 @@ Since OpenWar is a different game engine, not all things will work 100% the same
 
 OpenWar is *not* an official Blizzard product, its a Warcraft: Orcs & Humans modification, by Warcraft fans for Warcraft fans. You need a copy of the original Warcraft: Orcs & Humans MS-DOS version to make use of OpenWar. *Warcraft* is a registered trademark of [Blizzard Entertainment](https://www.blizzard.com).
 
+### Development
+
+The game is not yet playable but most resources are now decoded and loadable.
+
+* Images & Sprites
+* Palettes
+* Tilesets
+* Maps
+* Sound
+* Music
+* Dialog, Mission text, etc.
+
 ### License
 
 Any copyright is dedicated to the Public Domain.
