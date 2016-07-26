@@ -4,6 +4,7 @@
 package main
 
 import (
+	"errors"
 	"flag"
 	"fmt"
 	"math/rand"
@@ -57,17 +58,15 @@ func main() {
 	flag.Parse()
 	banner()
 
-	var warFile [1]string
-	filepath.Walk(resourcePath, func(path string, info os.FileInfo, err error) error {
+	path := filepath.Walk(resourcePath, func(path string, info os.FileInfo, err error) error {
 		if info != nil && !info.IsDir() && strings.ToUpper(filepath.Base(path)) == "DATA.WAR" {
-			warFile[0] = path
 			fmt.Println("Found resources: " + path)
-			return filepath.SkipDir
+			return errors.New(path)
 		}
 		return nil
-	})
+	}).Error()
 
-	if warFile[0] == "" {
+	if path == "" {
 		fmt.Println("Could not find all game resources.")
 		return
 	}
@@ -76,7 +75,7 @@ func main() {
 
 	//resource.Logger = os.Stdout
 	//resource.LoadUnsupported = true
-	arch, err := resource.OpenArchive(warFile[0])
+	arch, err := resource.OpenArchive(path)
 	if err != nil {
 		panic(err)
 	}
