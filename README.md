@@ -2,7 +2,7 @@
 
 [![Build](https://drone.io/github.com/andreas-jonsson/openwar/status.png)](https://drone.io/github.com/andreas-jonsson/openwar/latest)
 [![Contribute](https://img.shields.io/badge/contribute-FreedomSponsors-blue.svg?style=flat-square)](https://freedomsponsors.org/project/341)
-[![Website](https://img.shields.io/badge/project-website-red.svg?style=flat-square)](https://openwar.io)
+[![Website](https://img.shields.io/badge/project-website-red.svg?style=flat-square)](http://openwar.io)
 
 ### About
 
