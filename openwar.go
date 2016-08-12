@@ -46,8 +46,8 @@ func banner() {
 	fmt.Print(logo)
 	fmt.Println(" Ver:", versionString)
 
-	fmt.Println("\n\tProgrammed by:")
-	for _, author := range authors {
+	fmt.Println("\n\tAuthors:")
+	for _, author := range game.Authors {
 		fmt.Println("\t\t", author)
 	}
 	fmt.Println()
