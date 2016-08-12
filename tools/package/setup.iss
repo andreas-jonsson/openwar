@@ -6,8 +6,8 @@
 #define MyAppPublisher "Andreas T Jonsson"
 #define MyAppURL "http://www.openwar.io"
 #define MyAppExeName "openwar.exe"
-
-#define AppRoot "../.."
+#define MySetupBaseName "OpenWar"
+#define MyAppRoot "../.."
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application.
@@ -15,7 +15,7 @@
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
 AppId={{0D36755D-F8B1-4D71-AD5B-2E077EF864FD}
 AppName={#MyAppName}
-AppVersion={param:version|{#MyAppVersion}}
+AppVersion={#MyAppVersion}
 ;AppVerName={#MyAppName} {#MyAppVersion}
 AppPublisher={#MyAppPublisher}
 AppPublisherURL={#MyAppURL}
@@ -23,9 +23,9 @@ AppSupportURL={#MyAppURL}
 AppUpdatesURL={#MyAppURL}
 DefaultDirName={pf}\{#MyAppName}
 DisableProgramGroupPage=yes
-LicenseFile={#AppRoot}\LICENSE
-OutputBaseFilename=setup
-SetupIconFile={#AppRoot}\tools\package\icon.ico
+LicenseFile={#MyAppRoot}\LICENSE
+OutputBaseFilename=openwar-{#MyAppVersion}-win64
+SetupIconFile={#MyAppRoot}\tools\package\icon.ico
 Compression=lzma
 SolidCompression=yes
 ArchitecturesInstallIn64BitMode=x64
@@ -37,19 +37,19 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-;Source: "{#AppRoot}\tools\package\dependencies\gtk2-runtime-2.24.30-2016-04-09-ts-win64.exe"; DestDir: "{tmp}"; Flags: deleteafterinstall
+;Source: "{#MyAppRoot}\tools\package\dependencies\gtk2-runtime-2.24.30-2016-04-09-ts-win64.exe"; DestDir: "{tmp}"; Flags: deleteafterinstall
 
-Source: "{#AppRoot}\openwar.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#AppRoot}\tools\package\dependencies\libFLAC-8.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#AppRoot}\tools\package\dependencies\libmikmod-2.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#AppRoot}\tools\package\dependencies\libmodplug-1.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#AppRoot}\tools\package\dependencies\libogg-0.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#AppRoot}\tools\package\dependencies\libvorbis-0.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#AppRoot}\tools\package\dependencies\libvorbisfile-3.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#AppRoot}\tools\package\dependencies\SDL2.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#AppRoot}\tools\package\dependencies\SDL2_mixer.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#AppRoot}\tools\package\dependencies\smpeg2.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#AppRoot}\data\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "{#MyAppRoot}\openwar.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#MyAppRoot}\tools\package\dependencies\libFLAC-8.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#MyAppRoot}\tools\package\dependencies\libmikmod-2.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#MyAppRoot}\tools\package\dependencies\libmodplug-1.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#MyAppRoot}\tools\package\dependencies\libogg-0.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#MyAppRoot}\tools\package\dependencies\libvorbis-0.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#MyAppRoot}\tools\package\dependencies\libvorbisfile-3.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#MyAppRoot}\tools\package\dependencies\SDL2.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#MyAppRoot}\tools\package\dependencies\SDL2_mixer.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#MyAppRoot}\tools\package\dependencies\smpeg2.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#MyAppRoot}\data\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
