@@ -25,6 +25,7 @@ _testmain.go
 
 img/**
 archive/**
+tools/package/dependencies/**
 
 openwar
 
