@@ -2,7 +2,7 @@
 <interface>
   <requires lib="gtk+" version="2.24"/>
   <!-- interface-naming-policy project-wide -->
-  <object class="GtkAboutDialog" id="aboutdialog1">
+  <object class="GtkAboutDialog" id="about_dialog">
     <property name="can_focus">False</property>
     <property name="border_width">5</property>
     <property name="resizable">False</property>
@@ -715,54 +715,6 @@ Joakim Jonsson</property>
       </object>
     </child>
   </object>
-  <object class="GtkFileChooserDialog" id="filechooserdialog1">
-    <property name="can_focus">False</property>
-    <property name="border_width">5</property>
-    <property name="role">GtkFileChooserDialog</property>
-    <property name="type_hint">dialog</property>
-    <property name="create_folders">False</property>
-    <child internal-child="vbox">
-      <object class="GtkVBox" id="dialog-vbox1">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="spacing">2</property>
-        <child internal-child="action_area">
-          <object class="GtkHButtonBox" id="dialog-action_area1">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="layout_style">end</property>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <object class="GtkButton" id="button5">
-                <property name="label" translatable="yes">Load</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">True</property>
-            <property name="fill">True</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-      </object>
-    </child>
-    <action-widgets>
-      <action-widget response="0">button5</action-widget>
-    </action-widgets>
-  </object>
   <object class="GtkWindow" id="launcher_window">
     <property name="can_focus">False</property>
     <property name="title" translatable="yes">OpenWar</property>
@@ -820,11 +772,12 @@ Joakim Jonsson</property>
                         <property name="can_focus">False</property>
                         <property name="spacing">8</property>
                         <child>
-                          <object class="GtkButton" id="button1">
-                            <property name="label" translatable="yes">Load</property>
+                          <object class="GtkButton" id="open_button">
+                            <property name="label">gtk-open</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
+                            <property name="use_stock">True</property>
                           </object>
                           <packing>
                             <property name="expand">True</property>
@@ -833,12 +786,11 @@ Joakim Jonsson</property>
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkEntry" id="entry1">
+                          <object class="GtkEntry" id="resource_entry">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="editable">False</property>
                             <property name="invisible_char">●</property>
-                            <property name="text" translatable="yes">Path to DATA.WAR...</property>
                             <property name="invisible_char_set">True</property>
                             <property name="primary_icon_activatable">False</property>
                             <property name="secondary_icon_activatable">False</property>
@@ -852,7 +804,7 @@ Joakim Jonsson</property>
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkImage" id="image2">
+                          <object class="GtkImage" id="resource_image">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="stock">gtk-cancel</property>
@@ -902,7 +854,7 @@ Joakim Jonsson</property>
                         <property name="can_focus">False</property>
                         <property name="spacing">4</property>
                         <child>
-                          <object class="GtkCheckButton" id="checkbutton1">
+                          <object class="GtkCheckButton" id="fullscreen_checkbutton">
                             <property name="label" translatable="yes">Fullscreen</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
@@ -916,7 +868,7 @@ Joakim Jonsson</property>
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkCheckButton" id="checkbutton2">
+                          <object class="GtkCheckButton" id="widescreen_checkbutton">
                             <property name="label" translatable="yes">Widescreen</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
@@ -930,11 +882,12 @@ Joakim Jonsson</property>
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkCheckButton" id="checkbutton3">
+                          <object class="GtkCheckButton" id="wc2_input_checkbutton">
                             <property name="label" translatable="yes">WC2 input</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
+                            <property name="active">True</property>
                             <property name="draw_indicator">True</property>
                           </object>
                           <packing>
@@ -981,9 +934,10 @@ Joakim Jonsson</property>
                 <property name="can_focus">False</property>
                 <property name="spacing">8</property>
                 <child>
-                  <object class="GtkButton" id="button2">
+                  <object class="GtkButton" id="join_button">
                     <property name="label" translatable="yes">Join</property>
                     <property name="visible">True</property>
+                    <property name="sensitive">False</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                   </object>
@@ -994,9 +948,10 @@ Joakim Jonsson</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkButton" id="button3">
+                  <object class="GtkButton" id="create_button">
                     <property name="label" translatable="yes">Create</property>
                     <property name="visible">True</property>
+                    <property name="sensitive">False</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                   </object>
@@ -1007,7 +962,7 @@ Joakim Jonsson</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkButton" id="button4">
+                  <object class="GtkButton" id="about_button">
                     <property name="label" translatable="yes">About</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>

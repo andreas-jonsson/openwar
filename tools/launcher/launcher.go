@@ -19,9 +19,19 @@ package main
 
 import (
 	"log"
+	"unsafe"
 
+	"github.com/andreas-jonsson/openwar/resource"
 	"github.com/mattn/go-gtk/gtk"
 )
+
+type Config struct {
+	fullscreen,
+	widescreen,
+	wc2Input bool
+}
+
+var resourcePath string
 
 func main() {
 	gtk.Init(nil)
@@ -32,12 +42,69 @@ func main() {
 		log.Fatalln("could not load interface description:", err)
 	}
 
-	launcherWindow := gtk.WidgetFromObject(builder.GetObject("launcher_window")).GetTopLevelAsWindow()
+	setupLauncherWindow(builder)
+	gtk.Main()
+}
+
+func createConfig(builder *gtk.Builder) *Config {
+	fullscreen := true // (*gtk.CheckButton)(unsafe.Pointer(builder.GetObject("fullscreen_checkbutton"))).GetActive()
+	widescreen := true //(*gtk.CheckButton)(unsafe.Pointer(builder.GetObject("widescreen_checkbutton"))).GetActive()
+	wc2Input := true   // (*gtk.CheckButton)(unsafe.Pointer(builder.GetObject("wc2_input_checkbutton"))).GetActive()
+
+	return &Config{fullscreen, widescreen, wc2Input}
+}
+
+func setSensitive(builder *gtk.Builder, sensitive bool) {
+	joinButton := (*gtk.Button)(unsafe.Pointer(builder.GetObject("join_button")))
+	joinButton.SetSensitive(sensitive)
+
+	//createButton := (*gtk.Button)(unsafe.Pointer(builder.GetObject("create_button")))
+	//createButton.SetSensitive(sensitive)
+}
+
+func setupLauncherWindow(builder *gtk.Builder) {
+	launcherWindow := gtk.WidgetFromObject(builder.GetObject("launcher_window"))
 	launcherWindow.ShowAll()
 
 	launcherWindow.Connect("delete_event", func() {
 		gtk.MainQuit()
 	})
 
-	gtk.Main()
+	builder.GetObject("open_button").Connect("clicked", func() {
+		fileDialog := gtk.NewFileChooserDialog("Open", launcherWindow.GetTopLevelAsWindow(), gtk.FILE_CHOOSER_ACTION_OPEN, gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL, gtk.STOCK_OPEN, gtk.RESPONSE_OK)
+
+		filter := gtk.NewFileFilter()
+		filter.SetName("Warcraft Data Archive")
+		filter.AddPattern("DATA.WAR")
+		fileDialog.AddFilter(filter)
+
+		if fileDialog.Run() == gtk.RESPONSE_OK {
+			file := fileDialog.GetFilename()
+			entry := (*gtk.Entry)(unsafe.Pointer(builder.GetObject("resource_entry")))
+			entry.SetText(file)
+			resourcePath = file
+			fileDialog.Hide()
+
+			img := (*gtk.Image)(unsafe.Pointer(builder.GetObject("resource_image")))
+			if _, err := resource.OpenArchive(file); err == nil {
+				img.SetFromStock("gtk-ok", gtk.ICON_SIZE_BUTTON)
+				setSensitive(builder, true)
+			} else {
+				img.SetFromStock("gtk-cancel", gtk.ICON_SIZE_BUTTON)
+				setSensitive(builder, false)
+			}
+		} else {
+			fileDialog.Hide()
+		}
+	}, nil)
+
+	builder.GetObject("join_button").Connect("clicked", func() {
+		createConfig(builder)
+	}, nil)
+
+	builder.GetObject("about_button").Connect("clicked", func() {
+		aboutDialog := (*gtk.AboutDialog)(unsafe.Pointer(builder.GetObject("about_dialog")))
+		aboutDialog.Run()
+		aboutDialog.Hide()
+	}, nil)
 }
