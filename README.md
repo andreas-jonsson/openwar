@@ -1,8 +1,8 @@
 # OpenWar
 
-[![Build](https://drone.io/github.com/andreas-jonsson/openwar/status.png)](https://drone.io/github.com/andreas-jonsson/openwar/latest)
-[![Contribute](https://img.shields.io/badge/contribute-FreedomSponsors-blue.svg?style=flat-square)](https://freedomsponsors.org/project/341)
-[![Website](https://img.shields.io/badge/project-website-red.svg?style=flat-square)](http://www.openwar.io)
+[![Build](https://travis-ci.org/andreas-jonsson/openwar.svg?branch=master)](https://travis-ci.org/andreas-jonsson/openwar)
+[![Contribute](https://img.shields.io/badge/contribute-FreedomSponsors-blue.svg)](https://freedomsponsors.org/project/341)
+[![Website](https://img.shields.io/badge/project-website-red.svg)](http://www.openwar.io)
 
 ### About
 
