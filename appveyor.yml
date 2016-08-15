@@ -21,10 +21,10 @@ install:
     # - setup.exe /SILENT
     
     - appveyor DownloadFile https://drive.google.com/open?id=0BwNOhD4ZlgzGMWg1dkMtZ0JUYms
-    - 7zip.exe e -o c:\gopath\src\github.com\andreas-jonsson\openwar\tools\package\dependencies dependencies.7z
+    - 7z.exe e -o c:\gopath\src\github.com\andreas-jonsson\openwar\tools\package\dependencies dependencies.7z
     
     - appveyor DownloadFile https://drive.google.com/open?id=0BwNOhD4ZlgzGaUx2VWp0VXlUalU
-    - 7zip.exe e -o c:\TDM-GCC-64 TDM-GCC-64.7z
+    - 7z.exe e -o c:\TDM-GCC-64 TDM-GCC-64.7z
 
 build_script:
     - go get
