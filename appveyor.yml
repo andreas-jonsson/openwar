@@ -17,9 +17,9 @@ install:
     - go version
     - go env
     
-install:
     - curl -fsS -o setup.exe http://www.jrsoftware.org/download.php/ispack-unicode.exe
     - setup.exe /SILENT
+    
     - appveyor DownloadFile https://drive.google.com/open?id=0BwNOhD4ZlgzGMWg1dkMtZ0JUYms
     - 7zip.exe e -o c:\gopath\src\github.com\andreas-jonsson\openwar\tools\package\dependencies dependencies.7z
 
