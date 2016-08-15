@@ -16,15 +16,16 @@ install:
     - msiexec /i go1.6.3.windows-amd64.msi /q
     - go version
     - go env
-    
+
     # - curl -fsS -o setup.exe http://www.jrsoftware.org/download.php/ispack-unicode.exe
     # - setup.exe /SILENT
 
     - appveyor DownloadFile https://github.com/andreas-jonsson/openwar/raw/master/tools/package/dependencies.7z
     - 7z.exe x dependencies.7z -oc:\gopath\src\github.com\andreas-jonsson\openwar\tools\package\dependencies
-    
+
     - appveyor DownloadFile https://github.com/andreas-jonsson/openwar/raw/master/tools/build/TDM-GCC-64.7z
     - 7z.exe x TDM-GCC-64.7z -oc:\TDM-GCC-64
+    - set PATH=%PATH%;c:\TDM-GCC-64\bin
 
 build_script:
     - go get
