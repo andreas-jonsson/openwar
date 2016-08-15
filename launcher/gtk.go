@@ -1,3 +1,5 @@
+// -build nogui
+
 /*
 Copyright (C) 2016 Andreas T Jonsson
 
@@ -15,27 +17,21 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-package main
+package launcher
 
 import (
 	"log"
 	"unsafe"
 
+	"github.com/andreas-jonsson/openwar/game"
 	"github.com/andreas-jonsson/openwar/resource"
 	"github.com/mattn/go-gtk/gtk"
 )
 
-type Config struct {
-	fullscreen,
-	widescreen,
-	wc2Input bool
-}
+func Start() {
+	log.Println("Starting launcher...")
 
-var resourcePath string
-
-func main() {
 	gtk.Init(nil)
-
 	builder := gtk.NewBuilder()
 
 	if _, err := builder.AddFromFile("data/launcher.glade"); err != nil {
@@ -46,12 +42,17 @@ func main() {
 	gtk.Main()
 }
 
-func createConfig(builder *gtk.Builder) *Config {
+func createConfig(builder *gtk.Builder, resourcePath string) *game.Config {
 	fullscreen := true // (*gtk.CheckButton)(unsafe.Pointer(builder.GetObject("fullscreen_checkbutton"))).GetActive()
 	widescreen := true //(*gtk.CheckButton)(unsafe.Pointer(builder.GetObject("widescreen_checkbutton"))).GetActive()
 	wc2Input := true   // (*gtk.CheckButton)(unsafe.Pointer(builder.GetObject("wc2_input_checkbutton"))).GetActive()
 
-	return &Config{fullscreen, widescreen, wc2Input}
+	return &game.Config{
+		Fullscreen:   fullscreen,
+		Widescreen:   widescreen,
+		WC2Input:     wc2Input,
+		ResourcePath: resourcePath,
+	}
 }
 
 func setSensitive(builder *gtk.Builder, sensitive bool) {
@@ -63,6 +64,8 @@ func setSensitive(builder *gtk.Builder, sensitive bool) {
 }
 
 func setupLauncherWindow(builder *gtk.Builder) {
+	resourcePath := [1]string{""}
+
 	launcherWindow := gtk.WidgetFromObject(builder.GetObject("launcher_window"))
 	launcherWindow.ShowAll()
 
@@ -82,7 +85,7 @@ func setupLauncherWindow(builder *gtk.Builder) {
 			file := fileDialog.GetFilename()
 			entry := (*gtk.Entry)(unsafe.Pointer(builder.GetObject("resource_entry")))
 			entry.SetText(file)
-			resourcePath = file
+			resourcePath[0] = file
 			fileDialog.Hide()
 
 			img := (*gtk.Image)(unsafe.Pointer(builder.GetObject("resource_image")))
@@ -99,7 +102,11 @@ func setupLauncherWindow(builder *gtk.Builder) {
 	}, nil)
 
 	builder.GetObject("join_button").Connect("clicked", func() {
-		createConfig(builder)
+		launcherWindow.SetSensitive(false)
+		go func() {
+			game.Start(createConfig(builder, resourcePath[0]))
+			launcherWindow.SetSensitive(true)
+		}()
 	}, nil)
 
 	builder.GetObject("about_button").Connect("clicked", func() {

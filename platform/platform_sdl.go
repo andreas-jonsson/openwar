@@ -61,16 +61,14 @@ var mouseMapping = map[int]int{
 	sdl.MOUSEWHEEL:      MouseWheel,
 }
 
-func init() {
-	runtime.LockOSThread()
-}
-
 func Init() error {
+	runtime.LockOSThread()
 	return sdl.Init(sdl.INIT_EVERYTHING)
 }
 
 func Shutdown() {
 	sdl.Quit()
+	runtime.UnlockOSThread()
 }
 
 func PollEvent() Event {
