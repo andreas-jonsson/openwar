@@ -17,15 +17,18 @@ install:
     - go version
     - go env
 
-    # - curl -fsS -o setup.exe http://www.jrsoftware.org/download.php/ispack-unicode.exe
-    # - setup.exe /SILENT
+    - curl -fsS -o setup.exe http://www.jrsoftware.org/download.php/ispack-unicode.exe
+    - setup.exe /verysilent /noreboot
 
-    - appveyor DownloadFile https://github.com/andreas-jonsson/openwar/raw/master/tools/package/dependencies.7z
+    - appveyor DownloadFile http://lvserver.ugent.be/gtk-win64/gtk2-runtime/gtk2-runtime-2.24.30-2016-04-09-ts-win64.exe
+    - move gtk2-runtime-2.24.30-2016-04-09-ts-win64.exe c:\gopath\src\github.com\andreas-jonsson\openwar\tools\package
+
+    - appveyor DownloadFile https://dl.dropboxusercontent.com/u/1955192/dependencies.7z
     - 7z x dependencies.7z -oc:\gopath\src\github.com\andreas-jonsson\openwar\tools\package
 
-    - appveyor DownloadFile https://github.com/andreas-jonsson/openwar/raw/master/tools/build/TDM-GCC-64.7z
-    - 7z x TDM-GCC-64.7z -oc:\
-    - set PATH=%PATH%;c:\TDM-GCC-64\bin
+    - appveyor DownloadFile https://dl.dropboxusercontent.com/u/1955192/msys64.7z
+    - 7z x msys64.7z -oc:\
+    # - set PATH=%PATH%;c:\TDM-GCC-64\bin
 
 build_script:
     - go get

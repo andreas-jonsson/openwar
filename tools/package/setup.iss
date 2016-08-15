@@ -39,7 +39,7 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 [Files]
 Source: "{#MyAppRoot}\tools\package\dependencies\timidity\*"; DestDir: "C:\timidity"; Flags: sharedfile recursesubdirs createallsubdirs
 
-;Source: "{#MyAppRoot}\tools\package\dependencies\gtk2-runtime-2.24.30-2016-04-09-ts-win64.exe"; DestDir: "{tmp}"; Flags: deleteafterinstall
+Source: "{#MyAppRoot}\tools\package\dependencies\gtk2-runtime-2.24.30-2016-04-09-ts-win64.exe"; DestDir: "{tmp}"; Flags: deleteafterinstall
 
 Source: "{#MyAppRoot}\openwar.exe"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#MyAppRoot}\tools\package\dependencies\libFLAC-8.dll"; DestDir: "{app}"; Flags: ignoreversion
@@ -51,7 +51,7 @@ Source: "{#MyAppRoot}\tools\package\dependencies\libvorbisfile-3.dll"; DestDir: 
 Source: "{#MyAppRoot}\tools\package\dependencies\SDL2.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#MyAppRoot}\tools\package\dependencies\SDL2_mixer.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#MyAppRoot}\tools\package\dependencies\smpeg2.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#MyAppRoot}\data\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "{#MyAppRoot}\data\*"; DestDir: "{app}\data"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
@@ -60,4 +60,4 @@ Name: "{commondesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: 
 
 [Run]
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
-;Filename: "{tmp}\gtk2-runtime-2.24.30-2016-04-09-ts-win64.exe"
+Filename: "{tmp}\gtk2-runtime-2.24.30-2016-04-09-ts-win64.exe"
