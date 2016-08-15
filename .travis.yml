@@ -1,12 +1,12 @@
 language: go
 
 go:
-	- 1.6
-	- tip
+    - 1.6
+    - tip
   
 install:
-	- go get
+    - go get
   
 script:
-	- go build
-	- go test -v ./...
+    - go build openwar.go
+    - go test -v ./...
