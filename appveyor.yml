@@ -25,7 +25,9 @@ install:
 
     - appveyor DownloadFile https://github.com/andreas-jonsson/openwar/raw/master/tools/build/TDM-GCC-64.7z
     - 7z.exe x TDM-GCC-64.7z -oc:\TDM-GCC-64
+    - set
     - set PATH=%PATH%;c:\TDM-GCC-64\bin
+    - set
 
 build_script:
     - go get
