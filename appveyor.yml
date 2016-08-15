@@ -21,13 +21,11 @@ install:
     # - setup.exe /SILENT
 
     - appveyor DownloadFile https://github.com/andreas-jonsson/openwar/raw/master/tools/package/dependencies.7z
-    - 7z.exe x dependencies.7z -oc:\gopath\src\github.com\andreas-jonsson\openwar\tools\package\dependencies
+    - 7z.exe x dependencies.7z -oc:\gopath\src\github.com\andreas-jonsson\openwar\tools\package
 
     - appveyor DownloadFile https://github.com/andreas-jonsson/openwar/raw/master/tools/build/TDM-GCC-64.7z
-    - 7z.exe x TDM-GCC-64.7z -oc:\TDM-GCC-64
+    - 7z.exe x TDM-GCC-64.7z -oc:\
     - set PATH=%PATH%;c:\TDM-GCC-64\bin
-    - dir c:\TDM-GCC-64\bin
-    - gcc
 
 build_script:
     - go get
