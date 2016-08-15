@@ -19,11 +19,11 @@ install:
     
     # - curl -fsS -o setup.exe http://www.jrsoftware.org/download.php/ispack-unicode.exe
     # - setup.exe /SILENT
-    
-    - curl -L "https://drive.google.com/open?id=0BwNOhD4ZlgzGMWg1dkMtZ0JUYms" > dependencies.7z
+
+    - curl -L "https://drive.google.com/uc?export=download&confirm=RIZV&id=0BwNOhD4ZlgzGMWg1dkMtZ0JUYms" > dependencies.7z
     - 7z.exe x dependencies.7z -oc:\gopath\src\github.com\andreas-jonsson\openwar\tools\package\dependencies
     
-    - curl -L "https://drive.google.com/open?id=0BwNOhD4ZlgzGaUx2VWp0VXlUalU" > TDM-GCC-64.7z
+    - curl -L "https://drive.google.com/uc?export=download&confirm=RIZV&id=0BwNOhD4ZlgzGaUx2VWp0VXlUalU" > TDM-GCC-64.7z
     - 7z.exe x TDM-GCC-64.7z -oc:\TDM-GCC-64
 
 build_script:
