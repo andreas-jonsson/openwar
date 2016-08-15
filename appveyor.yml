@@ -18,4 +18,6 @@ install:
     - go env
 
 build_script:
-    - go build
+    - go get
+    - go build openwar.go
+    - go test ./...
