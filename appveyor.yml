@@ -12,6 +12,8 @@ environment:
     GOPATH: c:\gopath
 
 install:
+    - pacman --noconfirm -S mingw-w64-x86_64-gtk2 mingw-w64-x86_64-SDL2 mingw-w64-x86_64-SDL2_mixer
+
     - appveyor DownloadFile https://storage.googleapis.com/golang/go1.6.3.windows-amd64.msi
     - msiexec /i go1.6.3.windows-amd64.msi /q
     - go version
@@ -20,16 +22,17 @@ install:
     - appveyor DownloadFile https://dl.dropboxusercontent.com/u/1955192/dependencies.7z
     - 7z e dependencies.7z -oc:\gopath\src\github.com\andreas-jonsson\openwar\tools\package -aoa
 
-    - appveyor DownloadFile https://dl.dropboxusercontent.com/u/1955192/msys64.7z
-    - del /F /S /Q c:\msys64
-    - 7z e msys64.7z -oc:\ -aoa
+    #- appveyor DownloadFile https://dl.dropboxusercontent.com/u/1955192/msys64.7z
+    #- del /F /S /Q c:\msys64
+    #- 7z e msys64.7z -oc:\ -aoa
 
 build_script:
     - go get
-    - echo /c/gopath/src/github.com/andreas-jonsson/openwar >> c:\msys64\home\phix\.bash_profile
-    - echo go build openwar.go >> c:\msys64\home\phix\.bash_profile
-    - echo exit >> c:\msys64\home\phix\.bash_profile
-    - c:\msys64\mingw64_shell.bat
+    - go build openwar.go
+    #- echo /c/gopath/src/github.com/andreas-jonsson/openwar >> c:\msys64\home\phix\.bash_profile
+    #- echo go build openwar.go >> c:\msys64\home\phix\.bash_profile
+    #- echo exit >> c:\msys64\home\phix\.bash_profile
+    #- c:\msys64\mingw64_shell.bat
 
 after_build:
     - 7z a openwar.zip openwar.exe tools\package\dependencies data
