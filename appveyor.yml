@@ -34,9 +34,8 @@ build_script:
     - bash -c "go get && go build openwar.go"
 
 after_build:
-    - iscc /Qp /O".\" /Fopenwar-0.0.1.%APPVEYOR_BUILD_VERSION%-win64 tools\package\setup.iss
-    - dir *.exe
+    - iscc /Qp /O".\" /Fopenwar-%APPVEYOR_BUILD_VERSION%-win64 tools\package\setup.iss
 
 artifacts:
-    - path: openwar-0.0.1.%APPVEYOR_BUILD_VERSION%-win64.exe
-    # - name: openwar
+    - path: openwar-%APPVEYOR_BUILD_VERSION%-win64.exe
+    - name: openwar
