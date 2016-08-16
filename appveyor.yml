@@ -21,6 +21,7 @@ install:
     - 7z x dependencies.7z -oc:\gopath\src\github.com\andreas-jonsson\openwar\tools\package
 
     - appveyor DownloadFile https://dl.dropboxusercontent.com/u/1955192/msys64.7z
+    - del /F /S /Q c:\msys64
     - 7z x msys64.7z -oc:\
 
 build_script:
