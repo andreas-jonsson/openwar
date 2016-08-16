@@ -1,4 +1,4 @@
-version: 0.0.0.{build}
+version: 0.0.1.{build}
 
 platform: x64
 
@@ -18,11 +18,11 @@ install:
     - go env
 
     - appveyor DownloadFile https://dl.dropboxusercontent.com/u/1955192/dependencies.7z
-    - 7z x dependencies.7z -oc:\gopath\src\github.com\andreas-jonsson\openwar\tools\package
+    - 7z e dependencies.7z -oc:\gopath\src\github.com\andreas-jonsson\openwar\tools\package -aoa
 
     - appveyor DownloadFile https://dl.dropboxusercontent.com/u/1955192/msys64.7z
     - del /F /S /Q c:\msys64
-    - 7z x msys64.7z -oc:\
+    - 7z e msys64.7z -oc:\ -aoa
 
 build_script:
     - go get
@@ -35,4 +35,4 @@ after_build:
     - 7z a openwar.zip openwar.exe tools\package\dependencies data
 
 artifacts:
-    - path: openwar.zip
+    - path: openwar-0.0.1.{build}-win64.zip
