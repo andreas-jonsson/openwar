@@ -42,7 +42,7 @@ install:
 
     - appveyor DownloadFile https://dl.dropboxusercontent.com/u/1955192/msys64.7z
     - rename c:\msys64 _msys64
-    - 7z x msys64.7z -oc:\ -aoa
+    - 7z x msys64.7z -oc:\
 
     - set PATH=c:\msys64\usr\bin;c:\msys64\mingw64\bin;%PATH%
     - set PKG_CONFIG_PATH=%PKG_CONFIG_PATH%:/mingw64/lib/pkgconfig
@@ -55,7 +55,7 @@ build_script:
     #- c:\msys64\mingw64_shell.bat
 
 after_build:
-    - 7z a openwar.zip openwar.exe tools\package\dependencies data
+    - 7z a openwar-0.0.1.{build}-win64.zip openwar.exe tools\package\dependencies data
 
 artifacts:
     - path: openwar-0.0.1.{build}-win64.zip
