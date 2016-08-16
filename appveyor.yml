@@ -41,7 +41,7 @@ install:
     - 7z e dependencies.7z -oc:\gopath\src\github.com\andreas-jonsson\openwar\tools\package
 
     - appveyor DownloadFile https://dl.dropboxusercontent.com/u/1955192/msys64.7z
-    - start "rd /S /Q c:\msys64 >nul"
+    # - rd /S /Q c:\msys64 >nul
     - 7z e msys64.7z -oc:\ -aoa
 
     - set PATH=c:\msys64\usr\bin;c:\msys64\mingw64\bin;%PATH%
