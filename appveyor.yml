@@ -34,8 +34,8 @@ build_script:
     - bash -c "go get && go build openwar.go"
 
 after_build:
-    - "c:\\Program Files (x86)\\Inno Setup 5\\Compil32.exe" /cc "tools\package\setup.iss"
-    - move tools\package\Output\openwar-0.0.1-win64.exe openwar-0.0.1.%APPVEYOR_BUILD_VERSION%-win64.exe
+    - "c:\\Program Files (x86)\\Inno Setup 5\\iscc.exe" /Qp /O"" /Fopenwar-0.0.1.%APPVEYOR_BUILD_VERSION%-win64 tools\package\setup.iss
+    # - move tools\package\Output\openwar-0.0.1-win64.exe openwar-0.0.1.%APPVEYOR_BUILD_VERSION%-win64.exe
 
 artifacts:
     - path: openwar-0.0.1.%APPVEYOR_BUILD_VERSION%-win64.exe
