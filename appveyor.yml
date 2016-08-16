@@ -27,14 +27,14 @@ install:
     - rename c:\msys64 _msys64
     - 7z x msys64.7z -oc:\
 
-    - set PATH=c:\msys64\usr\bin;c:\msys64\mingw64\bin;%PATH%
+    - set PATH="c:\Program Files (x86)\Inno Setup 5";c:\msys64\usr\bin;c:\msys64\mingw64\bin;%PATH%
     - set PKG_CONFIG_PATH=%PKG_CONFIG_PATH%:/mingw64/lib/pkgconfig
 
 build_script:
     - bash -c "go get && go build openwar.go"
 
 after_build:
-    - "c:\\Program Files (x86)\\Inno Setup 5\\iscc.exe" /Qp /O"" /Fopenwar-0.0.1.%APPVEYOR_BUILD_VERSION%-win64 tools\package\setup.iss
+    - iscc.exe /Qp /O"" /Fopenwar-0.0.1.%APPVEYOR_BUILD_VERSION%-win64 tools\package\setup.iss
     # - move tools\package\Output\openwar-0.0.1-win64.exe openwar-0.0.1.%APPVEYOR_BUILD_VERSION%-win64.exe
 
 artifacts:
