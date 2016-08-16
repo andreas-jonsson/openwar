@@ -1,7 +1,6 @@
 # OpenWar
 
-[![OSX & Linux Build](https://travis-ci.org/andreas-jonsson/openwar.svg?branch=master)](https://travis-ci.org/andreas-jonsson/openwar)
-[![Windows Build](https://ci.appveyor.com/api/projects/status/erhgfi08p3amtaec?svg=true)](https://ci.appveyor.com/project/andreas-t-jonsson/openwar)
+[![Chat](https://badges.gitter.im/andreas-jonsson/openwar.svg)](https://gitter.im/andreas-jonsson/openwar?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Contribute](https://img.shields.io/badge/contribute-FreedomSponsors-blue.svg)](https://freedomsponsors.org/project/341)
 [![Website](https://img.shields.io/badge/project-website-red.svg)](http://www.openwar.io)
 
@@ -18,6 +17,12 @@ Since OpenWar is a different game engine, not all things will work 100% the same
 ### Disclaimer
 
 OpenWar is *not* an official Blizzard product, its a Warcraft: Orcs & Humans modification, by Warcraft fans for Warcraft fans. You need a copy of the original Warcraft: Orcs & Humans MS-DOS version to make use of OpenWar. *Warcraft* is a registered trademark of [Blizzard Entertainment](https://www.blizzard.com).
+
+### Builds
+
+##### Linux & OSX: [![OSX & Linux Build](https://travis-ci.org/andreas-jonsson/openwar.svg?branch=master)](https://travis-ci.org/andreas-jonsson/openwar)
+
+##### Windows [![Windows Build](https://ci.appveyor.com/api/projects/status/erhgfi08p3amtaec?svg=true)](https://ci.appveyor.com/project/andreas-t-jonsson/openwar)
 
 ### Development
 
