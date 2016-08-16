@@ -12,7 +12,8 @@ environment:
     GOPATH: c:\gopath
 
 install:
-    - pacman --noconfirm -S mingw-w64-x86_64-gtk2 mingw-w64-x86_64-SDL2 mingw-w64-x86_64-SDL2_mixer
+    - set PATH=c:\msys64\usr\bin;c:\msys64\mingw64\bin;%PATH%
+    - bash -c "pacman --noconfirm -S mingw-w64-x86_64-gtk2 mingw-w64-x86_64-SDL2 mingw-w64-x86_64-SDL2_mixer"
 
     - appveyor DownloadFile https://storage.googleapis.com/golang/go1.6.3.windows-amd64.msi
     - msiexec /i go1.6.3.windows-amd64.msi /q
@@ -27,8 +28,7 @@ install:
     #- 7z e msys64.7z -oc:\ -aoa
 
 build_script:
-    - go get
-    - go build openwar.go
+    - bash -c "go get && go build openwar.go"
     #- echo /c/gopath/src/github.com/andreas-jonsson/openwar >> c:\msys64\home\phix\.bash_profile
     #- echo go build openwar.go >> c:\msys64\home\phix\.bash_profile
     #- echo exit >> c:\msys64\home\phix\.bash_profile
