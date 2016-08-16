@@ -12,8 +12,8 @@ environment:
     GOPATH: c:\gopath
 
 install:
-    - set PATH=c:\msys64\usr\bin;c:\msys64\mingw64\bin;%PATH%
-    - set PKG_CONFIG_PATH=%PKG_CONFIG_PATH%:/mingw64/lib/pkgconfig
+    #- set PATH=c:\msys64\usr\bin;c:\msys64\mingw64\bin;%PATH%
+    #- set PKG_CONFIG_PATH=%PKG_CONFIG_PATH%:/mingw64/lib/pkgconfig
     # - bash -c "pacman --noconfirm -Sy pacman"
     # - bash -c "pacman --noconfirm -Syu"
     # - bash -c "pacman --noconfirm -Su"
@@ -41,8 +41,11 @@ install:
     - 7z e dependencies.7z -oc:\gopath\src\github.com\andreas-jonsson\openwar\tools\package
 
     - appveyor DownloadFile https://dl.dropboxusercontent.com/u/1955192/msys64.7z
-    - del /F /S /Q c:\msys64
+    - del /F /S /Q c:\msys64 >nul
     - 7z e msys64.7z -oc:\ -aoa
+
+    - set PATH=c:\msys64\usr\bin;c:\msys64\mingw64\bin;%PATH%
+    - set PKG_CONFIG_PATH=%PKG_CONFIG_PATH%:/mingw64/lib/pkgconfig
 
 build_script:
     - bash -c "go get && go build openwar.go"
