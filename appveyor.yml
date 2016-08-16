@@ -18,7 +18,7 @@ install:
     - go env
 
     - appveyor DownloadFile https://dl.dropboxusercontent.com/u/1955192/dependencies.7z
-    - 7z x dependencies.7z -oc:\gopath\src\github.com\andreas-jonsson\openwar\tools\package
+    - 7z x dependencies.7z -o%APPVEYOR_BUILD_FOLDER%\tools\package
 
     - appveyor DownloadFile https://dl.dropboxusercontent.com/u/1955192/inno.7z
     - 7z x inno.7z -o"c:\Program Files (x86)"
@@ -34,8 +34,10 @@ build_script:
     - bash -c "go get && go build openwar.go"
 
 after_build:
-    - iscc.exe /Qp /O".\" /Fopenwar-0.0.1.%APPVEYOR_BUILD_VERSION%-win64 tools\package\setup.iss
+    - iscc /Qp /O".\" /Fopenwar-0.0.1.%APPVEYOR_BUILD_VERSION%-win64 tools\package\setup.iss
+    - 7z a debug.zip *.exe
 
 artifacts:
-    - path: openwar-0.0.1.%APPVEYOR_BUILD_VERSION%-win64.exe
+    - path debug.zip
+    # - path: openwar-0.0.1.%APPVEYOR_BUILD_VERSION%-win64.exe
     # - name: openwar
