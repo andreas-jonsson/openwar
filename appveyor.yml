@@ -21,12 +21,12 @@ install:
     # - bash -c "pacman --noconfirm -S mingw-w64-x86_64-gtk2 mingw-w64-x86_64-SDL2 mingw-w64-x86_64-SDL2_mixer"
     - bash -c "pacman --noconfirm -S mingw-w64-x86_64-gtk2"
 
-    - appveyor DownloadFile https://www.libsdl.org/release/SDL2-2.0.4.tar.gz
-    - 7z e SDL2-2.0.4.tar.gz
+    - appveyor DownloadFile https://www.libsdl.org/release/SDL2-2.0.4.zip
+    - 7z e SDL2-2.0.4.zip
     - bash "cd SDL2* && ./configure && make && make install"
 
-    - appveyor DownloadFile https://www.libsdl.org/projects/SDL_mixer/release/SDL2_mixer-2.0.1.tar.gz
-    - 7z e SDL2_mixer-2.0.1.tar.gz
+    - appveyor DownloadFile https://www.libsdl.org/projects/SDL_mixer/release/SDL2_mixer-2.0.1.zip
+    - 7z e SDL2_mixer-2.0.1.zip
     - bash "cd SDL2_mixer* && ./configure && make && make install"
 
     # - curl -fsS -o setup.exe http://www.jrsoftware.org/download.php/ispack-unicode.exe
