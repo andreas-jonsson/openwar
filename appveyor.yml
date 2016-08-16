@@ -38,6 +38,6 @@ after_build:
     - 7z a debug.zip *.exe
 
 artifacts:
-    - path debug.zip
+    - path: debug.zip
     # - path: openwar-0.0.1.%APPVEYOR_BUILD_VERSION%-win64.exe
     # - name: openwar
