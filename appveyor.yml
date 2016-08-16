@@ -13,7 +13,11 @@ environment:
 
 install:
     - set PATH=c:\msys64\usr\bin;c:\msys64\mingw64\bin;%PATH%
+    - set PKG_CONFIG_PATH=%PKG_CONFIG_PATH%:/mingw64/lib/pkgconfig
     - bash -c "pacman --noconfirm -S mingw-w64-x86_64-gtk2 mingw-w64-x86_64-SDL2 mingw-w64-x86_64-SDL2_mixer"
+
+    # - curl -fsS -o setup.exe http://www.jrsoftware.org/download.php/ispack-unicode.exe
+    # - setup.exe /verysilent /noreboot
 
     - appveyor DownloadFile https://storage.googleapis.com/golang/go1.6.3.windows-amd64.msi
     - msiexec /i go1.6.3.windows-amd64.msi /q
