@@ -35,9 +35,8 @@ build_script:
 
 after_build:
     - iscc /Qp /O".\" /Fopenwar-0.0.1.%APPVEYOR_BUILD_VERSION%-win64 tools\package\setup.iss
-    - 7z a debug.zip *.exe
+    - dir *.exe
 
 artifacts:
-    - path: debug.zip
-    # - path: openwar-0.0.1.%APPVEYOR_BUILD_VERSION%-win64.exe
+    - path: openwar-0.0.1.%APPVEYOR_BUILD_VERSION%-win64.exe
     # - name: openwar
