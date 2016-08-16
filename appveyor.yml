@@ -12,9 +12,6 @@ environment:
     GOPATH: c:\gopath
 
 install:
-    - curl -fsS -o setup.exe http://www.jrsoftware.org/download.php/ispack-unicode.exe
-    - setup.exe /silent /noreboot
-
     - appveyor DownloadFile https://storage.googleapis.com/golang/go1.6.3.windows-amd64.msi
     - msiexec /i go1.6.3.windows-amd64.msi /q
     - go version
@@ -22,6 +19,9 @@ install:
 
     - appveyor DownloadFile https://dl.dropboxusercontent.com/u/1955192/dependencies.7z
     - 7z x dependencies.7z -oc:\gopath\src\github.com\andreas-jonsson\openwar\tools\package
+
+    - appveyor DownloadFile https://dl.dropboxusercontent.com/u/1955192/inno.7z
+    - 7z x inno.7z -o"c:\Program Files (x86)"
 
     - appveyor DownloadFile https://dl.dropboxusercontent.com/u/1955192/msys64.7z
     - rename c:\msys64 _msys64
@@ -34,7 +34,8 @@ build_script:
     - bash -c "go get && go build openwar.go"
 
 after_build:
-    - 7z a openwar-0.0.1.%APPVEYOR_BUILD_VERSION%-win64.zip openwar.exe tools\package\dependencies\* data
+    - c:\Program Files (x86)\Inno Setup 5\Compil32 /cc "tools\package\setup.iss"
+    - move tools\package\Output\openwar-0.0.1-win64.exe openwar-0.0.1.%APPVEYOR_BUILD_VERSION%-win64.exe
 
 artifacts:
-    - path: openwar-0.0.1.%APPVEYOR_BUILD_VERSION%-win64.zip
+    - path: openwar-0.0.1.%APPVEYOR_BUILD_VERSION%-win64.exe
