@@ -12,25 +12,8 @@ environment:
     GOPATH: c:\gopath
 
 install:
-    #- set PATH=c:\msys64\usr\bin;c:\msys64\mingw64\bin;%PATH%
-    #- set PKG_CONFIG_PATH=%PKG_CONFIG_PATH%:/mingw64/lib/pkgconfig
-    # - bash -c "pacman --noconfirm -Sy pacman"
-    # - bash -c "pacman --noconfirm -Syu"
-    # - bash -c "pacman --noconfirm -Su"
-    # - bash -c "pacman --noconfirm -S mingw-w64-x86_64-toolchain mingw-w64-x86_64-gtk2 mingw-w64-x86_64-SDL2 mingw-w64-x86_64-SDL2_mixer"
-    # - bash -c "pacman --noconfirm -S mingw-w64-x86_64-gtk2 mingw-w64-x86_64-SDL2 mingw-w64-x86_64-SDL2_mixer"
-    #- bash -c "pacman --noconfirm -S mingw-w64-x86_64-gtk2"
-
-    #- appveyor DownloadFile https://www.libsdl.org/release/SDL2-2.0.4.zip
-    #- 7z e SDL2-2.0.4.zip -aoa
-    #- bash "cd SDL2-2.0.4 && ./configure && make && make install"
-
-    #- appveyor DownloadFile https://www.libsdl.org/projects/SDL_mixer/release/SDL2_mixer-2.0.1.zip
-    #- 7z e SDL2_mixer-2.0.1.zip -aoa
-    #- bash "cd SDL2_mixer-2.0.1 && ./configure && make && make install"
-
-    # - curl -fsS -o setup.exe http://www.jrsoftware.org/download.php/ispack-unicode.exe
-    # - setup.exe /verysilent /noreboot
+    - curl -fsS -o setup.exe http://www.jrsoftware.org/download.php/ispack-unicode.exe
+    - setup.exe /silent /noreboot
 
     - appveyor DownloadFile https://storage.googleapis.com/golang/go1.6.3.windows-amd64.msi
     - msiexec /i go1.6.3.windows-amd64.msi /q
@@ -49,13 +32,9 @@ install:
 
 build_script:
     - bash -c "go get && go build openwar.go"
-    #- echo /c/gopath/src/github.com/andreas-jonsson/openwar >> c:\msys64\home\phix\.bash_profile
-    #- echo go build openwar.go >> c:\msys64\home\phix\.bash_profile
-    #- echo exit >> c:\msys64\home\phix\.bash_profile
-    #- c:\msys64\mingw64_shell.bat
 
 after_build:
-    - 7z a openwar-0.0.1.{build}-win64.zip openwar.exe tools\package\dependencies data
+    - 7z a openwar-0.0.1.%APPVEYOR_BUILD_VERSION%-win64.zip openwar.exe tools\package\dependencies\* data
 
 artifacts:
-    - path: openwar-0.0.1.{build}-win64.zip
+    - path: openwar-0.0.1.%APPVEYOR_BUILD_VERSION%-win64.zip
