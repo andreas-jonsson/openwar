@@ -23,5 +23,5 @@ script:
     - go test -v ./...
 
     - ./tools/package/build_deb.sh
-    # - ./tools/dropbox/dropbox_uploader.sh upload openwar_0.0.1-$TRAVIS_BUILD_NUMBER Public/openwar_0.0.1-$TRAVIS_BUILD_NUMBER.deb
-    - ./tools/dropbox/dropbox_uploader.sh upload openwar_0.0.1-$TRAVIS_BUILD_NUMBER Public/openwar_0.0.1.deb
+    # - ./tools/dropbox/dropbox_uploader.sh upload openwar_0.0.1-$TRAVIS_BUILD_NUMBER.deb Public/openwar_0.0.1-$TRAVIS_BUILD_NUMBER.deb
+    - ./tools/dropbox/dropbox_uploader.sh upload openwar_0.0.1-$TRAVIS_BUILD_NUMBER.deb Public/openwar_0.0.1.deb
