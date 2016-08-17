@@ -11,7 +11,7 @@ os:
 before_install:
     - '[ "$TRAVIS_SECURE_ENV_VARS" == "false" ] || openssl aes-256-cbc -K $encrypted_2a6a96d3c45a_key -iv $encrypted_2a6a96d3c45a_iv -in tools/dropbox/.dropbox_uploader.enc -out ~/.dropbox_uploader -d'
 
-    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install gtk+2; fi
+    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install gtk+; fi
     - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install -y rpl; fi
 
     - wget -q http://www.libsdl.org/release/SDL2-2.0.3.tar.gz
