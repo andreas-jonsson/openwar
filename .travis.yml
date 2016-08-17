@@ -14,7 +14,8 @@ before_install:
 
 install:
     - go get
-  
+
 script:
     - go build openwar.go
     - go test -v ./...
+    - ./tools/package/build_deb.sh
