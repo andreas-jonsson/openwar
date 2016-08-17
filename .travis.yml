@@ -5,7 +5,7 @@ go:
     # - tip
 
 before_install:
-    - '[ "$TRAVIS_SECURE_ENV_VARS" == "false" ] || openssl aes-256-cbc -K $encrypted_2a6a96d3c45a_key -iv $encrypted_2a6a96d3c45a_iv -in tools/dropbox/.dropbox_uploader.enc -out ~\/.dropbox_uploader -d'
+    - '[ "$TRAVIS_SECURE_ENV_VARS" == "false" ] || openssl aes-256-cbc -K $encrypted_2a6a96d3c45a_key -iv $encrypted_2a6a96d3c45a_iv -in tools/dropbox/.dropbox_uploader.enc -out ~/.dropbox_uploader -d'
 
     - sudo apt-get install -y rpl
     - wget -q http://www.libsdl.org/release/SDL2-2.0.3.tar.gz
