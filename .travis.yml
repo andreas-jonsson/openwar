@@ -4,6 +4,10 @@ go:
     - 1.6
     # - tip
 
+os:
+  - linux
+  - osx
+
 before_install:
     - '[ "$TRAVIS_SECURE_ENV_VARS" == "false" ] || openssl aes-256-cbc -K $encrypted_2a6a96d3c45a_key -iv $encrypted_2a6a96d3c45a_iv -in tools/dropbox/.dropbox_uploader.enc -out ~/.dropbox_uploader -d'
 
@@ -22,6 +26,4 @@ script:
     - go build openwar.go
     - go test -v ./...
 
-    - ./tools/package/build_deb.sh
-    # - ./tools/dropbox/dropbox_uploader.sh upload openwar_0.0.1-$TRAVIS_BUILD_NUMBER.deb Public/openwar_0.0.1-$TRAVIS_BUILD_NUMBER.deb
-    - ./tools/dropbox/dropbox_uploader.sh upload openwar_0.0.1-$TRAVIS_BUILD_NUMBER.deb Public/openwar_0.0.1.deb
+    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then ./tools/package/build_deb.sh && ./tools/dropbox/dropbox_uploader.sh upload openwar_0.0.1-$TRAVIS_BUILD_NUMBER.deb Public/openwar_0.0.1.deb; fi
