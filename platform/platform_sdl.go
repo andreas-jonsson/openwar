@@ -18,6 +18,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package platform
 
 import (
+	"log"
 	"os"
 	"path"
 	"runtime"
@@ -77,6 +78,8 @@ func init() {
 			DataPath = path.Join(sdl.GetBasePath(), "data")
 		}
 	}
+
+	log.Println("Data path:", DataPath)
 }
 
 func RootJoin(p ...string) string {
