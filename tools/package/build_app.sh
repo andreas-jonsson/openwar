@@ -15,5 +15,6 @@ cp -r SDL2_mixer/SDL2_mixer.framework $DIR/Contents/Resources
 
 mkdir $DIR/Contents/MacOS
 cp openwar $DIR/Contents/MacOS
+cp -r data $DIR/Contents/MacOS
 
 7z a -tzip OpenWar.zip OpenWar.app
