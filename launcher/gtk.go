@@ -24,6 +24,7 @@ import (
 	"unsafe"
 
 	"github.com/andreas-jonsson/openwar/game"
+	"github.com/andreas-jonsson/openwar/platform"
 	"github.com/andreas-jonsson/openwar/resource"
 	"github.com/mattn/go-gtk/gtk"
 )
@@ -34,7 +35,7 @@ func Start() {
 	gtk.Init(nil)
 	builder := gtk.NewBuilder()
 
-	if _, err := builder.AddFromFile("data/launcher.glade"); err != nil {
+	if _, err := builder.AddFromFile(platform.RootJoin("launcher.glade")); err != nil {
 		log.Fatalln("could not load interface description:", err)
 	}
 
