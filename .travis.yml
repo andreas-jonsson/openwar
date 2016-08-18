@@ -21,5 +21,6 @@ script:
     - go build openwar.go
     - go test -v ./...
 
-    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then ./tools/package/build_app.sh && ./tools/dropbox/dropbox_uploader.sh upload OpenWar.zip Public/OpenWar.zip; fi
+    # - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then ./tools/package/build_app.sh && ./tools/dropbox/dropbox_uploader.sh upload OpenWar.zip Public/OpenWar.zip; fi
+    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then 7z a -tzip OpenWar.zip openwar data && ./tools/dropbox/dropbox_uploader.sh upload OpenWar.zip Public/OpenWar.zip; fi
     - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then ./tools/package/build_deb.sh && ./tools/dropbox/dropbox_uploader.sh upload openwar_0.0.1-$TRAVIS_BUILD_NUMBER.deb Public/openwar_0.0.1.deb; fi
