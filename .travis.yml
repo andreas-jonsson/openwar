@@ -13,6 +13,13 @@ notifications:
         on_success: never
         on_failure: always
 
+    webhooks:
+        urls:
+            - https://webhooks.gitter.im/e/33fa78a44d476a8bf7af
+        on_success: change
+        on_failure: always
+        on_start: never
+
 before_install:
     - '[ "$TRAVIS_SECURE_ENV_VARS" == "false" ] || openssl aes-256-cbc -K $encrypted_2a6a96d3c45a_key -iv $encrypted_2a6a96d3c45a_iv -in tools/dropbox/.dropbox_uploader.enc -out ~/.dropbox_uploader -d'
 
