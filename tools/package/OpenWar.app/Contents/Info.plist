@@ -13,6 +13,6 @@
     <key>CFBundlePackageType</key>
     <string>APPL</string>
     <key>CFBundleIconFile</key>
-    <string>icon</string>
+    <string>icon.icns</string>
 </dict>
 </plist>
