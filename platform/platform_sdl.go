@@ -18,6 +18,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package platform
 
 import (
+	"os"
+	"path"
 	"runtime"
 
 	"github.com/veandco/go-sdl2/sdl"
@@ -59,6 +61,26 @@ var mouseMapping = map[int]int{
 	sdl.MOUSEBUTTONUP:   MouseButtonUp,
 	sdl.MOUSEMOTION:     MouseMotion,
 	sdl.MOUSEWHEEL:      MouseWheel,
+}
+
+var DataPath string
+
+func init() {
+	wd, _ := os.Getwd()
+	DataPath = path.Join(wd, "data")
+
+	if _, err := os.Stat(DataPath); os.IsNotExist(err) {
+		switch runtime.GOOS {
+		case "linux":
+			DataPath = "/usr/local/share/openwar"
+		case "darwin":
+			DataPath = path.Join(sdl.GetBasePath(), "data")
+		}
+	}
+}
+
+func RootJoin(p ...string) string {
+	return path.Join(DataPath, path.Join(p...))
 }
 
 func Init() error {
