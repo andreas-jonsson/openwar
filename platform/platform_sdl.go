@@ -71,11 +71,8 @@ func init() {
 	DataPath = path.Join(wd, "data")
 
 	if _, err := os.Stat(DataPath); os.IsNotExist(err) {
-		switch runtime.GOOS {
-		case "linux":
-			DataPath = "/usr/local/share/openwar"
-		case "darwin":
-			DataPath = "/usr/local/Cellar/share/openwar"
+		DataPath = "/usr/local/share/openwar"
+		if runtime.GOOS == "darwin" {
 			if _, err := os.Stat(DataPath); os.IsNotExist(err) {
 				DataPath = path.Join(sdl.GetBasePath(), "data")
 			}
