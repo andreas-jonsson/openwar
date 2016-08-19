@@ -84,6 +84,10 @@ func init() {
 		}
 	}
 
+	if isInvalid() {
+		log.Fatalln("Could not locate data folder!")
+	}
+
 	log.Println("Data path:", DataPath)
 }
 
