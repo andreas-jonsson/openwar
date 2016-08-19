@@ -75,7 +75,10 @@ func init() {
 		case "linux":
 			DataPath = "/usr/local/share/openwar"
 		case "darwin":
-			DataPath = path.Join(sdl.GetBasePath(), "data")
+			DataPath = "/usr/local/Cellar/share/openwar-data"
+			if _, err := os.Stat(DataPath); os.IsNotExist(err) {
+				DataPath = path.Join(sdl.GetBasePath(), "data")
+			}
 		}
 	}
 
