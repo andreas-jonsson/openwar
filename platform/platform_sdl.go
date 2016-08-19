@@ -67,13 +67,18 @@ var mouseMapping = map[int]int{
 var DataPath string
 
 func init() {
+	isInvalid := func() bool {
+		_, err := os.Stat(path.Join(DataPath, "launcher.glade"))
+		return os.IsNotExist(err)
+	}
+
 	wd, _ := os.Getwd()
 	DataPath = path.Join(wd, "data")
 
-	if _, err := os.Stat(DataPath); os.IsNotExist(err) {
+	if isInvalid() {
 		DataPath = "/usr/local/share/openwar"
 		if runtime.GOOS == "darwin" {
-			if _, err := os.Stat(DataPath); os.IsNotExist(err) {
+			if isInvalid() {
 				DataPath = path.Join(sdl.GetBasePath(), "data")
 			}
 		}
