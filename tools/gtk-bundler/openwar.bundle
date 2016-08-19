@@ -94,13 +94,13 @@
        "${bundle}", which refers to the bundle root directory.
   -->
   <data>
-    ${prefix}/share/openwar
+    ${project}/../../data
   </data>
 
   <!-- Copy in the themes data. You may want to trim this to save space
        in your bundle. -->
-  <data dest="${bundle}/Contents/Resources/data>
-    ${project}/../../data
+  <data>
+    ${prefix}/share/themes
   </data>
 
   <!-- Copy icons. Note that the .icns file is an Apple format which
@@ -127,9 +127,9 @@
        icon names. To be safe, you should use "all". "none" is useful
        if you want just the index.theme file but no icons, mostly
        needed for the "hicolor" base theme.
-  >
-  <icon-theme icons="auto">
+  -->
+  <icon-theme icons="all">
     Tango
-  </icon-theme -->
+  </icon-theme>
 
 </app-bundle>
