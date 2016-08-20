@@ -20,18 +20,15 @@ notifications:
         on_failure: always
         on_start: never
 
-before_install:
+install:
     - '[ "$TRAVIS_SECURE_ENV_VARS" == "false" ] || openssl aes-256-cbc -K $encrypted_2a6a96d3c45a_key -iv $encrypted_2a6a96d3c45a_iv -in tools/dropbox/.dropbox_uploader.enc -out ~/.dropbox_uploader -d'
 
     - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update && brew install p7zip; fi
     - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install -y rpl && export SDL_PREFIX=/usr/local && ./tools/sdl_from_source.sh; fi
 
-install:
-    - go get
-
 script:
     - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then ./tools/package/build_app.sh; fi
     - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then ./tools/dropbox/dropbox_uploader.sh upload OpenWar.zip Public/OpenWar.zip; fi
 
-    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then go build openwar.go && go test -v ./...; fi
+    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then go get && go build openwar.go && go test -v ./...; fi
     - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then ./tools/package/build_deb.sh && ./tools/dropbox/dropbox_uploader.sh upload openwar_0.0.1-$TRAVIS_BUILD_NUMBER.deb Public/openwar_0.0.1.deb; fi
