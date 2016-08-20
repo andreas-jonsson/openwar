@@ -18,7 +18,7 @@
          app. If you leave out the path, the current directory is
          used. Note the usage of an environment variable here again.
     -->
-    <destination overwrite="yes">${project}/output</destination>
+    <destination overwrite="yes">${project}/../Output</destination>
 
     <image>
       <!-- Not implemented yet (DMG image). -->
@@ -50,7 +50,7 @@
   -->
   <plist>${project}/Info.plist</plist>
 
-  <main-binary>${project}/../../openwar</main-binary>
+  <main-binary>${project}/../../../openwar</main-binary>
 
   <!-- Copy in GTK+ modules.  Note the ${gtkdir} macro, which expands
        to the correct library subdirectory for the specified gtk
@@ -93,8 +93,8 @@
        "dest" property. The destination must then start with the macro
        "${bundle}", which refers to the bundle root directory.
   -->
-  <data>
-    ${project}/../../data
+  <data dest="${bundle}/Contents/Resources">
+    ${project}/../../../data
   </data>
 
   <!-- Copy in the themes data. You may want to trim this to save space
@@ -127,9 +127,9 @@
        icon names. To be safe, you should use "all". "none" is useful
        if you want just the index.theme file but no icons, mostly
        needed for the "hicolor" base theme.
-  -->
+  >
   <icon-theme icons="all">
     Tango
-  </icon-theme>
+  </icon-theme-->
 
 </app-bundle>
