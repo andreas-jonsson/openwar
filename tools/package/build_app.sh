@@ -1,6 +1,5 @@
 #!/bin/bash
 
-jhbuild --no-interact shell
 export PATH=$PREFIX/bin:~/.local/bin:$PATH
 
 export SDL_PREFIX=~/.local/usr
