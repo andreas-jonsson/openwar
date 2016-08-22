@@ -9,7 +9,7 @@ while :; do echo "ping!"; sleep 300; done &
 ./gtk-osx-build-setup.sh > jhbuild_log.txt 2>&1
 export PATH=~/.local/bin:$PATH
 jhbuild bootstrap > jhbuild_log.txt 2>&1
-jhbuild build meta-gtk-osx-bootstrap meta-gtk-osx-core > jhbuild_log.txt 2>&1
+# jhbuild build meta-gtk-osx-bootstrap meta-gtk-osx-core > jhbuild_log.txt 2>&1
 
 wget -q http://ftp.gnome.org/pub/gnome/sources/gtk-mac-bundler/0.7/gtk-mac-bundler-0.7.3.tar.xz
 tar xf gtk-mac-bundler-0.7.3.tar.xz
