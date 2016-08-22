@@ -50,7 +50,9 @@
   -->
   <plist>${project}/Info.plist</plist>
 
-  <main-binary>${project}/../../../openwar</main-binary>
+  <main-binary dest="${bundle}/Contents/MacOS">
+     ${project}/../../../openwar
+  </main-binary>
 
   <!-- Copy in GTK+ modules.  Note the ${gtkdir} macro, which expands
        to the correct library subdirectory for the specified gtk
