@@ -1,7 +1,5 @@
 #!/bin/bash
 
-rm -rf $GOPATH/pkg $GOPATH/bin
-
 wget -q https://git.gnome.org/browse/gtk-osx/plain/gtk-osx-build-setup.sh
 chmod +x gtk-osx-build-setup.sh
 
@@ -20,4 +18,4 @@ mkdir jhbuild
 cp -r .local jhbuild
 cp -r gtk jhbuild
 7z a -tzip jhbuild.zip jhbuild
-./tools/dropbox/dropbox_uploader.sh upload jhbuild.zip jhbuild.zip
+./tools/dropbox/dropbox_uploader.sh upload jhbuild.zip Public/jhbuild.zip
