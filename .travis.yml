@@ -29,6 +29,7 @@ install:
 script:
     - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then ./tools/package/setup_jhbuild.sh; fi
     # - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then ./tools/package/download_jhbuild.sh; fi
+    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then ./tools/package/revive_jhbuild.sh; fi
 
 
     - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then jhbuild run ./tools/package/build_app.sh; fi
