@@ -16,5 +16,8 @@ cd gtk-mac-bundler-0.7.3
 make install
 cd ..
 
-7z a -tzip jhbuild.zip .local
+mkdir jhbuild
+cp -r .local jhbuild
+cp -r gtk jhbuild
+7z a -tzip jhbuild.zip jhbuild
 ./tools/dropbox/dropbox_uploader.sh upload jhbuild.zip jhbuild.zip
