@@ -31,10 +31,10 @@ install:
     - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install -y rpl && export SDL_PREFIX=/usr/local && ./tools/sdl_from_source.sh; fi
 
 script:
-    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then ./tools/package/setup_jhbuild.sh; fi
-    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then ./tools/package/upload_jhbuild.sh; fi
-    # - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then ./tools/package/download_jhbuild.sh; fi
-    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then ./tools/package/revive_jhbuild.sh; fi
+    # - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then ./tools/package/setup_jhbuild.sh; fi
+    # - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then ./tools/package/upload_jhbuild.sh; fi
+    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then ./tools/package/download_jhbuild.sh; fi
+    # - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then ./tools/package/revive_jhbuild.sh; fi
 
     - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then jhbuild run ./tools/package/build_app.sh; fi
     - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then ./tools/dropbox/dropbox_uploader.sh upload OpenWar.zip Public/OpenWar.zip; fi
