@@ -1,7 +1,5 @@
 #!/bin/bash
 
-export PATH=$PREFIX/bin:~/.local/bin:$PATH
-
 ./tools/dropbox/dropbox_uploader.sh download Public/jhbuild.zip
 7z x jhbuild.zip -o~/ -aoa > /dev/null
 
