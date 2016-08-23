@@ -3,7 +3,7 @@
 ./tools/dropbox/dropbox_uploader.sh download Public/jhbuild.7z
 7z x jhbuild.7z -o$HOME -aoa > /dev/null
 
-ls -al
+ls -al $HOME
 
 wget -q http://ftp.gnome.org/pub/gnome/sources/gtk-mac-bundler/0.7/gtk-mac-bundler-0.7.3.tar.xz
 tar xf gtk-mac-bundler-0.7.3.tar.xz
