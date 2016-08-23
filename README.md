@@ -18,11 +18,28 @@ Since OpenWar is a different game engine, not all things will work 100% the same
 
 OpenWar is *not* an official Blizzard product, its a Warcraft: Orcs & Humans modification, by Warcraft fans for Warcraft fans. You need a copy of the original Warcraft: Orcs & Humans MS-DOS version to make use of OpenWar. *Warcraft* is a registered trademark of [Blizzard Entertainment](https://www.blizzard.com).
 
-### Builds
+### Build Status
 
 ##### Linux & OSX: [![OSX & Linux Build](https://travis-ci.org/andreas-jonsson/openwar.svg?branch=master)](https://travis-ci.org/andreas-jonsson/openwar)
 
 ##### Windows [![Windows Build](https://ci.appveyor.com/api/projects/status/erhgfi08p3amtaec?svg=true)](https://ci.appveyor.com/project/andreas-t-jonsson/openwar)
+
+### Build Instructions
+
+* Install all external dependencies: **GCC/LLVM/Mingw** compiler, **GTK+2**, **SDL2**, **SDL2_mixer** (with Timidity support), **Go 1.6+** and **Git**.
+
+* Make sure you have a **GOPATH** set to your Go workspace.
+```bash
+export GOPATH=$HOME
+```
+* Download the project using Go.
+```bash
+go get github.com/andreas-jonsson/openwar`
+```
+* Build or run OpenWar.
+```bash
+cd $GOPATH/src/github.com/andreas-jonsson/openwar && go build openwar.go
+```
 
 ### Development
 
