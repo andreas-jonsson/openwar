@@ -4,7 +4,7 @@
 [![Contribute](https://img.shields.io/badge/contribute-FreedomSponsors-blue.svg)](https://freedomsponsors.org/project/341)
 [![Website](https://img.shields.io/badge/project-website-red.svg)](http://www.openwar.io)
 
-### About
+## About
 
 OpenWar is an alternative Warcraft: Orcs & Humans game engine. So unless you have a *legal copy* of Warcraft: Orcs & Humans (original MS-DOS version required, won't work with the Mac or Demo versions) OpenWar will be pretty useless to you, since it doesn't come with any graphics or sounds itself.
 
@@ -14,34 +14,35 @@ Since OpenWar is a different game engine, not all things will work 100% the same
 <img src="https://raw.githubusercontent.com/andreas-jonsson/openwar/master/doc/screenshot3.gif" width="250">
 <img src="https://raw.githubusercontent.com/andreas-jonsson/openwar/master/doc/screenshot2.png" width="250">
 
-### Disclaimer
+## Disclaimer
 
 OpenWar is *not* an official Blizzard product, its a Warcraft: Orcs & Humans modification, by Warcraft fans for Warcraft fans. You need a copy of the original Warcraft: Orcs & Humans MS-DOS version to make use of OpenWar. *Warcraft* is a registered trademark of [Blizzard Entertainment](https://www.blizzard.com).
 
-### Build Status
+## Build
 
 ##### Linux & OSX: [![OSX & Linux Build](https://travis-ci.org/andreas-jonsson/openwar.svg?branch=master)](https://travis-ci.org/andreas-jonsson/openwar)
 
 ##### Windows [![Windows Build](https://ci.appveyor.com/api/projects/status/erhgfi08p3amtaec?svg=true)](https://ci.appveyor.com/project/andreas-t-jonsson/openwar)
 
-### Build Instructions
+Use [Homebrew](http://brew.sh) or [Linuxbrew](http://linuxbrew.sh) for building.
 
-* Install all external dependencies: **GCC/LLVM/Mingw** compiler, **GTK+2**, **SDL2**, **SDL2_mixer** (with Timidity support), **Go 1.6+** and **Git**.
-
-* Make sure you have a **GOPATH** set to your Go workspace.
 ```bash
-export GOPATH=$HOME
-```
-* Download the project using Go.
-```bash
-go get github.com/andreas-jonsson/openwar
-```
-* Build or run OpenWar.
-```bash
-cd $GOPATH/src/github.com/andreas-jonsson/openwar && go build openwar.go
+brew tap andreas-jonsson/tap
+brew install openwar
 ```
 
-### Development
+Or the good old fashioned way.
+
+```bash
+# Start by installing all external dependencies:
+# GCC/LLVM/Mingw, Go1.6, Git, GTK+2, SDL2, SDL2_mixer (with Timidity support).
+
+export GOPATH=$HOME                                                      # Make sure you have a GOPATH set to your Go workspace.
+go get github.com/andreas-jonsson/openwar                                # Download the project using Go.
+cd $GOPATH/src/github.com/andreas-jonsson/openwar && go build openwar.go # Build or run OpenWar.
+```
+
+## Development
 
 The game is not yet playable but most resources are now decoded and loadable.
 
@@ -53,11 +54,11 @@ The game is not yet playable but most resources are now decoded and loadable.
 * Music
 * Dialog, Mission text, etc.
 
-### Other Projects
+## Other Projects
 
 You can find more open-source game clones and remakes on [osgameclones.com](http://osgameclones.com/).
 
-### License
+## License
 ```
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
