@@ -41,6 +41,3 @@ script:
 
     - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then go get && go build openwar.go && go test -v ./...; fi
     - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then ./tools/package/build_deb.sh && ./tools/dropbox/dropbox_uploader.sh upload openwar_0.0.1-$TRAVIS_BUILD_NUMBER.deb Public/openwar_0.0.1.deb; fi
-
-after_failure:
-    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then ./tools/dropbox/dropbox_uploader.sh upload jhbuild_log.txt jhbuild_error_$TRAVIS_JOB_NUMBER.txt; fi
