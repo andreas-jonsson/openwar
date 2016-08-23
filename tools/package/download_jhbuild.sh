@@ -1,9 +1,7 @@
 #!/bin/bash
 
 ./tools/dropbox/dropbox_uploader.sh download Public/jhbuild.zip
-export PATH=~/.local/bin:$PATH
-
-7z x jhbuild.zip -o~/ -aoa
+7z x jhbuild.zip -o~/ -aoa > /dev/null
 mv -f jhbuild/* ~/
 
 wget -q http://ftp.gnome.org/pub/gnome/sources/gtk-mac-bundler/0.7/gtk-mac-bundler-0.7.3.tar.xz
