@@ -20,9 +20,7 @@ OpenWar is *not* an official Blizzard product, its a Warcraft: Orcs & Humans mod
 
 ## Build
 
-##### Linux & OSX: [![OSX & Linux Build](https://travis-ci.org/andreas-jonsson/openwar.svg?branch=master)](https://travis-ci.org/andreas-jonsson/openwar)
-
-##### Windows [![Windows Build](https://ci.appveyor.com/api/projects/status/erhgfi08p3amtaec?svg=true)](https://ci.appveyor.com/project/andreas-t-jonsson/openwar)
+[![OSX & Linux Build](https://travis-ci.org/andreas-jonsson/openwar.svg?branch=master)](https://travis-ci.org/andreas-jonsson/openwar) [![Windows Build](https://ci.appveyor.com/api/projects/status/erhgfi08p3amtaec?svg=true)](https://ci.appveyor.com/project/andreas-t-jonsson/openwar)
 
 Use [Homebrew](http://brew.sh) or [Linuxbrew](http://linuxbrew.sh) for building.
 
