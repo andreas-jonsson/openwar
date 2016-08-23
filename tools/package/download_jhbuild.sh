@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ./tools/dropbox/dropbox_uploader.sh download Public/jhbuild.7z
-7z x jhbuild.7z -o~/ -aoa > /dev/null
+7z x jhbuild.7z -o$HOME -aoa > /dev/null
 
 ls -al
 
