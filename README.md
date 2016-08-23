@@ -34,7 +34,7 @@ export GOPATH=$HOME
 ```
 * Download the project using Go.
 ```bash
-go get github.com/andreas-jonsson/openwar`
+go get github.com/andreas-jonsson/openwar
 ```
 * Build or run OpenWar.
 ```bash
