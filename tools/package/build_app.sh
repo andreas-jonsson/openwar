@@ -6,7 +6,7 @@ export PKG_CONFIG_PATH=~/usr/lib/pkgconfig:$PKG_CONFIG_PATH
 
 # ./tools/sdl_from_source.sh > /dev/null
 
-$GOPATH=$HOME
+export $GOPATH=$HOME
 
 rm -rf $GOPATH/src/github.com/andreas-jonsson/openwar
 go get -u github.com/andreas-jonsson/openwar
