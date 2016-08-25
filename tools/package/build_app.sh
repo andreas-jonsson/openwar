@@ -1,19 +1,21 @@
 #!/bin/bash
 
 export PATH=$PREFIX/bin:~/.local/bin:$PATH
-export PKG_CONFIG_PATH=~/.local/usr/lib/pkgconfig:$PKG_CONFIG_PATH
-export SDL_PREFIX=~/.local/usr
+export PKG_CONFIG_PATH=~/usr/lib/pkgconfig:$PKG_CONFIG_PATH
+# export SDL_PREFIX=~/.local/usr
 
-./tools/sdl_from_source.sh > /dev/null
+# ./tools/sdl_from_source.sh > /dev/null
 
-rm -rf $GOPATH/pkg $GOPATH/bin
+$GOPATH=$HOME
 
-go get
+rm -rf $GOPATH/src/github.com/andreas-jonsson/openwar
+go get -u github.com/andreas-jonsson/openwar
+
+cd $GOPATH/src/github.com/andreas-jonsson/openwar
 go build openwar.go
 
 cd tools/package/app-bundler
 gtk-mac-bundler openwar.bundle
 
 cd ../Output
-7z a -tzip ../../OpenWar.zip OpenWar.app
-cd ../../
+zip -r ../../OpenWar.zip OpenWar.app
