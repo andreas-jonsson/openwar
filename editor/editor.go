@@ -22,23 +22,24 @@ import (
 
 	"github.com/andreas-jonsson/openwar/game"
 	"github.com/andreas-jonsson/openwar/platform"
+	"github.com/andreas-jonsson/openwar/resource"
 	"github.com/mattn/go-gtk/gtk"
 )
 
-func Start(cfg *game.Config) {
+func Start(cfg *game.Config, war *resource.Archive, exitCallback func()) {
 	builder := gtk.NewBuilder()
 	if _, err := builder.AddFromFile(platform.RootJoin("editor.glade")); err != nil {
 		log.Fatalln("could not load interface description:", err)
 	}
 
-	setupEditorWindow(builder)
+	setupEditorWindow(builder, exitCallback)
 }
 
-func setupEditorWindow(builder *gtk.Builder) {
+func setupEditorWindow(builder *gtk.Builder, exitCallback func()) {
 	editorWindow := gtk.WidgetFromObject(builder.GetObject("editor_window"))
 	editorWindow.ShowAll()
 
-	//editorWindow.Connect("delete_event", func() {
-	//gtk.MainQuit()
-	//})
+	editorWindow.Connect("delete_event", func() {
+		exitCallback()
+	})
 }

@@ -27,8 +27,11 @@ import (
 	"github.com/andreas-jonsson/openwar/game"
 	"github.com/andreas-jonsson/openwar/platform"
 	"github.com/andreas-jonsson/openwar/resource"
+	"github.com/mattn/go-gtk/gdk"
 	"github.com/mattn/go-gtk/gtk"
 )
+
+var war *resource.Archive
 
 func Start() {
 	log.Println("Starting launcher...")
@@ -44,16 +47,15 @@ func Start() {
 	gtk.Main()
 }
 
-func createConfig(builder *gtk.Builder, resourcePath string) *game.Config {
+func createConfig(builder *gtk.Builder) *game.Config {
 	fullscreen := true // (*gtk.CheckButton)(unsafe.Pointer(builder.GetObject("fullscreen_checkbutton"))).GetActive()
 	widescreen := true //(*gtk.CheckButton)(unsafe.Pointer(builder.GetObject("widescreen_checkbutton"))).GetActive()
 	wc2Input := true   // (*gtk.CheckButton)(unsafe.Pointer(builder.GetObject("wc2_input_checkbutton"))).GetActive()
 
 	return &game.Config{
-		Fullscreen:   fullscreen,
-		Widescreen:   widescreen,
-		WC2Input:     wc2Input,
-		ResourcePath: resourcePath,
+		Fullscreen: fullscreen,
+		Widescreen: widescreen,
+		WC2Input:   wc2Input,
 	}
 }
 
@@ -69,8 +71,6 @@ func setSensitive(builder *gtk.Builder, sensitive bool) {
 }
 
 func setupLauncherWindow(builder *gtk.Builder) {
-	resourcePath := [1]string{""}
-
 	launcherWindow := gtk.WidgetFromObject(builder.GetObject("launcher_window"))
 	launcherWindow.ShowAll()
 
@@ -90,11 +90,12 @@ func setupLauncherWindow(builder *gtk.Builder) {
 			file := fileDialog.GetFilename()
 			entry := (*gtk.Entry)(unsafe.Pointer(builder.GetObject("resource_entry")))
 			entry.SetText(file)
-			resourcePath[0] = file
 			fileDialog.Hide()
 
 			img := (*gtk.Image)(unsafe.Pointer(builder.GetObject("resource_image")))
-			if _, err := resource.OpenArchive(file); err == nil {
+
+			var err error
+			if war, err = resource.OpenArchive(file); err == nil {
 				img.SetFromStock("gtk-ok", gtk.ICON_SIZE_BUTTON)
 				setSensitive(builder, true)
 			} else {
@@ -109,17 +110,19 @@ func setupLauncherWindow(builder *gtk.Builder) {
 	builder.GetObject("join_button").Connect("clicked", func() {
 		launcherWindow.SetSensitive(false)
 		go func() {
-			game.Start(createConfig(builder, resourcePath[0]))
+			game.Start(createConfig(builder), war)
+
+			gdk.ThreadsEnter()
 			launcherWindow.SetSensitive(true)
+			gdk.ThreadsLeave()
 		}()
 	}, nil)
 
 	builder.GetObject("editor_button").Connect("clicked", func() {
 		launcherWindow.SetSensitive(false)
-		go func() {
-			editor.Start(createConfig(builder, resourcePath[0]))
+		editor.Start(createConfig(builder), war, func() {
 			launcherWindow.SetSensitive(true)
-		}()
+		})
 	}, nil)
 
 	builder.GetObject("about_button").Connect("clicked", func() {

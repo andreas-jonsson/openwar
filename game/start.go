@@ -31,18 +31,10 @@ type Config struct {
 	Fullscreen,
 	Widescreen,
 	WC2Input bool
-	ResourcePath string
 }
 
-func Start(cfg *Config) {
+func Start(cfg *Config, arch *resource.Archive) {
 	rand.Seed(time.Now().UnixNano())
-
-	//resource.Logger = os.Stdout
-	//resource.LoadUnsupported = true
-	arch, err := resource.OpenArchive(cfg.ResourcePath)
-	if err != nil {
-		panic(err)
-	}
 
 	fmt.Println("Loading palettes...")
 	palettes, err := resource.LoadPalettes(arch)
@@ -68,6 +60,9 @@ func Start(cfg *Config) {
 		panic(err)
 	}
 
+	//debug.DumpImg(images, resource.CombinePalettes(palettes["FOREST.PAL"], palettes["SPRITE0.PAL"]), "")
+	//debug.DumpArchive(arch, "")
+
 	if err = platform.Init(); err != nil {
 		panic(err)
 	}
@@ -89,9 +84,6 @@ func Start(cfg *Config) {
 	if err = loadAudio(arch, player); err != nil {
 		panic(err)
 	}
-
-	//debug.DumpImg(images, resource.CombinePalettes(palettes["FOREST.PAL"], palettes["SPRITE0.PAL"]), "")
-	//debug.DumpArchive(arch, "")
 
 	res := resource.Resources{Palettes: palettes, Images: images, Sprites: sprites, Tilesets: tilesets, Archive: arch}
 	g, err := NewGame(rend, player, res)
