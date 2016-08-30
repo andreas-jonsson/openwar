@@ -23,6 +23,7 @@ import (
 	"log"
 	"unsafe"
 
+	"github.com/andreas-jonsson/openwar/editor"
 	"github.com/andreas-jonsson/openwar/game"
 	"github.com/andreas-jonsson/openwar/platform"
 	"github.com/andreas-jonsson/openwar/resource"
@@ -62,6 +63,9 @@ func setSensitive(builder *gtk.Builder, sensitive bool) {
 
 	//createButton := (*gtk.Button)(unsafe.Pointer(builder.GetObject("create_button")))
 	//createButton.SetSensitive(sensitive)
+
+	editorButton := (*gtk.Button)(unsafe.Pointer(builder.GetObject("editor_button")))
+	editorButton.SetSensitive(sensitive)
 }
 
 func setupLauncherWindow(builder *gtk.Builder) {
@@ -106,6 +110,14 @@ func setupLauncherWindow(builder *gtk.Builder) {
 		launcherWindow.SetSensitive(false)
 		go func() {
 			game.Start(createConfig(builder, resourcePath[0]))
+			launcherWindow.SetSensitive(true)
+		}()
+	}, nil)
+
+	builder.GetObject("editor_button").Connect("clicked", func() {
+		launcherWindow.SetSensitive(false)
+		go func() {
+			editor.Start(createConfig(builder, resourcePath[0]))
 			launcherWindow.SetSensitive(true)
 		}()
 	}, nil)
