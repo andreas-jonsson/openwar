@@ -1,6 +1,6 @@
 #!/bin/bash
 
-export PATH=$PREFIX/bin:~/.local/bin:$PATH
+export PATH=$PREFIX/bin:~/.local/bin:/usr/local/bin:$PATH
 export PKG_CONFIG_PATH=~/usr/lib/pkgconfig:$PKG_CONFIG_PATH
 # export SDL_PREFIX=~/.local/usr
 
