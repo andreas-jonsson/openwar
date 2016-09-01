@@ -15,7 +15,7 @@ cd $GOPATH/src/github.com/andreas-jonsson/openwar
 go build openwar.go
 
 cd tools/package/app-bundler
-gtk-mac-bundler openwar.bundle
+gtk-mac-bundler OpenWar.bundle
 
 cd ../Output
 zip -r ../../OpenWar.zip OpenWar.app
