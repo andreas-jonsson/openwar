@@ -25,7 +25,8 @@ install:
 
     - appveyor DownloadFile https://dl.dropboxusercontent.com/u/1955192/TDM-GCC-64.7z
     - 7z x TDM-GCC-64.7z -oc:\
-    - set PATH=c:\TDM-GCC-64\bin;%PATH%
+    
+    - set PATH="c:\Program Files (x86)\Inno Setup 5";c:\TDM-GCC-64\bin;%PATH%
 
 build_script:
     - bash -c "go get && go build openwar.go"
