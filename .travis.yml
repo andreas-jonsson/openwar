@@ -26,5 +26,5 @@ install:
 script:
     - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install openwar; fi
 
-    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then go get && go build openwar.go; fi
+    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then go get && go build; fi
     - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then ./tools/package/build_deb.sh && ./tools/dropbox/dropbox_uploader.sh upload openwar_0.0.1-$TRAVIS_BUILD_NUMBER.deb Public/openwar_0.0.1.deb; fi

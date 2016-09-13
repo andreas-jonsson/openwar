@@ -30,3 +30,4 @@ tools/package/dependencies/**
 openwar
 
 *.WAR
+*.syso
