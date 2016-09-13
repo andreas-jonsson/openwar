@@ -23,12 +23,9 @@ install:
     - appveyor DownloadFile https://dl.dropboxusercontent.com/u/1955192/inno.7z
     - 7z x inno.7z -o"c:\Program Files (x86)"
 
-    - appveyor DownloadFile https://dl.dropboxusercontent.com/u/1955192/msys64.7z
-    - rename c:\msys64 _msys64
-    - 7z x msys64.7z -oc:\
-
-    - set PATH="c:\Program Files (x86)\Inno Setup 5";c:\msys64\usr\bin;c:\msys64\mingw64\bin;%PATH%
-    - set PKG_CONFIG_PATH=%PKG_CONFIG_PATH%:/mingw64/lib/pkgconfig
+    - appveyor DownloadFile https://dl.dropboxusercontent.com/u/1955192/TDM-GCC-64.7z
+    - 7z x TDM-GCC-64.7z -oc:\
+    - set PATH=c:\TDM-GCC-64\bin;%PATH%
 
 build_script:
     - bash -c "go get && go build openwar.go"
