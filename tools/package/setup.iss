@@ -37,8 +37,6 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "{#MyAppRoot}\tools\package\dependencies\timidity\*"; DestDir: "C:\timidity"; Flags: sharedfile recursesubdirs createallsubdirs
-
 Source: "{#MyAppRoot}\tools\package\dependencies\gtk2-runtime-2.24.30-2016-04-09-ts-win64.exe"; DestDir: "{tmp}"; Flags: deleteafterinstall
 
 Source: "{#MyAppRoot}\openwar.exe"; DestDir: "{app}"; Flags: ignoreversion
@@ -51,7 +49,10 @@ Source: "{#MyAppRoot}\tools\package\dependencies\libvorbisfile-3.dll"; DestDir: 
 Source: "{#MyAppRoot}\tools\package\dependencies\SDL2.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#MyAppRoot}\tools\package\dependencies\SDL2_mixer.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#MyAppRoot}\tools\package\dependencies\smpeg2.dll"; DestDir: "{app}"; Flags: ignoreversion
+
 Source: "{#MyAppRoot}\data\*"; DestDir: "{app}\data"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "{#MyAppRoot}\tools\package\dependencies\timidity\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
