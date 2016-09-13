@@ -60,4 +60,7 @@ Name: "{commondesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: 
 
 [Run]
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
-Filename: "{tmp}\gtk2-runtime-2.24.30-2016-04-09-ts-win64.exe"
+Filename: "{tmp}\gtk2-runtime-2.24.30-2016-04-09-ts-win64.exe"; Parameters: "/sideeffects=no /dllpath=root /translations=no /compatdlls=no /S /D={app}"
+
+[UninstallRun]
+Filename: "{app}\gtk2_runtime_uninst.exe"; Parameters: "/remove_config=yes /sideeffects=no /dllpath=root /translations=no /compatdlls=no /S"
