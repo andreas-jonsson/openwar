@@ -28,7 +28,7 @@ script:
     - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then go get && go build; fi
     
     - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then ./tools/package/build_deb.sh; fi
-    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo alien -v -r openwar_0.0.1-$TRAVIS_BUILD_NUMBER.deb; fi
-   
     - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then ./tools/dropbox/dropbox_uploader.sh upload openwar_0.0.1-$TRAVIS_BUILD_NUMBER.deb Public/openwar_0.0.1.deb; fi
-    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then ./tools/dropbox/dropbox_uploader.sh upload openwar_0.0.1-$TRAVIS_BUILD_NUMBER.x86_64.rpm Public/openwar_0.0.1.x86_64.rpm; fi
+    
+    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then mv openwar_0.0.1-*.deb openwar_0.0.1.deb && sudo alien -v -r openwar_0.0.1.deb; fi
+    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then ./tools/dropbox/dropbox_uploader.sh upload openwar_0.0.1.x86_64.rpm Public/openwar_0.0.1.x86_64.rpm; fi
