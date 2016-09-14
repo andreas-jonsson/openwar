@@ -33,5 +33,5 @@ script:
     - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then ./tools/package/build_deb.sh; fi
     - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then ./tools/dropbox/dropbox_uploader.sh upload openwar_$OPENWAR_VERSION-$TRAVIS_BUILD_NUMBER.deb Public/openwar_$OPENWAR_VERSION.deb; fi
     
-    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo alien -v -r openwar_$OPENWAR_VERSION-$TRAVIS_BUILD_NUMBER.deb && mv openwar_$OPENWAR_VERSION-*.x86_64.rpm openwar_$OPENWAR_VERSION.x86_64.rpm; fi
-    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then ./tools/dropbox/dropbox_uploader.sh upload openwar_$OPENWAR_VERSION.x86_64.rpm Public/openwar_$OPENWAR_VERSION.x86_64.rpm; fi
+    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo alien -v -r openwar_$OPENWAR_VERSION-$TRAVIS_BUILD_NUMBER.deb && mv openwar-$OPENWAR_VERSION-*.x86_64.rpm openwar-$OPENWAR_VERSION.x86_64.rpm; fi
+    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then ./tools/dropbox/dropbox_uploader.sh upload openwar-$OPENWAR_VERSION.x86_64.rpm Public/openwar-$OPENWAR_VERSION.x86_64.rpm; fi
