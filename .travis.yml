@@ -16,15 +16,25 @@ notifications:
 branches:
     only:
         - master
+        
+env:
+    - OPENWAR_VERSION=0.0.1
 
 install:
     - '[ "$TRAVIS_SECURE_ENV_VARS" == "false" ] || openssl aes-256-cbc -K $encrypted_2a6a96d3c45a_key -iv $encrypted_2a6a96d3c45a_iv -in tools/dropbox/.dropbox_uploader.enc -out ~/.dropbox_uploader -d'
 
     - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update && brew tap andreas-jonsson/tap; fi
-    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install -y rpl && export SDL_PREFIX=/usr/local && ./tools/sdl_from_source.sh; fi
+    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install -y rpl alien && export SDL_PREFIX=/usr/local && ./tools/sdl_from_source.sh; fi
 
 script:
     - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install openwar; fi
-
     - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then go get && go build; fi
-    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then ./tools/package/build_deb.sh && ./tools/dropbox/dropbox_uploader.sh upload openwar_0.0.1-$TRAVIS_BUILD_NUMBER.deb Public/openwar_0.0.1.deb; fi
+    
+    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then ./tools/package/build_deb.sh; fi
+    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then ./tools/dropbox/dropbox_uploader.sh upload openwar_$OPENWAR_VERSION-$TRAVIS_BUILD_NUMBER.deb Public/openwar_$OPENWAR_VERSION.deb; fi
+    
+    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo alien -k -r openwar_$OPENWAR_VERSION-$TRAVIS_BUILD_NUMBER.deb; fi
+    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then ./tools/dropbox/dropbox_uploader.sh upload openwar-$OPENWAR_VERSION-$TRAVIS_BUILD_NUMBER.x86_64.rpm Public/openwar-$OPENWAR_VERSION.x86_64.rpm; fi
+
+    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo alien -t openwar_$OPENWAR_VERSION-$TRAVIS_BUILD_NUMBER.deb; fi
+    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then ./tools/dropbox/dropbox_uploader.sh upload openwar-$OPENWAR_VERSION.tgz Public/openwar-$OPENWAR_VERSION.tgz; fi
