@@ -21,6 +21,7 @@ import (
 	"image"
 	"image/color"
 	"image/draw"
+	"log"
 	"unsafe"
 
 	"github.com/veandco/go-sdl2/sdl"
@@ -35,15 +36,47 @@ type sdlRenderer struct {
 
 func NewRenderer(w, h int, data ...interface{}) (Renderer, error) {
 	var (
-		r   sdlRenderer
-		err error
+		r     sdlRenderer
+		title string
+		err   error
+
+		width         = 320
+		height        = 200
+		logicalHeight = 240
 	)
 
-	r.window, err = sdl.CreateWindow(data[0].(string), sdl.WINDOWPOS_UNDEFINED, sdl.WINDOWPOS_UNDEFINED, w, h, sdl.WINDOW_SHOWN)
+	flags := uint32(sdl.WINDOW_SHOWN)
+	for i := 0; i < len(data); i++ {
+		handled := true
+		p := data[i]
+
+		ps, ok := p.(string)
+		if ok {
+			switch ps {
+			case "fullscreen":
+				flags |= sdl.WINDOW_FULLSCREEN
+			case "widescreen":
+				width = 640
+				height = 300
+				logicalHeight = 360
+			case "title":
+				i++
+				title = data[i].(string)
+			default:
+				handled = false
+			}
+		}
+
+		if !handled {
+			log.Println("invalid parameter passed to renderer:", p)
+		}
+	}
+
+	r.window, err = sdl.CreateWindow(title, sdl.WINDOWPOS_UNDEFINED, sdl.WINDOWPOS_UNDEFINED, w, h, flags)
 	if err != nil {
 		panic(err)
 	}
-	r.backBuffer = image.NewRGBA(image.Rect(0, 0, 320, 200))
+	r.backBuffer = image.NewRGBA(image.Rect(0, 0, width, height))
 
 	renderer, err := sdl.CreateRenderer(r.window, -1, sdl.RENDERER_ACCELERATED)
 	if err != nil {
@@ -52,10 +85,10 @@ func NewRenderer(w, h int, data ...interface{}) (Renderer, error) {
 	r.internalRenderer = renderer
 
 	sdl.SetHint(sdl.HINT_RENDER_SCALE_QUALITY, "linear")
-	renderer.SetLogicalSize(320, 240)
+	renderer.SetLogicalSize(width, logicalHeight)
 	renderer.SetDrawColor(0, 0, 0, 255)
 
-	r.internalHWBuffer, err = renderer.CreateTexture(sdl.PIXELFORMAT_ABGR8888, sdl.TEXTUREACCESS_STREAMING, 320, 200)
+	r.internalHWBuffer, err = renderer.CreateTexture(sdl.PIXELFORMAT_ABGR8888, sdl.TEXTUREACCESS_STREAMING, width, height)
 	if err != nil {
 		return nil, err
 	}

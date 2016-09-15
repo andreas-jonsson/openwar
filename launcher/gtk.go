@@ -31,7 +31,10 @@ import (
 	"github.com/mattn/go-gtk/gtk"
 )
 
-var war *resource.Archive
+var (
+	war *resource.Archive
+	cfg = &game.Config{Fullscreen: false, Widescreen: false, WC2Input: true}
+)
 
 func Start() {
 	log.Println("Starting launcher...")
@@ -47,18 +50,6 @@ func Start() {
 	gtk.Main()
 }
 
-func createConfig(builder *gtk.Builder) *game.Config {
-	fullscreen := true // (*gtk.CheckButton)(unsafe.Pointer(builder.GetObject("fullscreen_checkbutton"))).GetActive()
-	widescreen := true //(*gtk.CheckButton)(unsafe.Pointer(builder.GetObject("widescreen_checkbutton"))).GetActive()
-	wc2Input := true   // (*gtk.CheckButton)(unsafe.Pointer(builder.GetObject("wc2_input_checkbutton"))).GetActive()
-
-	return &game.Config{
-		Fullscreen: fullscreen,
-		Widescreen: widescreen,
-		WC2Input:   wc2Input,
-	}
-}
-
 func setSensitive(builder *gtk.Builder, sensitive bool) {
 	joinButton := (*gtk.Button)(unsafe.Pointer(builder.GetObject("join_button")))
 	joinButton.SetSensitive(sensitive)
@@ -68,6 +59,20 @@ func setSensitive(builder *gtk.Builder, sensitive bool) {
 
 	editorButton := (*gtk.Button)(unsafe.Pointer(builder.GetObject("editor_button")))
 	editorButton.SetSensitive(sensitive)
+}
+
+func setupCheckBoxes(builder *gtk.Builder) {
+	builder.GetObject("fullscreen_checkbutton").Connect("toggled", func() {
+		cfg.Fullscreen = !cfg.Fullscreen
+	}, nil)
+
+	builder.GetObject("widescreen_checkbutton").Connect("toggled", func() {
+		cfg.Widescreen = !cfg.Widescreen
+	}, nil)
+
+	builder.GetObject("wc2_input_checkbutton").Connect("toggled", func() {
+		cfg.WC2Input = !cfg.WC2Input
+	}, nil)
 }
 
 func setupLauncherWindow(builder *gtk.Builder) {
@@ -84,6 +89,8 @@ func setupLauncherWindow(builder *gtk.Builder) {
 		filter := gtk.NewFileFilter()
 		filter.SetName("Warcraft Data Archive")
 		filter.AddPattern("DATA.WAR")
+		filter.AddPattern("Data.war")
+		filter.AddPattern("data.war")
 		fileDialog.AddFilter(filter)
 
 		if fileDialog.Run() == gtk.RESPONSE_OK {
@@ -107,10 +114,12 @@ func setupLauncherWindow(builder *gtk.Builder) {
 		}
 	}, nil)
 
+	setupCheckBoxes(builder)
+
 	builder.GetObject("join_button").Connect("clicked", func() {
 		launcherWindow.SetSensitive(false)
 		go func() {
-			game.Start(createConfig(builder), war)
+			game.Start(cfg, war)
 
 			gdk.ThreadsEnter()
 			launcherWindow.SetSensitive(true)
@@ -120,7 +129,7 @@ func setupLauncherWindow(builder *gtk.Builder) {
 
 	builder.GetObject("editor_button").Connect("clicked", func() {
 		launcherWindow.SetSensitive(false)
-		editor.Start(createConfig(builder), war, func() {
+		editor.Start(cfg, war, func() {
 			launcherWindow.SetSensitive(true)
 		})
 	}, nil)
