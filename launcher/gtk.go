@@ -101,6 +101,8 @@ func setupLauncherWindow(builder *gtk.Builder) {
 
 			img := (*gtk.Image)(unsafe.Pointer(builder.GetObject("resource_image")))
 
+			//resource.LoadUnsupported = true
+
 			var err error
 			if war, err = resource.OpenArchive(file); err == nil {
 				img.SetFromStock("gtk-ok", gtk.ICON_SIZE_BUTTON)

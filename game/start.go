@@ -68,15 +68,20 @@ func Start(cfg *Config, arch *resource.Archive) {
 	}
 	defer platform.Shutdown()
 
+	windowWidth := 640
+	windowHeight := 480
 	params := []interface{}{"title", "OpenWar"}
+
 	if cfg.Fullscreen {
 		params = append(params, "fullscreen")
 	}
 	if cfg.Widescreen {
 		params = append(params, "widescreen")
+		windowWidth = 1280
+		windowHeight = 720
 	}
 
-	rend, err := platform.NewRenderer(640, 480, params...)
+	rend, err := platform.NewRenderer(windowWidth, windowHeight, params...)
 	if err != nil {
 		panic(err)
 	}
