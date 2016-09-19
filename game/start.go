@@ -22,7 +22,6 @@ import (
 	"math/rand"
 	"path"
 	"time"
-	"runtime"
 
 	"github.com/andreas-jonsson/openwar/platform"
 	"github.com/andreas-jonsson/openwar/resource"
@@ -121,7 +120,6 @@ func Start(cfg *Config, arch *resource.Archive) {
 		}
 
 		rend.Present()
-		runtime.Gosched()
 	}
 }
 
