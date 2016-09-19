@@ -12,8 +12,8 @@ environment:
     GOPATH: c:\gopath
 
 install:
-    - appveyor DownloadFile https://storage.googleapis.com/golang/go1.6.3.windows-amd64.msi
-    - msiexec /i go1.6.3.windows-amd64.msi /q
+    - appveyor DownloadFile https://storage.googleapis.com/golang/go1.7.1.windows-amd64.msi
+    - msiexec /i go1.7.1.windows-amd64.msi /q
     - go version
     - go env
 
