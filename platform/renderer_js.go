@@ -24,8 +24,8 @@ import (
 	"image/color"
 	"image/draw"
 	"log"
-	"strconv"
 	"runtime"
+	"strconv"
 
 	"github.com/gopherjs/gopherjs/js"
 )
@@ -101,18 +101,15 @@ func (p *jsRenderer) Present() {
 	buf32 := js.Global.Get("Uint32Array").New(arrBuf)
 
 	buf := buf32.Interface().([]uint)
+	pix := p.backBuffer.Pix
 
-	for y := 0; y < p.height; y++ {
-		for x := 0; x < p.width; x++ {
-			r, g, b, _ := p.backBuffer.At(x, y).RGBA()
-			buf[y*p.width+x] = 0x00000000 | (uint(b) << 16) | (uint(g) << 8) | uint(r)
-			//buf[y*p.width+x] = 0xFF0000FF
-		}
+	for offset := 0; offset < len(pix); offset += 4 {
+		buf[offset/4] = 0xFF000000 | (uint(pix[offset+2]) << 16) | (uint(pix[offset+1]) << 8) | uint(pix[offset])
 	}
 
 	data.Call("set", buf8)
 	ctx.Call("putImageData", img, 0, 0)
-	
+
 	runtime.Gosched()
 }
 
@@ -128,25 +125,13 @@ func (p *jsRenderer) BackBuffer() draw.Image {
 }
 
 func (p *jsRenderer) BlitPaletted(dp image.Point, src *image.Paletted) {
-	p.BlitImage(dp, src, src.Palette)
+	Blit(p.backBuffer, dp, src, src.Bounds(), src.Palette)
 }
 
 func (p *jsRenderer) BlitImage(dp image.Point, src *image.Paletted, pal color.Palette) {
-	p.Blit(dp, src, src.Bounds(), pal)
+	Blit(p.backBuffer, dp, src, src.Bounds(), pal)
 }
 
 func (p *jsRenderer) Blit(dp image.Point, src *image.Paletted, sr image.Rectangle, pal color.Palette) {
-	min := sr.Min
-	max := sr.Max
-
-	for y, dy := min.Y, 0; y < max.Y; y++ {
-		for x, dx := min.X, 0; x < max.X; x++ {
-			c := pal[src.ColorIndexAt(x, y)]
-			if _, _, _, a := c.RGBA(); a > 0 {
-				p.backBuffer.Set(dx+dp.X, dy+dp.Y, c)
-			}
-			dx++
-		}
-		dy++
-	}
+	Blit(p.backBuffer, dp, src, sr, pal)
 }
