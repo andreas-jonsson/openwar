@@ -1,4 +1,4 @@
-// +build nogui
+// +build js
 
 /*
 Copyright (C) 2016 Andreas T Jonsson
@@ -17,25 +17,23 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-package launcher
+package platform
 
-import (
-	"log"
+import "path"
 
-	"github.com/andreas-jonsson/openwar/game"
-	"github.com/andreas-jonsson/openwar/resource"
-)
+var DataPath = ""
 
-func Start() {
-	cfg := &game.Config{
-		Fullscreen: false,
-		Widescreen: false,
-		WC2Input:   true,
-	}
+func RootJoin(p ...string) string {
+	return path.Join(DataPath, path.Join(p...))
+}
 
-	if war, err = resource.OpenArchive("DATA.WAR"); err == nil {
-		game.Start(cfg, war)
-	} else {
-		log.Fatalln(err)
-	}
+func Init() error {
+	return nil
+}
+
+func Shutdown() {
+}
+
+func PollEvent() Event {
+	return nil
 }

@@ -1,4 +1,4 @@
-// -build nogui
+// +build !nogui,!js
 
 /*
 Copyright (C) 2016 Andreas T Jonsson

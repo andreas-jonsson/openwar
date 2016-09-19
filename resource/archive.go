@@ -43,7 +43,6 @@ import (
 	"io"
 	"io/ioutil"
 	"os"
-	"path"
 )
 
 var (
@@ -82,7 +81,15 @@ func OpenArchive(file string) (*Archive, error) {
 		return nil, err
 	}
 
-	var archiveID [4]byte
+	return OpenArchiveFrom(fp, info.Size())
+}
+
+func OpenArchiveFrom(fp io.ReadSeeker, sz int64) (*Archive, error) {
+	var (
+		err       error
+		archiveID [4]byte
+	)
+
 	if _, err = fp.Read(archiveID[:]); err != nil {
 		return nil, err
 	}
@@ -148,7 +155,7 @@ func OpenArchive(file string) (*Archive, error) {
 
 		var dataLength uint32
 		if i == len(fileTable)-1 {
-			dataLength = uint32(info.Size()) - fileTable[i]
+			dataLength = uint32(sz) - fileTable[i]
 		} else {
 			dataLength = fileTable[i+1] - fileTable[i]
 		}
@@ -161,7 +168,7 @@ func OpenArchive(file string) (*Archive, error) {
 			}
 
 			fmt.Fprintf(Logger, "Warning: Filename table is incomplete! Missing file with id %v.\n", i)
-			fileName = fmt.Sprintf("%s.%v", path.Base(fp.Name()), i)
+			fileName = fmt.Sprintf("DATA.WAR.%v", i)
 		}
 
 		var data []byte
