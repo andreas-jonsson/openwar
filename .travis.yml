@@ -28,7 +28,7 @@ install:
 
 script:
     - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install openwar; fi
-    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then go get && go build; fi
+    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then go get github.com/gopherjs/gopherjs && go get && go build; fi
     
     - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then ./tools/package/build_deb.sh; fi
     - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then ./tools/dropbox/dropbox_uploader.sh upload openwar_$OPENWAR_VERSION-$TRAVIS_BUILD_NUMBER.deb Public/openwar_$OPENWAR_VERSION.deb; fi
@@ -36,5 +36,6 @@ script:
     - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo alien -k -r openwar_$OPENWAR_VERSION-$TRAVIS_BUILD_NUMBER.deb; fi
     - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then ./tools/dropbox/dropbox_uploader.sh upload openwar-$OPENWAR_VERSION-$TRAVIS_BUILD_NUMBER.x86_64.rpm Public/openwar-$OPENWAR_VERSION.x86_64.rpm; fi
 
-    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo alien -t openwar_$OPENWAR_VERSION-$TRAVIS_BUILD_NUMBER.deb; fi
-    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then ./tools/dropbox/dropbox_uploader.sh upload openwar-$OPENWAR_VERSION.tgz Public/openwar-$OPENWAR_VERSION.tgz; fi
+    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then $GOPATH/bin/gopherjs build openwar.go; fi
+    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then ./tools/dropbox/dropbox_uploader.sh upload openwar.js Public/openwar.js && ./tools/dropbox/dropbox_uploader.sh upload openwar.js.map Public/openwar.js.map; fi
+
