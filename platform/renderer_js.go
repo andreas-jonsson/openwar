@@ -25,6 +25,7 @@ import (
 	"image/draw"
 	"log"
 	"strconv"
+	"runtime"
 
 	"github.com/gopherjs/gopherjs/js"
 )
@@ -111,6 +112,8 @@ func (p *jsRenderer) Present() {
 
 	data.Call("set", buf8)
 	ctx.Call("putImageData", img, 0, 0)
+	
+	runtime.Gosched()
 }
 
 func (p *jsRenderer) Shutdown() {
