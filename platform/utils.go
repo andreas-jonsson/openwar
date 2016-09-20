@@ -36,20 +36,22 @@ func Blit(backBuffer *image.RGBA, dp image.Point, src *image.Paletted, sr image.
 	min := sr.Min
 	max := sr.Max
 
-	if max.X > bbMaxBounds.X {
-		max.X = bbMaxBounds.X
-	}
-
-	if max.Y > bbMaxBounds.Y {
-		max.Y = bbMaxBounds.Y
-	}
-
 	srWidth := src.Bounds().Max.X
 	sPix := src.Pix
 	dPix := backBuffer.Pix
 
+	//TODO Optimize this code!
+
 	for y, dy := min.Y, 0; y < max.Y; y++ {
+		if dy+dp.Y < 0 || dy+dp.Y >= bbMaxBounds.Y {
+			continue
+		}
+
 		for x, dx := min.X, 0; x < max.X; x++ {
+			if dx+dp.X < 0 || dx+dp.X >= bbMaxBounds.X {
+				continue
+			}
+
 			i := sPix[y*srWidth+x]
 			c := pal[i]
 
@@ -59,7 +61,7 @@ func Blit(backBuffer *image.RGBA, dp image.Point, src *image.Paletted, sr image.
 				dPix[offset] = byte(r)
 				dPix[offset+1] = byte(g)
 				dPix[offset+2] = byte(b)
-				dPix[offset+3] = 0xFF
+				//dPix[offset+3] = 0xFF
 			}
 			dx++
 		}

@@ -50,9 +50,11 @@ func load() {
 
 func openFile() (string, []byte) {
 	document := js.Global.Get("document")
+
 	inputElem := document.Call("createElement", "input")
 	inputElem.Call("setAttribute", "type", "file")
 	inputElem.Call("setAttribute", "accept", ".war")
+
 	document.Get("body").Call("appendChild", inputElem)
 
 	filec := make(chan *js.Object, 1)
@@ -71,6 +73,8 @@ func openFile() (string, []byte) {
 	reader.Call("readAsArrayBuffer", file)
 	data := <-bufc
 
+	div := document.Call("getElementById", "upload_text")
 	document.Get("body").Call("removeChild", inputElem)
+	document.Get("body").Call("removeChild", div)
 	return name, data
 }

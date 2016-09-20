@@ -19,9 +19,60 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 package platform
 
-import "path"
+import (
+	"path"
+
+	"github.com/gopherjs/gopherjs/js"
+)
 
 var DataPath = ""
+
+var (
+	eventQueue = make(chan Event)
+
+	mouseXPrev, mouseYPrev,
+	mouseXRel, mouseYRel,
+	mouseX, mouseY int
+)
+
+func setupCanvasInput(canvas *js.Object, w, h, resX, resY int) {
+	rect := canvas.Call("getBoundingClientRect")
+	left := rect.Get("left").Float()
+	top := rect.Get("top").Float()
+
+	canvas.Call("addEventListener", "mousemove", func(event *js.Object) {
+		mouseX = int(((event.Get("clientX").Float() - left) / float64(w)) * float64(resX))
+		mouseY = int(((event.Get("clientY").Float() - top) / float64(h)) * float64(resY))
+
+		mouseXRel += mouseX - mouseXPrev
+		mouseYRel += mouseY - mouseYPrev
+
+		mouseXPrev = mouseX
+		mouseYPrev = mouseY
+	})
+
+	canvas.Call("addEventListener", "mouseup", func(event *js.Object) {
+		go func() {
+			eventQueue <- &MouseButtonEvent{
+				X:      mouseX,
+				Y:      mouseY,
+				Button: event.Get("button").Int(),
+				Type:   MouseButtonUp,
+			}
+		}()
+	})
+
+	canvas.Call("addEventListener", "mousedown", func(event *js.Object) {
+		go func() {
+			eventQueue <- &MouseButtonEvent{
+				X:      mouseX,
+				Y:      mouseY,
+				Button: event.Get("button").Int(),
+				Type:   MouseButtonDown,
+			}
+		}()
+	})
+}
 
 func RootJoin(p ...string) string {
 	return path.Join(DataPath, path.Join(p...))
@@ -35,5 +86,23 @@ func Shutdown() {
 }
 
 func PollEvent() Event {
-	return nil
+	if mouseXRel != 0 || mouseYRel != 0 {
+		ev := &MouseMotionEvent{
+			X:    mouseX,
+			Y:    mouseY,
+			XRel: mouseXRel,
+			YRel: mouseYRel,
+		}
+
+		mouseXRel = 0
+		mouseYRel = 0
+		return ev
+	}
+
+	select {
+	case ev := <-eventQueue:
+		return ev
+	default:
+		return nil
+	}
 }

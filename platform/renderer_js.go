@@ -31,8 +31,8 @@ import (
 )
 
 type jsRenderer struct {
-	backBuffer       *image.RGBA
-	canvas, document *js.Object
+	backBuffer        *image.RGBA
+	context, document *js.Object
 
 	width, height,
 	logicalHeight int
@@ -76,10 +76,15 @@ func NewRenderer(w, h int, data ...interface{}) (Renderer, error) {
 	canvas := r.document.Call("createElement", "canvas")
 	canvas.Call("setAttribute", "width", strconv.Itoa(r.width))
 	canvas.Call("setAttribute", "height", strconv.Itoa(r.height))
-	canvas.Get("style").Set("width", strconv.Itoa(w)+"px")
-	canvas.Get("style").Set("height", strconv.Itoa(h)+"px")
+
+	style := canvas.Get("style")
+	style.Set("width", strconv.Itoa(w)+"px")
+	style.Set("height", strconv.Itoa(h)+"px")
+	style.Set("cursor", "none")
+
 	r.document.Get("body").Call("appendChild", canvas)
-	r.canvas = canvas
+	r.context = canvas.Call("getContext", "2d")
+	setupCanvasInput(canvas, w, h, r.width, r.height)
 
 	return &r, nil
 }
@@ -92,8 +97,7 @@ func (p *jsRenderer) Clear() {
 }
 
 func (p *jsRenderer) Present() {
-	ctx := p.canvas.Call("getContext", "2d")
-	img := ctx.Call("getImageData", 0, 0, p.width, p.height)
+	img := p.context.Call("getImageData", 0, 0, p.width, p.height)
 	data := img.Get("data")
 
 	arrBuf := js.Global.Get("ArrayBuffer").New(data.Length())
@@ -108,7 +112,7 @@ func (p *jsRenderer) Present() {
 	}
 
 	data.Call("set", buf8)
-	ctx.Call("putImageData", img, 0, 0)
+	p.context.Call("putImageData", img, 0, 0)
 
 	runtime.Gosched()
 }
