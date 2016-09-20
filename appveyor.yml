@@ -12,8 +12,8 @@ environment:
     GOPATH: c:\gopath
 
 install:
-    - appveyor DownloadFile https://storage.googleapis.com/golang/go1.6.3.windows-amd64.msi
-    - msiexec /i go1.6.3.windows-amd64.msi /q
+    - appveyor DownloadFile https://storage.googleapis.com/golang/go1.7.1.windows-amd64.msi
+    - msiexec /i go1.7.1.windows-amd64.msi /q
     - go version
     - go env
 
@@ -29,10 +29,9 @@ install:
     - set PATH="c:\Program Files (x86)\Inno Setup 5";"%GOPATH%\bin";c:\TDM-GCC-64\bin;%PATH%
 
 build_script:
-    - go get
     - go get github.com/akavel/rsrc
     - rsrc -ico=tools/package/icon.ico -arch=amd64
-    - go build -ldflags="-H windowsgui"
+    - go get && go build -ldflags="-H windowsgui"
 
 after_build:
     # - iscc /Qp /O".\" /Fopenwar-%APPVEYOR_BUILD_VERSION%-win64 tools\package\setup.iss
