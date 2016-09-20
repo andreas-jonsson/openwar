@@ -134,14 +134,18 @@ func (p *sdlRenderer) BackBuffer() draw.Image {
 	return p.backBuffer
 }
 
+func (p *sdlRenderer) DrawRect(dest image.Rectangle, c color.Color) {
+	drawRect(p.backBuffer, dest, c)
+}
+
 func (p *sdlRenderer) BlitPaletted(dp image.Point, src *image.Paletted) {
-	Blit(p.backBuffer, dp, src, src.Bounds(), src.Palette)
+	blit(p.backBuffer, dp, src, src.Bounds(), src.Palette)
 }
 
 func (p *sdlRenderer) BlitImage(dp image.Point, src *image.Paletted, pal color.Palette) {
-	Blit(p.backBuffer, dp, src, src.Bounds(), pal)
+	blit(p.backBuffer, dp, src, src.Bounds(), pal)
 }
 
 func (p *sdlRenderer) Blit(dp image.Point, src *image.Paletted, sr image.Rectangle, pal color.Palette) {
-	Blit(p.backBuffer, dp, src, sr, pal)
+	blit(p.backBuffer, dp, src, sr, pal)
 }

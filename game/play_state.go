@@ -35,7 +35,7 @@ type playState struct {
 }
 
 func NewPlayState(g *Game) GameState {
-	ter, _ := newTerrain(g, "HUMAN01.TER")
+	ter, _ := newTerrain(g, "HUMAN01")
 
 	return &playState{
 		g:   g,
@@ -70,7 +70,7 @@ func (s *playState) Update() error {
 func (s *playState) Render() error {
 	s.scroll += s.g.dt * 0.005
 
-	s.ter.render(image.Rect(0, 0, 320, 200), image.Point{int(s.scroll), 0})
+	s.ter.render(s.g.renderer.BackBuffer().Bounds(), image.Point{int(s.scroll), 0})
 	s.p.render()
 	return nil
 }

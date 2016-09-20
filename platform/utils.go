@@ -20,17 +20,40 @@ package platform
 import (
 	"image"
 	"image/color"
+	"image/draw"
 )
 
-func BlitPaletted(backBuffer *image.RGBA, dp image.Point, src *image.Paletted) {
-	Blit(backBuffer, dp, src, src.Bounds(), src.Palette)
+type noneSolidRect image.Rectangle
+
+func (r *noneSolidRect) ColorModel() color.Model {
+	return color.AlphaModel
 }
 
-func BlitImage(backBuffer *image.RGBA, dp image.Point, src *image.Paletted, pal color.Palette) {
-	Blit(backBuffer, dp, src, src.Bounds(), pal)
+func (r *noneSolidRect) Bounds() image.Rectangle {
+	return *(*image.Rectangle)(r)
 }
 
-func Blit(backBuffer *image.RGBA, dp image.Point, src *image.Paletted, sr image.Rectangle, pal color.Palette) {
+func (r *noneSolidRect) At(x, y int) color.Color {
+	if x == r.Max.X-1 || x == r.Min.X || y == r.Max.Y-1 || y == r.Min.Y {
+		return color.Alpha{0xFF}
+	}
+	return color.Alpha{0}
+}
+
+func drawRect(backBuffer *image.RGBA, dest image.Rectangle, c color.Color) {
+	//TODO Optimize this!
+	draw.DrawMask(backBuffer, backBuffer.Bounds(), &image.Uniform{c}, image.ZP, (*noneSolidRect)(&dest), image.ZP, draw.Over)
+}
+
+func blitPaletted(backBuffer *image.RGBA, dp image.Point, src *image.Paletted) {
+	blit(backBuffer, dp, src, src.Bounds(), src.Palette)
+}
+
+func blitImage(backBuffer *image.RGBA, dp image.Point, src *image.Paletted, pal color.Palette) {
+	blit(backBuffer, dp, src, src.Bounds(), pal)
+}
+
+func blit(backBuffer *image.RGBA, dp image.Point, src *image.Paletted, sr image.Rectangle, pal color.Palette) {
 	bbMaxBounds := backBuffer.Bounds().Max
 
 	min := sr.Min

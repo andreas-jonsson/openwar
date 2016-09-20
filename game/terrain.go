@@ -38,16 +38,18 @@ const (
 type terrain struct {
 	g *Game
 
-	mapSize   int
-	tileIndex []uint16
 	tileset   resource.Tileset
 	pal       color.Palette
+	tileIndex []uint16
+
+	MapSize   int
+	TileFlags []uint16
 }
 
 var mapsEnvironment = map[string]environmentType{
-	"ORC01.TER": environmentSwamp,
+	"ORC01": environmentSwamp,
 
-	"HUMAN01.TER": environmentForest,
+	"HUMAN01": environmentForest,
 }
 
 func newTerrain(g *Game, name string) (*terrain, error) {
@@ -70,16 +72,26 @@ func newTerrain(g *Game, name string) (*terrain, error) {
 		ter.pal = g.resources.Palettes["DUNGEON.PAL"]
 	}
 
-	reader, err := g.resources.Archive.Open(name)
+	reader, err := g.resources.Archive.Open(name + ".TER")
 	if err != nil {
 		return nil, err
 	}
 
-	size := len(g.resources.Archive.Files[name]) / 2
+	size := len(g.resources.Archive.Files[name+".TER"]) / 2
 	ter.tileIndex = make([]uint16, size)
-	ter.mapSize = int(math.Sqrt(float64(size)))
+	ter.MapSize = int(math.Sqrt(float64(size)))
 
-	if err := binary.Read(reader, binary.LittleEndian, ter.tileIndex); err != nil {
+	if err = binary.Read(reader, binary.LittleEndian, ter.tileIndex); err != nil {
+		return nil, err
+	}
+
+	reader, err = g.resources.Archive.Open(name + ".FOG")
+	if err != nil {
+		return nil, err
+	}
+
+	ter.TileFlags = make([]uint16, size)
+	if err := binary.Read(reader, binary.LittleEndian, ter.TileFlags); err != nil {
 		return nil, err
 	}
 
@@ -95,9 +107,11 @@ func (ter *terrain) render(cullRect image.Rectangle, cameraPos image.Point) {
 	max.X++
 	max.Y++
 
-	for y, dy := min.Y, 0; y < ter.mapSize && y < max.Y; y++ {
-		for x, dx := min.X, 0; x < ter.mapSize && x < max.X; x++ {
-			idx := int(ter.tileIndex[y*ter.mapSize+x])
+	for y, dy := min.Y, 0; y < ter.MapSize && y < max.Y; y++ {
+		for x, dx := min.X, 0; x < ter.MapSize && x < max.X; x++ {
+			offset := y*ter.MapSize + x
+			idx := int(ter.tileIndex[offset])
+
 			if idx > ter.tileset.NumTiles-1 {
 				panic("index out of range")
 			}
@@ -107,6 +121,13 @@ func (ter *terrain) render(cullRect image.Rectangle, cameraPos image.Point) {
 			tilePos := image.Point{dx*16 - (cameraPos.X % 16), dy*16 - (cameraPos.Y % 16)}
 
 			renderer.Blit(tilePos, src, rect, ter.pal)
+
+			flags := ter.TileFlags[offset]
+			if flags != 0 {
+				rect = image.Rect(tilePos.X, tilePos.Y, tilePos.X+16, tilePos.Y+16)
+				renderer.DrawRect(rect, color.RGBA{byte(flags & 0xFF), 0x0, 0x0, 0xFF})
+			}
+
 			dx++
 		}
 		dy++

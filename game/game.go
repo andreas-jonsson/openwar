@@ -37,6 +37,7 @@ type GameState interface {
 }
 
 type Game struct {
+	config       *Config
 	currentState GameState
 	running      bool
 	states       map[string]GameState
@@ -57,12 +58,13 @@ type Game struct {
 	numFrames, fps int
 }
 
-func NewGame(rend platform.Renderer, player platform.AudioPlayer, res resource.Resources) (*Game, error) {
+func NewGame(cfg *Config, rend platform.Renderer, player platform.AudioPlayer, res resource.Resources) (*Game, error) {
 	var err error
 
 	g := new(Game)
 	g.running = true
 
+	g.config = cfg
 	g.renderer = rend
 	g.resources = res
 	g.soundPlayer = player

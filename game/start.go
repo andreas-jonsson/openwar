@@ -99,7 +99,7 @@ func Start(cfg *Config, arch *resource.Archive) {
 	}
 
 	res := resource.Resources{Palettes: palettes, Images: images, Sprites: sprites, Tilesets: tilesets, Archive: arch}
-	g, err := NewGame(rend, player, res)
+	g, err := NewGame(cfg, rend, player, res)
 	if err != nil {
 		panic(err)
 	}

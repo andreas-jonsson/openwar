@@ -128,14 +128,18 @@ func (p *jsRenderer) BackBuffer() draw.Image {
 	return p.backBuffer
 }
 
+func (p *jsRenderer) DrawRect(dest image.Rectangle, c color.Color) {
+	drawRect(p.backBuffer, dest, c)
+}
+
 func (p *jsRenderer) BlitPaletted(dp image.Point, src *image.Paletted) {
-	Blit(p.backBuffer, dp, src, src.Bounds(), src.Palette)
+	blit(p.backBuffer, dp, src, src.Bounds(), src.Palette)
 }
 
 func (p *jsRenderer) BlitImage(dp image.Point, src *image.Paletted, pal color.Palette) {
-	Blit(p.backBuffer, dp, src, src.Bounds(), pal)
+	blit(p.backBuffer, dp, src, src.Bounds(), pal)
 }
 
 func (p *jsRenderer) Blit(dp image.Point, src *image.Paletted, sr image.Rectangle, pal color.Palette) {
-	Blit(p.backBuffer, dp, src, sr, pal)
+	blit(p.backBuffer, dp, src, sr, pal)
 }
