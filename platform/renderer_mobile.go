@@ -82,7 +82,7 @@ func (p *mobileRenderer) Clear() {
 
 func (p *mobileRenderer) Present() {
 	if cb, ok := <-PaintEventChan; ok {
-		copy(ExternalBackBuffer.Pix, p.backBuffer.Pix)
+		draw.Draw(ExternalBackBuffer, p.backBuffer.Bounds(), p.backBuffer, image.ZP, draw.Src)
 		cb <- struct{}{}
 	}
 }

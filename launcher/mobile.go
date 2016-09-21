@@ -20,7 +20,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package launcher
 
 import (
-	"image"
 	"io"
 	"log"
 
@@ -64,7 +63,7 @@ func Start() {
 				case lifecycle.CrossOn:
 					glctx, _ = e.DrawContext.(gl.Context)
 					images = glutil.NewImages(glctx)
-					glimg = images.NewImage(320, 200)
+					glimg = images.NewImage(512, 512)
 					platform.ExternalBackBuffer = glimg.RGBA
 
 					file, size := openAssets()
@@ -99,7 +98,7 @@ func Start() {
 				glimg.Upload()
 				<-paintDoneChan
 
-				glimg.Draw(sz, geom.Point{0, 0}, geom.Point{0, 1}, geom.Point{0, 1}, image.Rect(0, 0, 320, 200))
+				glimg.Draw(sz, geom.Point{0, 0}, geom.Point{512, 0}, geom.Point{0, 512}, glimg.RGBA.Bounds())
 				a.Publish()
 				a.Send(paint.Event{})
 			case touch.Event, key.Event:
