@@ -1,4 +1,4 @@
-// +build nogui
+// +build mobile
 
 /*
 Copyright (C) 2016 Andreas T Jonsson
@@ -17,25 +17,28 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-package launcher
+package platform
 
-import (
-	"log"
+const maxEvents = 128
 
-	"github.com/andreas-jonsson/openwar/game"
-	"github.com/andreas-jonsson/openwar/resource"
-)
+var InputEventChan = make(chan interface{}, maxEvents)
 
-func Start() {
-	cfg := &game.Config{
-		Fullscreen: false,
-		Widescreen: false,
-		WC2Input:   true,
-	}
+func Init() error {
+	return nil
+}
 
-	if war, err := resource.OpenArchive("DATA.WAR"); err == nil {
-		game.Start(cfg, war)
-	} else {
-		log.Fatalln(err)
+func Shutdown() {
+}
+
+func PollEvent() Event {
+	for {
+		select {
+		case _, ok := <-InputEventChan:
+			if !ok {
+				return QuitEvent{}
+			}
+		default:
+			return nil
+		}
 	}
 }

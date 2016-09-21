@@ -21,6 +21,7 @@ import (
 	"image"
 	"image/color"
 	"image/draw"
+	"path"
 )
 
 type noneSolidRect image.Rectangle
@@ -90,4 +91,10 @@ func blit(backBuffer *image.RGBA, dp image.Point, src *image.Paletted, sr image.
 		}
 		dy++
 	}
+}
+
+var DataPath string
+
+func RootJoin(p ...string) string {
+	return path.Join(DataPath, path.Join(p...))
 }

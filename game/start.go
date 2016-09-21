@@ -19,6 +19,7 @@ package game
 
 import (
 	"fmt"
+	"log"
 	"math/rand"
 	"path"
 	"time"
@@ -121,6 +122,8 @@ func Start(cfg *Config, arch *resource.Archive) {
 
 		rend.Present()
 	}
+
+	defer log.Println("Clean shutdown!")
 }
 
 func loadAudio(arch *resource.Archive, player platform.AudioPlayer) error {

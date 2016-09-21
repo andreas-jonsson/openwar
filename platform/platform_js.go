@@ -19,13 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 package platform
 
-import (
-	"path"
-
-	"github.com/gopherjs/gopherjs/js"
-)
-
-var DataPath = ""
+import "github.com/gopherjs/gopherjs/js"
 
 var (
 	eventQueue = make(chan Event)
@@ -72,10 +66,6 @@ func setupCanvasInput(canvas *js.Object, w, h, resX, resY int) {
 			}
 		}()
 	})
-}
-
-func RootJoin(p ...string) string {
-	return path.Join(DataPath, path.Join(p...))
 }
 
 func Init() error {

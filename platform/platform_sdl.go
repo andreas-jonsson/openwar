@@ -1,4 +1,4 @@
-// +build !js
+// +build !js,!mobile
 
 /*
 Copyright (C) 2016 Andreas T Jonsson
@@ -66,8 +66,6 @@ var mouseMapping = map[int]int{
 	sdl.MOUSEWHEEL:      MouseWheel,
 }
 
-var DataPath string
-
 func init() {
 	isInvalid := func() bool {
 		_, err := os.Stat(path.Join(DataPath, "launcher.glade"))
@@ -91,10 +89,6 @@ func init() {
 	}
 
 	log.Println("Data path:", DataPath)
-}
-
-func RootJoin(p ...string) string {
-	return path.Join(DataPath, path.Join(p...))
 }
 
 func Init() error {

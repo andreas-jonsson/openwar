@@ -1,4 +1,4 @@
-// +build js
+// +build js mobile
 
 /*
 Copyright (C) 2016 Andreas T Jonsson
