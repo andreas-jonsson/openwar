@@ -12,18 +12,18 @@ environment:
     GOPATH: c:\gopath
 
 install:
-    - curl -S https://storage.googleapis.com/golang/go1.7.1.windows-amd64.msi
+    - appveyor DownloadFile https://storage.googleapis.com/golang/go1.7.1.windows-amd64.msi
     - msiexec /i go1.7.1.windows-amd64.msi /q
     - go version
     - go env
 
-    - curl -S http://dl.bintray.com/andreas-jonsson/openwar/:dependencies.7z
+    - appveyor DownloadFile http://dl.bintray.com/andreas-jonsson/openwar/dependencies.7z
     - 7z x dependencies.7z -o%APPVEYOR_BUILD_FOLDER%\tools\package
 
-    - curl -S http://dl.bintray.com/andreas-jonsson/openwar/:inno.7z
+    - appveyor DownloadFile http://dl.bintray.com/andreas-jonsson/openwar/inno.7z
     - 7z x inno.7z -o"c:\Program Files (x86)"
 
-    - curl -S http://dl.bintray.com/andreas-jonsson/openwar/:TDM-GCC-64.7z
+    - appveyor DownloadFile http://dl.bintray.com/andreas-jonsson/openwar/TDM-GCC-64.7z
     - 7z x TDM-GCC-64.7z -oc:\
 
     - set PATH="c:\Program Files (x86)\Inno Setup 5";"%GOPATH%\bin";c:\TDM-GCC-64\bin;%PATH%
