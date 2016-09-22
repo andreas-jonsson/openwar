@@ -20,8 +20,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package launcher
 
 import (
+	"errors"
 	"io"
 	"log"
+	"os"
+	"path/filepath"
+	"strings"
 
 	"github.com/andreas-jonsson/openwar/game"
 	"github.com/andreas-jonsson/openwar/platform"
@@ -114,7 +118,23 @@ func Start() {
 func openAssets() (asset.File, int64) {
 	file, err := asset.Open("DATA.WAR")
 	if err != nil {
-		log.Fatalln(err)
+		err = filepath.Walk("/storage/emulated/0/Download", func(path string, info os.FileInfo, err error) error {
+			log.Println(path, info.Name())
+			if info != nil && !info.IsDir() && strings.ToUpper(filepath.Base(path)) == "DATA.WAR" {
+				log.Println("Found resources: " + path)
+				return errors.New(path)
+			}
+			return nil
+		})
+
+		if err == nil {
+			log.Fatalln("Could not find DATA.WAR in your Download folder!")
+		}
+
+		file, err = os.Open(err.Error())
+		if err != nil {
+			log.Fatalln(err)
+		}
 	}
 
 	size, err := file.Seek(0, io.SeekEnd)
