@@ -90,6 +90,10 @@ func Start() {
 				}
 			case size.Event:
 				sz = e
+				select {
+				case platform.InputEventChan <- e:
+				default:
+				}
 			case paint.Event:
 				if glctx == nil || e.External {
 					continue
@@ -119,7 +123,6 @@ func openAssets() (asset.File, int64) {
 	file, err := asset.Open("DATA.WAR")
 	if err != nil {
 		err = filepath.Walk("/storage/emulated/0/Download", func(path string, info os.FileInfo, err error) error {
-			log.Println(path, info.Name())
 			if info != nil && !info.IsDir() && strings.ToUpper(filepath.Base(path)) == "DATA.WAR" {
 				log.Println("Found resources: " + path)
 				return errors.New(path)

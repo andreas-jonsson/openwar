@@ -50,7 +50,6 @@ const (
 const (
 	MouseButtonDown = iota
 	MouseButtonUp
-	MouseMotion
 	MouseWheel
 )
 
