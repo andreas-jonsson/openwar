@@ -17,13 +17,13 @@ install:
     - go version
     - go env
 
-    - appveyor DownloadFile http://dl.bintray.com/andreas-jonsson/openwar/dependencies.7z
+    - appveyor DownloadFile https://dl.dropboxusercontent.com/u/1955192/dependencies.7z
     - 7z x dependencies.7z -o%APPVEYOR_BUILD_FOLDER%\tools\package
 
-    - appveyor DownloadFile http://dl.bintray.com/andreas-jonsson/openwar/inno.7z
+    - appveyor DownloadFile https://dl.dropboxusercontent.com/u/1955192/inno.7z
     - 7z x inno.7z -o"c:\Program Files (x86)"
 
-    - appveyor DownloadFile http://dl.bintray.com/andreas-jonsson/openwar/TDM-GCC-64.7z
+    - appveyor DownloadFile https://dl.dropboxusercontent.com/u/1955192/TDM-GCC-64.7z
     - 7z x TDM-GCC-64.7z -oc:\
 
     - set PATH="c:\Program Files (x86)\Inno Setup 5";"%GOPATH%\bin";c:\TDM-GCC-64\bin;%PATH%

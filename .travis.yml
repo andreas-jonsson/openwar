@@ -29,7 +29,9 @@ install:
 
 script:
     - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install openwar; fi
-    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then go get golang.org/x/mobile/cmd/gomobile && gomobile init && go get github.com/gopherjs/gopherjs; fi
+
+    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then go get golang.org/x/mobile/cmd/gomobile && go get github.com/gopherjs/gopherjs; fi
+    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then gomobile init; fi
     - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then go get && go build; fi
 
     - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then ./tools/package/build_deb.sh; fi
