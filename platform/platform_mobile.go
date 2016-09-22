@@ -34,7 +34,9 @@ func PollEvent() Event {
 	for {
 		select {
 		case _, ok := <-InputEventChan:
-			if !ok {
+			if ok {
+				return &MouseButtonEvent{X: 0, Y: 0, Button: 0, Type: MouseButtonDown}
+			} else {
 				return QuitEvent{}
 			}
 		default:
