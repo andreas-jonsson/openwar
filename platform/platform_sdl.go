@@ -62,7 +62,6 @@ var keyModMapping = map[uint16]int{
 var mouseMapping = map[int]int{
 	sdl.MOUSEBUTTONDOWN: MouseButtonDown,
 	sdl.MOUSEBUTTONUP:   MouseButtonUp,
-	sdl.MOUSEMOTION:     MouseMotion,
 	sdl.MOUSEWHEEL:      MouseWheel,
 }
 
