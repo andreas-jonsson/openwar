@@ -14,7 +14,8 @@
 
 		<activity android:name="org.golang.app.GoNativeActivity"
 			android:label="OpenWar"
-			android:configChanges="keyboardHidden"
+			android:windowSoftInputMode="stateAlwaysHidden|adjustResize"
+			android:configChanges="orientation|keyboardHidden"
 			android:screenOrientation="landscape">
 
 			<meta-data android:name="android.app.lib_name" android:value="openwar" />
