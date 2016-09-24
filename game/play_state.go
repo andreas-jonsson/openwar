@@ -31,7 +31,7 @@ const (
 	scrollDown  = 0x8
 )
 
-const scrollSpeed = 0.05
+const scrollSpeed = 0.1
 
 type playState struct {
 	g *Game
@@ -73,11 +73,12 @@ func (s *playState) Exit(to GameState) error {
 }
 
 func (s *playState) Update() error {
-	s.g.PollAll()
+	g := s.g
+	g.PollAll()
 
-	dt := s.g.dt
-	pos := s.g.cursorPos
-	max := s.g.renderer.BackBuffer().Bounds().Max
+	dt := g.dt
+	pos := g.cursorPos
+	max := g.renderer.BackBuffer().Bounds().Max
 	s.scrollDirection = 0
 
 	if pos.X == 0 {
@@ -94,6 +95,27 @@ func (s *playState) Update() error {
 	} else if pos.Y == max.Y-1 {
 		s.scrollDirection |= scrollDown
 		s.cameraY += dt * scrollSpeed
+	}
+
+	switch {
+	case s.scrollDirection == scrollUp|scrollRight:
+		g.currentCursor = cursorScrollTopRight
+	case s.scrollDirection == scrollDown|scrollRight:
+		g.currentCursor = cursorScrollBottomRight
+	case s.scrollDirection == scrollDown|scrollLeft:
+		g.currentCursor = cursorScrollBottomLeft
+	case s.scrollDirection == scrollUp|scrollLeft:
+		g.currentCursor = cursorScrollTopLeft
+	case s.scrollDirection == scrollUp:
+		g.currentCursor = cursorScrollTop
+	case s.scrollDirection == scrollRight:
+		g.currentCursor = cursorScrollRight
+	case s.scrollDirection == scrollDown:
+		g.currentCursor = cursorScrollBottom
+	case s.scrollDirection == scrollLeft:
+		g.currentCursor = cursorScrollLeft
+	default:
+		g.currentCursor = cursorNormal
 	}
 
 	return nil

@@ -28,6 +28,27 @@ import (
 	"github.com/andreas-jonsson/openwar/resource"
 )
 
+type cursorType int
+
+const (
+	cursorNormal cursorType = iota
+	cursorNop
+	cursorCroshair
+	cursorTarget1
+	cursorTarget2
+	cursorTarget3
+	cursorInspect
+	cursorTime
+	cursorScrollTop
+	cursorScrollTopRight
+	cursorScrollRight
+	cursorScrollBottomRight
+	cursorScrollBottom
+	cursorScrollBottomLeft
+	cursorScrollLeft
+	cursorScrollTopLeft
+)
+
 type GameState interface {
 	Name() string
 	Enter(from GameState, args ...interface{}) error
@@ -42,7 +63,7 @@ type Game struct {
 	running      bool
 	states       map[string]GameState
 
-	currentCursor int
+	currentCursor cursorType
 	cursorPos     image.Point
 	cursors       []resource.Image
 	cursorPal     color.Palette
@@ -190,7 +211,7 @@ func (g *Game) Render() error {
 	}
 
 	cur := g.cursors[g.currentCursor]
-	g.renderer.BlitImage(g.cursorPos.Add(cur.Point()), cur.Data, g.cursorPal)
+	g.renderer.BlitImage(g.cursorPos.Sub(cur.Point()), cur.Data, g.cursorPal)
 	return nil
 }
 
