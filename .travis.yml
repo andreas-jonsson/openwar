@@ -37,7 +37,7 @@ script:
     - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then ./tools/package/build_deb.sh; fi
     - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then ./tools/dropbox/dropbox_uploader.sh upload openwar_$OPENWAR_VERSION-$TRAVIS_BUILD_NUMBER.deb Public/openwar_$OPENWAR_VERSION.deb; fi
 
-    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then gomobile build -target=android -tags=mobile; fi
+    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then cp ./tools/package/AndroidManifest.xml ./ && gomobile build -target=android -tags=mobile; fi
     - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then ./tools/dropbox/dropbox_uploader.sh upload openwar.apk Public; fi
 
     - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then $GOPATH/bin/gopherjs build openwar.go; fi
