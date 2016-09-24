@@ -26,10 +26,11 @@ import (
 )
 
 type gameHud struct {
-	g      *Game
-	race   playerRace
-	pal    color.Palette
-	images resource.Images
+	g              *Game
+	race           playerRace
+	pal            color.Palette
+	images         resource.Images
+	viewportBounds image.Rectangle
 
 	humanGfx, orcGfx map[string]image.Point
 }
@@ -40,6 +41,11 @@ func newGameHud(g *Game, race playerRace, envPal color.Palette) *gameHud {
 	// Viewport is 240x176
 
 	hud := &gameHud{g: g, race: race}
+	hud.viewportBounds = image.Rectangle{
+		Min: image.Point{72, 12},
+		Max: image.Point{312, 188},
+	}
+
 	hud.images = make(resource.Images)
 	hud.humanGfx = map[string]image.Point{
 		"IHRESBAR.IMG": {72, 0},
@@ -89,4 +95,6 @@ func (hud *gameHud) render() error {
 func (hud *gameHud) renderImage(name string, gfx map[string]image.Point) {
 	img := hud.images[name]
 	hud.g.renderer.BlitImage(gfx[name].Add(image.Point{img.X, img.Y}), img.Data, hud.pal)
+
+	//hud.g.renderer.DrawRect(hud.viewportBounds, color.RGBA{0xFF, 0, 0, 0xFF})
 }

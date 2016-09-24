@@ -100,15 +100,19 @@ func newTerrain(g *Game, name string) (*terrain, error) {
 
 func (ter *terrain) render(cullRect image.Rectangle, cameraPos image.Point) {
 	renderer := ter.g.renderer
+	cullMin := cullRect.Min
 
-	min := cullRect.Min.Add(cameraPos).Div(16)
+	cullRect.Max = cullRect.Max.Sub(cullMin)
+	cullRect.Min = image.Point{0, 0}
+
+	min := cameraPos.Div(16)
 	max := cullRect.Max.Add(cameraPos).Div(16)
 
 	max.X++
 	max.Y++
 
-	for y, dy := min.Y, 0; y < ter.MapSize && y < max.Y; y++ {
-		for x, dx := min.X, 0; x < ter.MapSize && x < max.X; x++ {
+	for y := min.Y; y < ter.MapSize && y < max.Y; y++ {
+		for x := min.X; x < ter.MapSize && x < max.X; x++ {
 			offset := y*ter.MapSize + x
 			idx := int(ter.tileIndex[offset])
 
@@ -118,7 +122,9 @@ func (ter *terrain) render(cullRect image.Rectangle, cameraPos image.Point) {
 
 			rect := image.Rect(0, 16*idx, 16, 16*idx+16)
 			src := ter.tileset.Data
-			tilePos := image.Point{dx*16 - (cameraPos.X % 16), dy*16 - (cameraPos.Y % 16)}
+
+			tilePos := image.Point{x*16 - cameraPos.X, y*16 - cameraPos.Y}
+			tilePos = tilePos.Add(cullMin)
 
 			renderer.Blit(tilePos, src, rect, ter.pal)
 
@@ -127,9 +133,6 @@ func (ter *terrain) render(cullRect image.Rectangle, cameraPos image.Point) {
 				rect = image.Rect(tilePos.X, tilePos.Y, tilePos.X+16, tilePos.Y+16)
 				renderer.DrawRect(rect, color.RGBA{byte(flags & 0xFF), 0x0, 0x0, 0xFF})
 			}
-
-			dx++
 		}
-		dy++
 	}
 }

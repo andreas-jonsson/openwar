@@ -24,11 +24,21 @@ import (
 	"github.com/andreas-jonsson/openwar/resource"
 )
 
+const (
+	scrollLeft  = 0x1
+	scrollRight = 0x2
+	scrollUp    = 0x4
+	scrollDown  = 0x8
+)
+
+const scrollSpeed = 0.05
+
 type playState struct {
 	g *Game
 	p *player
 
-	scroll float64
+	scrollDirection  int
+	cameraX, cameraY float64
 
 	ter *terrain
 	res resource.Resources
@@ -64,13 +74,54 @@ func (s *playState) Exit(to GameState) error {
 
 func (s *playState) Update() error {
 	s.g.PollAll()
+
+	dt := s.g.dt
+	pos := s.g.cursorPos
+	max := s.g.renderer.BackBuffer().Bounds().Max
+	s.scrollDirection = 0
+
+	if pos.X == 0 {
+		s.scrollDirection |= scrollLeft
+		s.cameraX -= dt * scrollSpeed
+	} else if pos.X == max.X-1 {
+		s.scrollDirection |= scrollRight
+		s.cameraX += dt * scrollSpeed
+	}
+
+	if pos.Y == 0 {
+		s.scrollDirection |= scrollUp
+		s.cameraY -= dt * scrollSpeed
+	} else if pos.Y == max.Y-1 {
+		s.scrollDirection |= scrollDown
+		s.cameraY += dt * scrollSpeed
+	}
+
 	return nil
 }
 
 func (s *playState) Render() error {
-	s.scroll += s.g.dt * 0.005
+	mapSize := s.ter.MapSize
+	vp := s.p.hud.viewportBounds
+	cameraPos := image.Point{int(s.cameraX), int(s.cameraY)}
+	cameraMax := image.Point{mapSize*16 - (vp.Max.X - vp.Min.X), mapSize*16 - (vp.Max.Y - vp.Min.Y)}
 
-	s.ter.render(s.g.renderer.BackBuffer().Bounds(), image.Point{int(s.scroll), 0})
+	if cameraPos.X < 0 {
+		cameraPos.X = 0
+		s.cameraX = 0
+	} else if cameraPos.X > cameraMax.X {
+		cameraPos.X = cameraMax.X
+		s.cameraX = float64(cameraPos.X)
+	}
+
+	if cameraPos.Y < 0 {
+		cameraPos.Y = 0
+		s.cameraY = 0
+	} else if cameraPos.Y > cameraMax.Y {
+		cameraPos.Y = cameraMax.Y
+		s.cameraY = float64(cameraPos.Y)
+	}
+
+	s.ter.render(vp, cameraPos)
 	s.p.render()
 	return nil
 }

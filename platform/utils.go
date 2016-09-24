@@ -55,42 +55,11 @@ func blitImage(backBuffer *image.RGBA, dp image.Point, src *image.Paletted, pal 
 }
 
 func blit(backBuffer *image.RGBA, dp image.Point, src *image.Paletted, sr image.Rectangle, pal color.Palette) {
-	bbMaxBounds := backBuffer.Bounds().Max
+	srcImage := *src
+	srcImage.Palette = pal
 
-	min := sr.Min
-	max := sr.Max
-
-	srWidth := src.Bounds().Max.X
-	sPix := src.Pix
-	dPix := backBuffer.Pix
-
-	//TODO Optimize this code!
-
-	for y, dy := min.Y, 0; y < max.Y; y++ {
-		if dy+dp.Y < 0 || dy+dp.Y >= bbMaxBounds.Y {
-			continue
-		}
-
-		for x, dx := min.X, 0; x < max.X; x++ {
-			if dx+dp.X < 0 || dx+dp.X >= bbMaxBounds.X {
-				continue
-			}
-
-			i := sPix[y*srWidth+x]
-			c := pal[i]
-
-			if r, g, b, a := c.RGBA(); a > 0 {
-				offset := (dy+dp.Y)*bbMaxBounds.X*4 + (dx+dp.X)*4
-
-				dPix[offset] = byte(r)
-				dPix[offset+1] = byte(g)
-				dPix[offset+2] = byte(b)
-				//dPix[offset+3] = 0xFF
-			}
-			dx++
-		}
-		dy++
-	}
+	r := image.Rectangle{dp, dp.Add(sr.Size())}
+	draw.Draw(backBuffer, r, &srcImage, sr.Min, draw.Over)
 }
 
 var DataPath string
