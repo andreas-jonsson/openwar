@@ -17,7 +17,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 package game
 
-import "image/color"
+import (
+	"image"
+	"image/color"
+)
 
 type playerRace int
 
@@ -35,6 +38,6 @@ func newPlay(g *Game, race playerRace, envPal color.Palette) *player {
 	return &player{g: g, hud: newGameHud(g, race, envPal)}
 }
 
-func (p *player) render() error {
-	return p.hud.render()
+func (p *player) render(miniMap *image.RGBA, cameraPos image.Point) error {
+	return p.hud.render(miniMap, cameraPos)
 }

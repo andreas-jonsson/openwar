@@ -23,6 +23,7 @@ import (
 	"image"
 	"image/color"
 	"math"
+	"math/rand"
 
 	"github.com/andreas-jonsson/openwar/resource"
 )
@@ -41,6 +42,7 @@ type terrain struct {
 	tileset   resource.Tileset
 	pal       color.Palette
 	tileIndex []uint16
+	miniMap   *image.RGBA
 
 	MapSize   int
 	TileFlags []uint16
@@ -95,6 +97,7 @@ func newTerrain(g *Game, name string) (*terrain, error) {
 		return nil, err
 	}
 
+	ter.miniMap = ter.renderMiniMap()
 	return ter, nil
 }
 
@@ -135,4 +138,20 @@ func (ter *terrain) render(cullRect image.Rectangle, cameraPos image.Point) {
 			}
 		}
 	}
+}
+
+func (ter *terrain) renderMiniMap() *image.RGBA {
+	img := image.NewRGBA(image.Rect(0, 0, ter.MapSize, ter.MapSize))
+	for y := 0; y < ter.MapSize; y++ {
+		for x := 0; x < ter.MapSize; x++ {
+			offset := y*ter.MapSize + x
+			idx := int(ter.tileIndex[offset])
+			img.Set(x, y, tileColor(ter.tileset.Data, ter.pal, idx))
+		}
+	}
+	return img
+}
+
+func tileColor(img *image.Paletted, pal color.Palette, idx int) color.Color {
+	return pal[img.ColorIndexAt(rand.Intn(15), idx*16+rand.Intn(15))]
 }

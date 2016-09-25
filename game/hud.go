@@ -20,17 +20,20 @@ package game
 import (
 	"image"
 	"image/color"
+	"image/draw"
 	"strings"
 
 	"github.com/andreas-jonsson/openwar/resource"
 )
 
 type gameHud struct {
-	g              *Game
-	race           playerRace
-	pal            color.Palette
-	images         resource.Images
-	viewportBounds image.Rectangle
+	g      *Game
+	race   playerRace
+	pal    color.Palette
+	images resource.Images
+
+	viewportBounds,
+	miniMapViewportBounds image.Rectangle
 
 	humanGfx, orcGfx map[string]image.Point
 }
@@ -45,6 +48,13 @@ func newGameHud(g *Game, race playerRace, envPal color.Palette) *gameHud {
 		Min: image.Point{72, 12},
 		Max: image.Point{312, 188},
 	}
+
+	vp := hud.viewportBounds
+	vp.Max.Sub(vp.Min)
+	vp.Min = image.Point{0, 0}
+	vp.Min = vp.Min.Div(16)
+	vp.Max = vp.Max.Div(16)
+	hud.miniMapViewportBounds = vp
 
 	hud.images = make(resource.Images)
 	hud.humanGfx = map[string]image.Point{
@@ -75,7 +85,7 @@ func newGameHud(g *Game, race playerRace, envPal color.Palette) *gameHud {
 	return hud
 }
 
-func (hud *gameHud) render() error {
+func (hud *gameHud) render(miniMap *image.RGBA, cameraPos image.Point) error {
 	if hud.race == humanRace {
 		hud.renderImage("IHRESBAR.IMG", hud.humanGfx)
 		hud.renderImage("IHRIGBAR.IMG", hud.humanGfx)
@@ -89,6 +99,14 @@ func (hud *gameHud) render() error {
 		hud.renderImage("IOLPANEL.IMG", hud.orcGfx)
 		hud.renderImage("IOMMAP01.IMG", hud.orcGfx)
 	}
+
+	p := image.Point{3, 6}
+	r := image.Rectangle{p, p.Add(miniMap.Bounds().Size())}
+	draw.Draw(hud.g.renderer.BackBuffer(), r, miniMap, image.Point{0, 0}, draw.Src)
+
+	cameraPos = cameraPos.Div(16)
+	hud.g.renderer.DrawRect(hud.miniMapViewportBounds.Add(cameraPos).Add(p), color.RGBA{0x0, 0xFF, 0x0, 0xFF})
+
 	return nil
 }
 

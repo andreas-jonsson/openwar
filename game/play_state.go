@@ -144,6 +144,6 @@ func (s *playState) Render() error {
 	}
 
 	s.ter.render(vp, cameraPos)
-	s.p.render()
+	s.p.render(s.ter.miniMap, cameraPos)
 	return nil
 }
