@@ -45,11 +45,16 @@ type playState struct {
 }
 
 func NewPlayState(g *Game) GameState {
-	ter, _ := newTerrain(g, "HUMAN01")
+	ter, _ := newTerrain(g, "ORC01")
+
+	race := humanRace
+	if g.config.Debug.Race == "Orcs" {
+		race = orcRace
+	}
 
 	return &playState{
 		g:   g,
-		p:   newPlay(g, humanRace, ter.terrainPalette()),
+		p:   newPlay(g, race, ter.terrainPalette()),
 		res: g.resources,
 		ter: ter,
 	}
@@ -75,8 +80,12 @@ func (s *playState) Exit(to GameState) error {
 func (s *playState) Update() error {
 	g := s.g
 	g.PollAll()
+	s.updateScroll(g.dt)
+	return nil
+}
 
-	dt := g.dt
+func (s *playState) updateScroll(dt float64) {
+	g := s.g
 	pos := g.cursorPos
 	max := g.renderer.BackBuffer().Bounds().Max
 	s.scrollDirection = 0
@@ -97,6 +106,34 @@ func (s *playState) Update() error {
 		s.cameraY += dt * scrollSpeed
 	}
 
+	mapSize := s.ter.size()
+	vp := s.p.hud.viewport()
+	cameraPos := image.Point{int(s.cameraX), int(s.cameraY)}
+	cameraMax := image.Point{mapSize*16 - (vp.Max.X - vp.Min.X), mapSize*16 - (vp.Max.Y - vp.Min.Y)}
+
+	if cameraPos.X < 0 {
+		cameraPos.X = 0
+		s.cameraX = 0
+	} else if cameraPos.X > cameraMax.X {
+		cameraPos.X = cameraMax.X
+		s.cameraX = float64(cameraPos.X)
+	}
+
+	if cameraPos.Y < 0 {
+		cameraPos.Y = 0
+		s.cameraY = 0
+	} else if cameraPos.Y > cameraMax.Y {
+		cameraPos.Y = cameraMax.Y
+		s.cameraY = float64(cameraPos.Y)
+	}
+
+	s.setCursor()
+}
+
+func (s *playState) setCursor() {
+	g := s.g
+	g.currentCursor = cursorNormal
+
 	switch {
 	case s.scrollDirection == scrollUp|scrollRight:
 		g.currentCursor = cursorScrollTopRight
@@ -114,11 +151,7 @@ func (s *playState) Update() error {
 		g.currentCursor = cursorScrollBottom
 	case s.scrollDirection == scrollLeft:
 		g.currentCursor = cursorScrollLeft
-	default:
-		g.currentCursor = cursorNormal
 	}
-
-	return nil
 }
 
 func (s *playState) Render() error {

@@ -168,5 +168,5 @@ func (ter *terrainImpl) createMap() (*image.Paletted, *image.RGBA) {
 }
 
 func tileColor(img *image.Paletted, pal color.Palette, idx int) color.Color {
-	return pal[img.ColorIndexAt(rand.Intn(15), idx*16+rand.Intn(15))]
+	return pal[img.ColorIndexAt(rand.Intn(7)+4, idx*16+rand.Intn(7)+4)]
 }

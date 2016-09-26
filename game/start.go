@@ -32,6 +32,10 @@ type Config struct {
 	Fullscreen,
 	Widescreen,
 	WC2Input bool
+
+	Debug struct {
+		Race string
+	}
 }
 
 func Start(cfg *Config, arch *resource.Archive) {

@@ -25,6 +25,7 @@ import (
 
 	"github.com/andreas-jonsson/openwar/editor"
 	"github.com/andreas-jonsson/openwar/game"
+	"github.com/andreas-jonsson/openwar/launcher/debug"
 	"github.com/andreas-jonsson/openwar/platform"
 	"github.com/andreas-jonsson/openwar/resource"
 	"github.com/mattn/go-gtk/gdk"
@@ -46,6 +47,7 @@ func Start() {
 		log.Fatalln("could not load interface description:", err)
 	}
 
+	debug.Start(cfg)
 	setupLauncherWindow(builder)
 	gtk.Main()
 }

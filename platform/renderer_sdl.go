@@ -57,6 +57,7 @@ func NewRenderer(w, h int, data ...interface{}) (Renderer, error) {
 			switch ps {
 			case "fullscreen":
 				flags |= sdl.WINDOW_FULLSCREEN
+				//flags |= sdl.WINDOW_FULLSCREEN_DESKTOP
 			case "widescreen":
 				width = 640
 				height = 300
@@ -86,7 +87,7 @@ func NewRenderer(w, h int, data ...interface{}) (Renderer, error) {
 	}
 	r.internalRenderer = renderer
 
-	sdl.SetHint(sdl.HINT_RENDER_SCALE_QUALITY, "linear")
+	//sdl.SetHint(sdl.HINT_RENDER_SCALE_QUALITY, "linear")
 	renderer.SetLogicalSize(width, logicalHeight)
 	renderer.SetDrawColor(0, 0, 0, 255)
 
