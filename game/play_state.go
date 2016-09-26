@@ -40,7 +40,7 @@ type playState struct {
 	scrollDirection  int
 	cameraX, cameraY float64
 
-	ter *terrain
+	ter terrain
 	res resource.Resources
 }
 
@@ -49,7 +49,7 @@ func NewPlayState(g *Game) GameState {
 
 	return &playState{
 		g:   g,
-		p:   newPlay(g, humanRace, ter.pal),
+		p:   newPlay(g, humanRace, ter.terrainPalette()),
 		res: g.resources,
 		ter: ter,
 	}
@@ -122,8 +122,8 @@ func (s *playState) Update() error {
 }
 
 func (s *playState) Render() error {
-	mapSize := s.ter.mapSize
-	vp := s.p.hud.viewportBounds
+	mapSize := s.ter.size()
+	vp := s.p.hud.viewport()
 	cameraPos := image.Point{int(s.cameraX), int(s.cameraY)}
 	cameraMax := image.Point{mapSize*16 - (vp.Max.X - vp.Min.X), mapSize*16 - (vp.Max.Y - vp.Min.Y)}
 
@@ -144,6 +144,6 @@ func (s *playState) Render() error {
 	}
 
 	s.ter.render(vp, cameraPos)
-	s.p.render(s.ter.miniMap, cameraPos)
+	s.p.render(s.ter.miniMapImage(), cameraPos)
 	return nil
 }

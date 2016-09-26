@@ -37,19 +37,28 @@ const (
 	environmentDungeon
 )
 
-type terrain struct {
-	g *Game
+type (
+	terrainImpl struct {
+		g *Game
 
-	tileset resource.Tileset
-	pal     color.Palette
+		tileset resource.Tileset
+		pal     color.Palette
 
-	mapSize   int
-	tileIndex []uint16
-	tileFlags []uint16
+		mapSize   int
+		tileIndex []uint16
+		tileFlags []uint16
 
-	miniMap  *image.RGBA
-	mapImage *image.Paletted
-}
+		miniMap  *image.RGBA
+		mapImage *image.Paletted
+	}
+
+	terrain interface {
+		render(cullRect image.Rectangle, cameraPos image.Point)
+		miniMapImage() *image.RGBA
+		terrainPalette() color.Palette
+		size() int
+	}
+)
 
 var mapsEnvironment = map[string]environmentType{
 	"ORC01": environmentSwamp,
@@ -57,8 +66,8 @@ var mapsEnvironment = map[string]environmentType{
 	"HUMAN01": environmentForest,
 }
 
-func newTerrain(g *Game, name string) (*terrain, error) {
-	ter := &terrain{g: g}
+func newTerrain(g *Game, name string) (terrain, error) {
+	ter := &terrainImpl{g: g}
 
 	env, ok := mapsEnvironment[name]
 	if !ok {
@@ -104,7 +113,19 @@ func newTerrain(g *Game, name string) (*terrain, error) {
 	return ter, nil
 }
 
-func (ter *terrain) render(cullRect image.Rectangle, cameraPos image.Point) {
+func (ter *terrainImpl) terrainPalette() color.Palette {
+	return ter.pal
+}
+
+func (ter *terrainImpl) miniMapImage() *image.RGBA {
+	return ter.miniMap
+}
+
+func (ter *terrainImpl) size() int {
+	return ter.mapSize
+}
+
+func (ter *terrainImpl) render(cullRect image.Rectangle, cameraPos image.Point) {
 	cullMin := cullRect.Min
 	cullRect.Max = cullRect.Size()
 	cullRect.Min = image.Point{}
@@ -113,7 +134,7 @@ func (ter *terrain) render(cullRect image.Rectangle, cameraPos image.Point) {
 	ter.g.renderer.Blit(cullMin, ter.mapImage, cullRect, ter.pal)
 }
 
-func (ter *terrain) createMap() (*image.Paletted, *image.RGBA) {
+func (ter *terrainImpl) createMap() (*image.Paletted, *image.RGBA) {
 	miniMap := image.NewRGBA(image.Rect(0, 0, ter.mapSize, ter.mapSize))
 	mapImage := image.NewPaletted(image.Rect(0, 0, ter.mapSize*16, ter.mapSize*16), ter.pal)
 

@@ -26,24 +26,31 @@ import (
 	"github.com/andreas-jonsson/openwar/resource"
 )
 
-type gameHud struct {
-	g      *Game
-	race   playerRace
-	pal    color.Palette
-	images resource.Images
+type (
+	gameHudImpl struct {
+		g      *Game
+		race   playerRace
+		pal    color.Palette
+		images resource.Images
 
-	viewportBounds,
-	miniMapViewportBounds image.Rectangle
+		viewportBounds,
+		miniMapViewportBounds image.Rectangle
 
-	humanGfx, orcGfx map[string]image.Point
-}
+		humanGfx, orcGfx map[string]image.Point
+	}
 
-func newGameHud(g *Game, race playerRace, envPal color.Palette) *gameHud {
+	gameHud interface {
+		render(miniMap *image.RGBA, cameraPos image.Point) error
+		viewport() image.Rectangle
+	}
+)
+
+func newGameHud(g *Game, race playerRace, envPal color.Palette) gameHud {
 	res := g.resources
 
 	// Viewport is 240x176
 
-	hud := &gameHud{g: g, race: race}
+	hud := &gameHudImpl{g: g, race: race}
 	hud.viewportBounds = image.Rectangle{
 		Min: image.Point{72, 12},
 		Max: image.Point{312, 188},
@@ -80,7 +87,11 @@ func newGameHud(g *Game, race playerRace, envPal color.Palette) *gameHud {
 	return hud
 }
 
-func (hud *gameHud) render(miniMap *image.RGBA, cameraPos image.Point) error {
+func (hud *gameHudImpl) viewport() image.Rectangle {
+	return hud.viewportBounds
+}
+
+func (hud *gameHudImpl) render(miniMap *image.RGBA, cameraPos image.Point) error {
 	if hud.race == humanRace {
 		hud.renderImage("IHRESBAR.IMG", hud.humanGfx)
 		hud.renderImage("IHRIGBAR.IMG", hud.humanGfx)
@@ -104,7 +115,7 @@ func (hud *gameHud) render(miniMap *image.RGBA, cameraPos image.Point) error {
 	return nil
 }
 
-func (hud *gameHud) renderImage(name string, gfx map[string]image.Point) {
+func (hud *gameHudImpl) renderImage(name string, gfx map[string]image.Point) {
 	img := hud.images[name]
 	hud.g.renderer.BlitImage(gfx[name].Add(image.Point{img.X, img.Y}), img.Data, hud.pal)
 

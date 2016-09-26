@@ -31,7 +31,7 @@ const (
 
 type player struct {
 	g   *Game
-	hud *gameHud
+	hud gameHud
 }
 
 func newPlay(g *Game, race playerRace, envPal color.Palette) *player {
