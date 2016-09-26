@@ -122,7 +122,7 @@ func (s *playState) Update() error {
 }
 
 func (s *playState) Render() error {
-	mapSize := s.ter.MapSize
+	mapSize := s.ter.mapSize
 	vp := s.p.hud.viewportBounds
 	cameraPos := image.Point{int(s.cameraX), int(s.cameraY)}
 	cameraMax := image.Point{mapSize*16 - (vp.Max.X - vp.Min.X), mapSize*16 - (vp.Max.Y - vp.Min.Y)}

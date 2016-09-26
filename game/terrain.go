@@ -22,6 +22,7 @@ import (
 	"errors"
 	"image"
 	"image/color"
+	"image/draw"
 	"math"
 	"math/rand"
 
@@ -39,13 +40,15 @@ const (
 type terrain struct {
 	g *Game
 
-	tileset   resource.Tileset
-	pal       color.Palette
-	tileIndex []uint16
-	miniMap   *image.RGBA
+	tileset resource.Tileset
+	pal     color.Palette
 
-	MapSize   int
-	TileFlags []uint16
+	mapSize   int
+	tileIndex []uint16
+	tileFlags []uint16
+
+	miniMap  *image.RGBA
+	mapImage *image.Paletted
 }
 
 var mapsEnvironment = map[string]environmentType{
@@ -81,7 +84,7 @@ func newTerrain(g *Game, name string) (*terrain, error) {
 
 	size := len(g.resources.Archive.Files[name+".TER"]) / 2
 	ter.tileIndex = make([]uint16, size)
-	ter.MapSize = int(math.Sqrt(float64(size)))
+	ter.mapSize = int(math.Sqrt(float64(size)))
 
 	if err = binary.Read(reader, binary.LittleEndian, ter.tileIndex); err != nil {
 		return nil, err
@@ -92,64 +95,55 @@ func newTerrain(g *Game, name string) (*terrain, error) {
 		return nil, err
 	}
 
-	ter.TileFlags = make([]uint16, size)
-	if err := binary.Read(reader, binary.LittleEndian, ter.TileFlags); err != nil {
+	ter.tileFlags = make([]uint16, size)
+	if err := binary.Read(reader, binary.LittleEndian, ter.tileFlags); err != nil {
 		return nil, err
 	}
 
-	ter.miniMap = ter.renderMiniMap()
+	ter.mapImage, ter.miniMap = ter.createMap()
 	return ter, nil
 }
 
 func (ter *terrain) render(cullRect image.Rectangle, cameraPos image.Point) {
-	renderer := ter.g.renderer
 	cullMin := cullRect.Min
+	cullRect.Max = cullRect.Size()
+	cullRect.Min = image.Point{}
+	cullRect = cullRect.Add(cameraPos)
 
-	cullRect.Max = cullRect.Max.Sub(cullMin)
-	cullRect.Min = image.Point{0, 0}
+	ter.g.renderer.Blit(cullMin, ter.mapImage, cullRect, ter.pal)
+}
 
-	min := cameraPos.Div(16)
-	max := cullRect.Max.Add(cameraPos).Div(16)
+func (ter *terrain) createMap() (*image.Paletted, *image.RGBA) {
+	miniMap := image.NewRGBA(image.Rect(0, 0, ter.mapSize, ter.mapSize))
+	mapImage := image.NewPaletted(image.Rect(0, 0, ter.mapSize*16, ter.mapSize*16), ter.pal)
 
-	max.X++
-	max.Y++
-
-	for y := min.Y; y < ter.MapSize && y < max.Y; y++ {
-		for x := min.X; x < ter.MapSize && x < max.X; x++ {
-			offset := y*ter.MapSize + x
+	for y := 0; y < ter.mapSize; y++ {
+		for x := 0; x < ter.mapSize; x++ {
+			offset := y*ter.mapSize + x
 			idx := int(ter.tileIndex[offset])
 
 			if idx > ter.tileset.NumTiles-1 {
 				panic("index out of range")
 			}
 
+			// Render minimap.
+			miniMap.Set(x, y, tileColor(ter.tileset.Data, ter.pal, idx))
+
 			rect := image.Rect(0, 16*idx, 16, 16*idx+16)
 			src := ter.tileset.Data
+			tilePos := image.Point{x * 16, y * 16}
 
-			tilePos := image.Point{x*16 - cameraPos.X, y*16 - cameraPos.Y}
-			tilePos = tilePos.Add(cullMin)
+			r := image.Rectangle{tilePos, tilePos.Add(rect.Size())}
+			draw.Draw(mapImage, r, src, rect.Min, draw.Src)
 
-			renderer.Blit(tilePos, src, rect, ter.pal)
-
-			flags := ter.TileFlags[offset]
+			flags := ter.tileFlags[offset]
 			if flags != 0 {
 				rect = image.Rect(tilePos.X, tilePos.Y, tilePos.X+16, tilePos.Y+16)
-				renderer.DrawRect(rect, color.RGBA{byte(flags & 0xFF), 0x0, 0x0, 0xFF})
+				ter.g.renderer.DrawRect(rect, color.RGBA{byte(flags & 0xFF), 0x0, 0x0, 0xFF})
 			}
 		}
 	}
-}
-
-func (ter *terrain) renderMiniMap() *image.RGBA {
-	img := image.NewRGBA(image.Rect(0, 0, ter.MapSize, ter.MapSize))
-	for y := 0; y < ter.MapSize; y++ {
-		for x := 0; x < ter.MapSize; x++ {
-			offset := y*ter.MapSize + x
-			idx := int(ter.tileIndex[offset])
-			img.Set(x, y, tileColor(ter.tileset.Data, ter.pal, idx))
-		}
-	}
-	return img
+	return mapImage, miniMap
 }
 
 func tileColor(img *image.Paletted, pal color.Palette, idx int) color.Color {
