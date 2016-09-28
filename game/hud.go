@@ -58,9 +58,9 @@ func newGameHud(g *Game, race playerRace, envPal color.Palette) gameHud {
 
 	addWidth := 0
 	if g.config.Widescreen {
-		max := image.Point{408, 222}
-		addWidth = max.X - hud.viewportBounds.Max.X
-		hud.viewportBounds.Max = max
+		maxX := 408
+		addWidth = maxX - hud.viewportBounds.Max.X
+		hud.viewportBounds.Max.X = maxX
 	}
 
 	hud.miniMapViewportBounds = image.Rectangle{image.Point{}, hud.viewportBounds.Size().Div(16)}
@@ -99,6 +99,7 @@ func (hud *gameHudImpl) viewport() image.Rectangle {
 }
 
 func (hud *gameHudImpl) render(miniMap *image.RGBA, cameraPos image.Point) error {
+	hud.patchWidescreen()
 	if hud.race == humanRace {
 		hud.renderImage("IHRESBAR.IMG", hud.humanGfx)
 		hud.renderImage("IHRIGBAR.IMG", hud.humanGfx)
@@ -124,7 +125,22 @@ func (hud *gameHudImpl) render(miniMap *image.RGBA, cameraPos image.Point) error
 
 func (hud *gameHudImpl) renderImage(name string, gfx map[string]image.Point) {
 	img := hud.images[name]
-	hud.g.renderer.BlitImage(gfx[name].Add(image.Point{img.X, img.Y}), img.Data, hud.pal)
+	hud.g.renderer.BlitImage(gfx[name], img.Data, hud.pal)
 
 	//hud.g.renderer.DrawRect(hud.viewportBounds, color.RGBA{0xFF, 0, 0, 0xFF})
+}
+
+func (hud *gameHudImpl) patchWidescreen() {
+	if hud.g.config.Widescreen {
+		topPos := image.Point{72, 0}
+		bottomPos := image.Point{72, 188}
+
+		if hud.race == humanRace {
+			hud.g.renderer.BlitImage(topPos, hud.images["IHRESBAR.IMG"].Data, hud.pal)
+			hud.g.renderer.BlitImage(bottomPos, hud.images["IHBOTBAR.IMG"].Data, hud.pal)
+		} else {
+			hud.g.renderer.BlitImage(topPos, hud.images["IORESBAR.IMG"].Data, hud.pal)
+			hud.g.renderer.BlitImage(bottomPos, hud.images["IOBOTBAR.IMG"].Data, hud.pal)
+		}
+	}
 }

@@ -31,11 +31,6 @@
               <object class="GtkComboBoxText" id="race_comboboxtext">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="active">0</property>
-                <items>
-                  <item translatable="yes">Humans</item>
-                  <item translatable="yes">Orcs</item>
-                </items>
               </object>
               <packing>
                 <property name="expand">True</property>
@@ -51,9 +46,11 @@
           </packing>
         </child>
         <child>
-          <object class="GtkTextView" id="textview1">
+          <object class="GtkTextView" id="log_textview">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
+            <property name="editable">False</property>
+            <property name="wrap_mode">char</property>
           </object>
           <packing>
             <property name="expand">True</property>

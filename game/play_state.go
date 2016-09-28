@@ -25,10 +25,10 @@ import (
 )
 
 const (
-	scrollLeft  = 0x1
-	scrollRight = 0x2
-	scrollUp    = 0x4
-	scrollDown  = 0x8
+	scrollLeft = 1 << iota
+	scrollRight
+	scrollUp
+	scrollDown
 )
 
 const scrollSpeed = 0.1
@@ -48,7 +48,7 @@ func NewPlayState(g *Game) GameState {
 	ter, _ := newTerrain(g, "ORC01")
 
 	race := humanRace
-	if g.config.Debug.Race == "Orcs" {
+	if g.config.Debug.Race == "Orc" {
 		race = orcRace
 	}
 

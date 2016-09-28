@@ -66,15 +66,15 @@ func setSensitive(builder *gtk.Builder, sensitive bool) {
 func setupCheckBoxes(builder *gtk.Builder) {
 	builder.GetObject("fullscreen_checkbutton").Connect("toggled", func() {
 		cfg.Fullscreen = !cfg.Fullscreen
-	}, nil)
+	})
 
 	builder.GetObject("widescreen_checkbutton").Connect("toggled", func() {
 		cfg.Widescreen = !cfg.Widescreen
-	}, nil)
+	})
 
 	builder.GetObject("wc2_input_checkbutton").Connect("toggled", func() {
 		cfg.WC2Input = !cfg.WC2Input
-	}, nil)
+	})
 }
 
 func setupLauncherWindow(builder *gtk.Builder) {
@@ -109,6 +109,7 @@ func setupLauncherWindow(builder *gtk.Builder) {
 			if war, err = resource.OpenArchive(file); err == nil {
 				img.SetFromStock("gtk-ok", gtk.ICON_SIZE_BUTTON)
 				setSensitive(builder, true)
+				debug.ArchiveLoaded(war)
 			} else {
 				img.SetFromStock("gtk-cancel", gtk.ICON_SIZE_BUTTON)
 				setSensitive(builder, false)
@@ -116,7 +117,7 @@ func setupLauncherWindow(builder *gtk.Builder) {
 		} else {
 			fileDialog.Hide()
 		}
-	}, nil)
+	})
 
 	setupCheckBoxes(builder)
 
@@ -129,18 +130,18 @@ func setupLauncherWindow(builder *gtk.Builder) {
 			launcherWindow.SetSensitive(true)
 			gdk.ThreadsLeave()
 		}()
-	}, nil)
+	})
 
 	builder.GetObject("editor_button").Connect("clicked", func() {
 		launcherWindow.SetSensitive(false)
 		editor.Start(cfg, war, func() {
 			launcherWindow.SetSensitive(true)
 		})
-	}, nil)
+	})
 
 	builder.GetObject("about_button").Connect("clicked", func() {
 		aboutDialog := (*gtk.AboutDialog)(unsafe.Pointer(builder.GetObject("about_dialog")))
 		aboutDialog.Run()
 		aboutDialog.Hide()
-	}, nil)
+	})
 }

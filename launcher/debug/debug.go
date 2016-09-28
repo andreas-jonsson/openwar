@@ -1,3 +1,5 @@
+// +build !ndebug
+
 /*
 Copyright (C) 2016 Andreas T Jonsson
 
@@ -18,25 +20,100 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package debug
 
 import (
+	"bufio"
+	"fmt"
 	"log"
+	"os"
+	"path"
+	"sort"
+	"strings"
+	"unsafe"
 
 	"github.com/andreas-jonsson/openwar/game"
 	"github.com/andreas-jonsson/openwar/platform"
+	"github.com/andreas-jonsson/openwar/resource"
+	"github.com/mattn/go-gtk/gdk"
 	"github.com/mattn/go-gtk/gtk"
 )
 
-func Start(cfg *game.Config) {
-	builder := gtk.NewBuilder()
+var (
+	builder *gtk.Builder
+	cfg     *game.Config
+)
+
+func Start(config *game.Config) {
+	cfg = config
+	builder = gtk.NewBuilder()
 	if _, err := builder.AddFromFile(platform.RootJoin("debug.glade")); err != nil {
 		log.Fatalln("could not load interface description:", err)
 	}
-
-	cfg.Debug.Race = "Orcs"
-
-	setupDebugWindow(builder)
+	setupDebugWindow()
 }
 
-func setupDebugWindow(builder *gtk.Builder) {
+func ArchiveLoaded(war *resource.Archive) {
+	maps := []string{}
+	mapCombobox := (*gtk.ComboBoxText)(unsafe.Pointer(builder.GetObject("map_comboboxtext")))
+
+	for file, _ := range war.Files {
+		if path.Ext(file) == ".TER" {
+			maps = append(maps, strings.TrimSuffix(file, ".TER"))
+		}
+	}
+
+	sort.Strings(maps)
+	for _, m := range maps {
+		mapCombobox.AppendText(m)
+	}
+	mapCombobox.SetActive(0)
+}
+
+func redirectLog(logTextView *gtk.TextView) {
+	r, w, err := os.Pipe()
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	oldStdout := os.Stdout
+	os.Stdout = w
+
+	go func() {
+		scanner := bufio.NewScanner(r)
+		for scanner.Scan() {
+			text := scanner.Text() + "\n"
+			fmt.Fprint(oldStdout, text)
+
+			gdk.ThreadsEnter()
+
+			var iter gtk.TextIter
+			buffer := logTextView.GetBuffer()
+			buffer.GetStartIter(&iter)
+			buffer.Insert(&iter, text)
+
+			gdk.ThreadsLeave()
+		}
+
+		if err := scanner.Err(); err != nil {
+			fmt.Fprintln(oldStdout, "pipe error", err)
+		}
+	}()
+}
+
+func setupDebugWindow() {
+	logTextView := (*gtk.TextView)(unsafe.Pointer(builder.GetObject("log_textview")))
+	redirectLog(logTextView)
+
+	raceCombobox := (*gtk.ComboBoxText)(unsafe.Pointer(builder.GetObject("race_comboboxtext")))
+	races := []string{"Human", "Orc"}
+	for _, r := range races {
+		raceCombobox.AppendText(r)
+	}
+	raceCombobox.SetActive(0)
+
+	cfg.Debug.Race = races[0]
+	raceCombobox.Connect("changed", func() {
+		cfg.Debug.Race = races[raceCombobox.GetActive()]
+	})
+
 	debugWindow := gtk.WidgetFromObject(builder.GetObject("debug_window"))
 	debugWindow.ShowAll()
 }
