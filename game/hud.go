@@ -48,7 +48,7 @@ type (
 func newGameHud(g *Game, race playerRace, envPal color.Palette) gameHud {
 	res := g.resources
 
-	// Viewport is 240x176
+	// Viewport is 240x176 in 4/3 mode and 336x176 in 16/9 mode.
 
 	hud := &gameHudImpl{g: g, race: race}
 	hud.viewportBounds = image.Rectangle{
@@ -56,13 +56,20 @@ func newGameHud(g *Game, race playerRace, envPal color.Palette) gameHud {
 		Max: image.Point{312, 188},
 	}
 
+	addWidth := 0
+	if g.config.Widescreen {
+		max := image.Point{408, 222}
+		addWidth = max.X - hud.viewportBounds.Max.X
+		hud.viewportBounds.Max = max
+	}
+
 	hud.miniMapViewportBounds = image.Rectangle{image.Point{}, hud.viewportBounds.Size().Div(16)}
 
 	hud.images = make(resource.Images)
 	hud.humanGfx = map[string]image.Point{
-		"IHRESBAR.IMG": {72, 0},
-		"IHRIGBAR.IMG": {312, 0},
-		"IHBOTBAR.IMG": {72, 188},
+		"IHRESBAR.IMG": {72 + addWidth, 0},
+		"IHRIGBAR.IMG": {312 + addWidth, 0},
+		"IHBOTBAR.IMG": {72 + addWidth, 188},
 		"IHLPANEL.IMG": {0, 72},
 		"IHMMAP01.IMG": {0, 0},
 		"IHMMAP02.IMG": {0, 0},

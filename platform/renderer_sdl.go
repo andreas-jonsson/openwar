@@ -59,9 +59,11 @@ func NewRenderer(w, h int, data ...interface{}) (Renderer, error) {
 				flags |= sdl.WINDOW_FULLSCREEN
 				//flags |= sdl.WINDOW_FULLSCREEN_DESKTOP
 			case "widescreen":
-				width = 640
-				height = 300
-				logicalHeight = 360
+				width = 416
+				logicalHeight = 234
+
+				//This is a bit of a hack... Should perhaps move this.
+				ScreenScale = ScreenScale16x9
 			case "title":
 				i++
 				title = data[i].(string)

@@ -28,7 +28,12 @@ import (
 	"github.com/veandco/go-sdl2/sdl"
 )
 
-const screenScale = 200.0 / 240.0
+const (
+	ScreenScale4x3  = 200.0 / 240.0
+	ScreenScale16x9 = 200.0 / 234.0
+)
+
+var ScreenScale = ScreenScale4x3
 
 var keyMapping = map[sdl.Keycode]int{
 	sdl.K_UP:     KeyUp,
@@ -143,15 +148,15 @@ func PollEvent() Event {
 		ev := &MouseButtonEvent{}
 		ev.Button = int(t.Button)
 		ev.X = int(t.X)
-		ev.Y = int(float32(t.Y) * screenScale)
+		ev.Y = int(float64(t.Y) * ScreenScale)
 		ev.Type = int(t.Type)
 		return ev
 	case *sdl.MouseMotionEvent:
 		ev := &MouseMotionEvent{}
 		ev.X = int(t.X)
-		ev.Y = int(float32(t.Y) * screenScale)
+		ev.Y = int(float64(t.Y) * ScreenScale)
 		ev.XRel = int(t.XRel)
-		ev.YRel = int(float32(t.YRel) * screenScale)
+		ev.YRel = int(float64(t.YRel) * ScreenScale)
 		return ev
 	}
 
