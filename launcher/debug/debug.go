@@ -20,10 +20,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package debug
 
 import (
-	"bufio"
 	"fmt"
 	"log"
-	"os"
 	"path"
 	"sort"
 	"strings"
@@ -40,6 +38,13 @@ var (
 	builder *gtk.Builder
 	cfg     *game.Config
 )
+
+type textLog func(string)
+
+func (f textLog) Write(p []byte) (n int, err error) {
+	(func(string))(f)(string(p))
+	return len(p), nil
+}
 
 func Start(config *game.Config) {
 	cfg = config
@@ -76,34 +81,17 @@ func ArchiveLoaded(war *resource.Archive) {
 }
 
 func redirectLog(logTextView *gtk.TextView) {
-	r, w, err := os.Pipe()
-	if err != nil {
-		log.Fatalln(err)
+	var iter gtk.TextIter
+	buffer := logTextView.GetBuffer()
+	buffer.GetStartIter(&iter)
+
+	f := func(s string) {
+		fmt.Print(s)
+		gdk.ThreadsEnter()
+		buffer.Insert(&iter, s)
+		gdk.ThreadsLeave()
 	}
-
-	oldStdout := os.Stdout
-	os.Stdout = w
-
-	go func() {
-		scanner := bufio.NewScanner(r)
-		for scanner.Scan() {
-			text := scanner.Text() + "\n"
-			fmt.Fprint(oldStdout, text)
-
-			gdk.ThreadsEnter()
-
-			var iter gtk.TextIter
-			buffer := logTextView.GetBuffer()
-			buffer.GetStartIter(&iter)
-			buffer.Insert(&iter, text)
-
-			gdk.ThreadsLeave()
-		}
-
-		if err := scanner.Err(); err != nil {
-			fmt.Fprintln(oldStdout, "pipe error:", err)
-		}
-	}()
+	log.SetOutput(textLog(f))
 }
 
 func setupDebugWindow() {
