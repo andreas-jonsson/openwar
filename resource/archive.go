@@ -42,6 +42,7 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
+	"log"
 	"os"
 )
 
@@ -54,7 +55,7 @@ var (
 
 var (
 	ErrUnsupportedVersion = errors.New("unsupported version")
-	Logger                = ioutil.Discard
+	Logger                = log.New(ioutil.Discard, "", 0)
 	LoadUnsupported       = false
 )
 
@@ -94,18 +95,18 @@ func OpenArchiveFrom(fp io.ReadSeeker, sz int64) (*Archive, error) {
 		return nil, err
 	}
 
-	fmt.Fprint(Logger, "Archive ID: ")
+	Logger.Print("Archive ID: ")
 	switch archiveID {
 	case dosRetail:
-		fmt.Fprintln(Logger, "DOS Retail")
+		Logger.Println("DOS Retail")
 	default:
 		switch archiveID {
 		case dosShareware:
-			fmt.Fprintln(Logger, "DOS Shareware")
+			Logger.Println("DOS Shareware")
 		case macRetail:
-			fmt.Fprintln(Logger, "Mac Retail")
+			Logger.Println("Mac Retail")
 		case macShareware:
-			fmt.Fprintln(Logger, "Mac Shareware")
+			Logger.Println("Mac Shareware")
 		default:
 			return nil, errors.New("unknown version")
 		}
@@ -116,7 +117,7 @@ func OpenArchiveFrom(fp io.ReadSeeker, sz int64) (*Archive, error) {
 	if err = binary.Read(fp, binary.LittleEndian, &numFiles); err != nil {
 		return nil, err
 	}
-	fmt.Fprintln(Logger, "Number of files in archive: ", numFiles)
+	Logger.Println("Number of files in archive: ", numFiles)
 
 	if int(numFiles) != len(fileMap) {
 		return nil, errors.New("table mapping mismatch")
@@ -134,10 +135,10 @@ func OpenArchiveFrom(fp io.ReadSeeker, sz int64) (*Archive, error) {
 	for i, offset := range fileTable {
 		if isPlaceHolder(fileTable, offset, i) {
 			if fileMap[i] != "" {
-				fmt.Fprintf(Logger, "Incomplete WAR file. Missing '%v'.\n", fileMap[i])
+				Logger.Printf("Incomplete WAR file. Missing '%v'.\n", fileMap[i])
 			}
 
-			fmt.Fprintln(Logger, "Skipping placeholder: ", i)
+			Logger.Println("Skipping placeholder: ", i)
 			continue
 		}
 
@@ -167,18 +168,18 @@ func OpenArchiveFrom(fp io.ReadSeeker, sz int64) (*Archive, error) {
 				continue
 			}
 
-			fmt.Fprintf(Logger, "Warning: Filename table is incomplete! Missing file with id %v.\n", i)
+			Logger.Printf("Warning: Filename table is incomplete! Missing file with id %v.\n", i)
 			fileName = fmt.Sprintf("DATA.WAR.%v", i)
 		}
 
 		var data []byte
 		if isCompressed {
-			fmt.Fprintf(Logger, "Compressed entry: #%v %s\n", i, fileName)
+			Logger.Printf("Compressed entry: #%v %s\n", i, fileName)
 			if data, err = uncompressData(fp, int(size), int(dataLength)); err != nil {
 				return nil, err
 			}
 		} else {
-			fmt.Fprintf(Logger, "Uncompressed entry: #%v %s\n", i, fileName)
+			Logger.Printf("Uncompressed entry: #%v %s\n", i, fileName)
 			data = make([]byte, size)
 			if num, err := fp.Read(data); num != len(data) || err != nil {
 				return nil, err

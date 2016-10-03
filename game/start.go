@@ -18,7 +18,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package game
 
 import (
-	"fmt"
 	"log"
 	"math/rand"
 	"path"
@@ -57,25 +56,25 @@ func Start(cfg *Config, arch *resource.Archive) {
 	startCh <- func() {
 		rand.Seed(time.Now().UnixNano())
 
-		fmt.Println("Loading palettes...")
+		log.Println("Loading palettes...")
 		palettes, err := resource.LoadPalettes(arch)
 		if err != nil {
 			panic(err)
 		}
 
-		fmt.Println("Loading images...")
+		log.Println("Loading images...")
 		images, err := resource.LoadImages(arch)
 		if err != nil {
 			panic(err)
 		}
 
-		fmt.Println("Loading sprites...")
+		log.Println("Loading sprites...")
 		sprites, err := resource.LoadSprites(arch, images)
 		if err != nil {
 			panic(err)
 		}
 
-		fmt.Println("Loading tilesets...")
+		log.Println("Loading tilesets...")
 		tilesets, err := resource.LoadTilesets(arch, images, palettes)
 		if err != nil {
 			panic(err)
@@ -114,7 +113,7 @@ func Start(cfg *Config, arch *resource.Archive) {
 		}
 		defer player.Shutdown()
 
-		fmt.Println("Loading audio...")
+		log.Println("Loading audio...")
 		if err = loadAudio(arch, player); err != nil {
 			panic(err)
 		}

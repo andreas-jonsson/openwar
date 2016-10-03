@@ -18,7 +18,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package main
 
 import (
-	"fmt"
+	"log"
 
 	"github.com/andreas-jonsson/openwar/game"
 	"github.com/andreas-jonsson/openwar/launcher"
@@ -32,14 +32,14 @@ const logo = `________                       __      __
         \/|__|        \/     \/      \/        \/`
 
 func banner() {
-	fmt.Print(logo)
-	fmt.Println(" Ver:", game.VersionString)
+	log.Print(logo)
+	log.Println(" Ver:", game.VersionString)
 
-	fmt.Println("\n\tAuthors:")
+	log.Println("\n\tAuthors:")
 	for _, author := range game.Authors {
-		fmt.Println("\t\t", author)
+		log.Println("\t\t", author)
 	}
-	fmt.Println()
+	log.Println()
 }
 
 func main() {

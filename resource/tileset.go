@@ -20,7 +20,6 @@ package resource
 import (
 	"bytes"
 	"encoding/binary"
-	"fmt"
 	"image"
 	"image/color"
 	"path"
@@ -45,13 +44,13 @@ func LoadTilesets(arch *Archive, images Images, palettes Palettes) (Tilesets, er
 		if ext == ".TIL" {
 			megaTileData, ok := arch.Files[strings.TrimSuffix(file, ext)+".PTR"]
 			if !ok {
-				fmt.Fprintf(Logger, "%s is incomplete, missing megatile.\n", file)
+				Logger.Printf("%s is incomplete, missing megatile.\n", file)
 				continue
 			}
 
 			pal, ok := palettes[strings.TrimSuffix(file, ext)+".PAL"]
 			if !ok {
-				fmt.Fprintf(Logger, "%s is incomplete, missing palette.\n", file)
+				Logger.Printf("%s is incomplete, missing palette.\n", file)
 				continue
 			}
 

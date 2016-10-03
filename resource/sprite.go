@@ -89,7 +89,7 @@ func LoadSprites(arch *Archive, images Images) (Sprites, error) {
 				if frame.Offset == prevOffset {
 
 					// NOTE This is strange... could it be compressed?
-					fmt.Fprintln(Logger, "Frame repeat:", file, i)
+					Logger.Println("Frame repeat:", file, i)
 
 					img = sprite.Imgs[i-1]
 				} else {
