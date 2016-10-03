@@ -34,7 +34,7 @@ import (
 
 var (
 	war *resource.Archive
-	cfg = &game.Config{Fullscreen: false, Widescreen: false, WC2Input: true}
+	cfg = &game.Config{Fullscreen: false, Widescreen: true, WC2Input: true}
 )
 
 func Start() {

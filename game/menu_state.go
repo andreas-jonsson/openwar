@@ -19,11 +19,43 @@ package game
 
 import (
 	"image"
+	"image/color"
+	"image/draw"
 	"time"
 
 	"github.com/andreas-jonsson/openwar/platform"
 	"github.com/andreas-jonsson/openwar/resource"
 )
+
+func lerp(v0, v1, t float64) float64 {
+	return (1.0-t)*v0 + t*v1
+}
+
+func lerpRGBA(v0, v1 color.RGBA, t float64) (col color.RGBA) {
+	col.R = uint8(lerp(float64(v0.R), float64(v1.R), t))
+	col.G = uint8(lerp(float64(v0.G), float64(v1.G), t))
+	col.B = uint8(lerp(float64(v0.B), float64(v1.B), t))
+	col.A = uint8(lerp(float64(v0.A), float64(v1.A), t))
+	return
+}
+
+type gradient image.Rectangle
+
+func (g *gradient) ColorModel() color.Model {
+	return color.RGBAModel
+}
+
+func (g *gradient) Bounds() image.Rectangle {
+	return *(*image.Rectangle)(g)
+}
+
+func (g *gradient) At(x, y int) color.Color {
+	top := color.RGBA{30, 30, 75, 255}
+	bottom := color.RGBA{0, 0, 15, 255}
+
+	t := float64(y) / float64(g.Max.Y)
+	return lerpRGBA(top, bottom, t)
+}
 
 type menuState struct {
 	g   *Game
@@ -64,9 +96,17 @@ func (s *menuState) Update() error {
 }
 
 func (s *menuState) Render() error {
+	renderer := s.g.renderer
+	bb := renderer.BackBuffer()
+	bounds := bb.Bounds()
+	g := (*gradient)(&bounds)
+
+	draw.Draw(bb, bounds, g, image.Point{}, draw.Src)
+
 	img := s.res.Images["TITLE.IMG"]
 	pal := s.res.Palettes["TITLE.PAL"]
 
-	s.g.renderer.BlitImage(image.Point{}, img.Data, pal)
+	offset := (bounds.Max.X - img.Data.Bounds().Max.X) / 2
+	renderer.BlitImage(image.Point{offset, 0}, img.Data, pal)
 	return nil
 }

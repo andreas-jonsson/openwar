@@ -61,10 +61,18 @@ func ArchiveLoaded(war *resource.Archive) {
 	}
 
 	sort.Strings(maps)
+	log.Println("Available maps:")
+
 	for _, m := range maps {
 		mapCombobox.AppendText(m)
+		log.Println(m)
 	}
 	mapCombobox.SetActive(0)
+
+	cfg.Debug.Map = maps[0]
+	mapCombobox.Connect("changed", func() {
+		cfg.Debug.Map = maps[mapCombobox.GetActive()]
+	})
 }
 
 func redirectLog(logTextView *gtk.TextView) {
@@ -93,7 +101,7 @@ func redirectLog(logTextView *gtk.TextView) {
 		}
 
 		if err := scanner.Err(); err != nil {
-			fmt.Fprintln(oldStdout, "pipe error", err)
+			fmt.Fprintln(oldStdout, "pipe error:", err)
 		}
 	}()
 }

@@ -19,6 +19,7 @@ package game
 
 import (
 	"image"
+	"log"
 	"time"
 
 	"github.com/andreas-jonsson/openwar/resource"
@@ -45,7 +46,10 @@ type playState struct {
 }
 
 func NewPlayState(g *Game) GameState {
-	ter, _ := newTerrain(g, "ORC01")
+	ter, err := newTerrain(g, g.config.Debug.Map)
+	if err != nil {
+		log.Fatalln(err)
+	}
 
 	race := humanRace
 	if g.config.Debug.Race == "Orc" {

@@ -23,6 +23,7 @@ import (
 	"image"
 	"image/color"
 	"image/draw"
+	"log"
 	"math"
 	"math/rand"
 
@@ -60,10 +61,45 @@ type (
 	}
 )
 
-var mapsEnvironment = map[string]environmentType{
-	"ORC01": environmentSwamp,
+// HUMAN04, HUMAN08 and CUSTOMD3-8 is not working...
 
-	"HUMAN01": environmentForest,
+var mapsEnvironment = map[string]environmentType{
+	"CUSTOMD1": environmentDungeon,
+	"CUSTOMD2": environmentDungeon,
+	"CUSTOMD3": environmentDungeon,
+	"CUSTOMD4": environmentDungeon,
+	"CUSTOMD5": environmentDungeon,
+	"CUSTOMD6": environmentDungeon,
+	"CUSTOMD7": environmentDungeon,
+	"CUSTOMD8": environmentDungeon,
+	"CUSTOMF1": environmentForest,
+	"CUSTOMF2": environmentForest,
+	"CUSTOMS1": environmentSwamp,
+	"CUSTOMS2": environmentSwamp,
+	"HUMAN01":  environmentForest,
+	"HUMAN02":  environmentForest,
+	"HUMAN03":  environmentSwamp,
+	"HUMAN04":  environmentForest,
+	"HUMAN05":  environmentForest,
+	"HUMAN06":  environmentForest,
+	"HUMAN07":  environmentForest,
+	"HUMAN08":  environmentSwamp,
+	"HUMAN09":  environmentSwamp,
+	"HUMAN10":  environmentSwamp,
+	"HUMAN11":  environmentSwamp,
+	"HUMAN12":  environmentSwamp,
+	"ORC01":    environmentSwamp,
+	"ORC02":    environmentSwamp,
+	"ORC03":    environmentSwamp,
+	"ORC04":    environmentSwamp,
+	"ORC05":    environmentSwamp,
+	"ORC06":    environmentSwamp,
+	"ORC07":    environmentSwamp,
+	"ORC08":    environmentSwamp,
+	"ORC09":    environmentSwamp,
+	"ORC10":    environmentSwamp,
+	"ORC11":    environmentSwamp,
+	"ORC12":    environmentSwamp,
 }
 
 func newTerrain(g *Game, name string) (terrain, error) {
@@ -144,7 +180,7 @@ func (ter *terrainImpl) createMap() (*image.Paletted, *image.RGBA) {
 			idx := int(ter.tileIndex[offset])
 
 			if idx > ter.tileset.NumTiles-1 {
-				panic("index out of range")
+				log.Fatalln("index out of range", idx, ter.tileset.NumTiles-1)
 			}
 
 			// Render minimap.
