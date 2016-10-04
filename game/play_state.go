@@ -94,18 +94,18 @@ func (s *playState) updateScroll(dt float64) {
 	max := g.renderer.BackBuffer().Bounds().Max
 	s.scrollDirection = 0
 
-	if pos.X == 0 {
+	if pos.X <= 0 {
 		s.scrollDirection |= scrollLeft
 		s.cameraX -= dt * scrollSpeed
-	} else if pos.X == max.X-1 {
+	} else if pos.X >= max.X-1 {
 		s.scrollDirection |= scrollRight
 		s.cameraX += dt * scrollSpeed
 	}
 
-	if pos.Y == 0 {
+	if pos.Y <= 0 {
 		s.scrollDirection |= scrollUp
 		s.cameraY -= dt * scrollSpeed
-	} else if pos.Y == max.Y-1 {
+	} else if pos.Y >= max.Y-1 {
 		s.scrollDirection |= scrollDown
 		s.cameraY += dt * scrollSpeed
 	}

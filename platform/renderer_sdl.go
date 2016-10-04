@@ -56,8 +56,8 @@ func NewRenderer(w, h int, data ...interface{}) (Renderer, error) {
 		if ok {
 			switch ps {
 			case "fullscreen":
-				flags |= sdl.WINDOW_FULLSCREEN
-				//flags |= sdl.WINDOW_FULLSCREEN_DESKTOP
+				//flags |= sdl.WINDOW_FULLSCREEN
+				flags |= sdl.WINDOW_FULLSCREEN_DESKTOP
 			case "widescreen":
 				width = 416
 				logicalHeight = 234
@@ -98,6 +98,7 @@ func NewRenderer(w, h int, data ...interface{}) (Renderer, error) {
 		return nil, err
 	}
 
+	r.window.SetGrab(true)
 	sdl.ShowCursor(0)
 	return &r, nil
 }
@@ -107,8 +108,8 @@ func (p *sdlRenderer) ToggleFullscreen() {
 	if isFullscreen {
 		p.window.SetFullscreen(0)
 	} else {
-		//p.window.SetFullscreen(sdl.WINDOW_FULLSCREEN_DESKTOP)
-		p.window.SetFullscreen(sdl.WINDOW_FULLSCREEN)
+		p.window.SetFullscreen(sdl.WINDOW_FULLSCREEN_DESKTOP)
+		//p.window.SetFullscreen(sdl.WINDOW_FULLSCREEN)
 	}
 }
 
