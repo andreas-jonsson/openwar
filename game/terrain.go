@@ -26,6 +26,7 @@ import (
 	"log"
 	"math"
 	"math/rand"
+	"time"
 
 	"github.com/andreas-jonsson/openwar/resource"
 )
@@ -38,12 +39,15 @@ const (
 	environmentDungeon
 )
 
+const paletteAnimationSpeed = 250 * time.Millisecond
+
 type (
 	terrainImpl struct {
 		g *Game
 
 		tileset resource.Tileset
 		pal     color.Palette
+		palAnim *time.Ticker
 
 		mapSize   int
 		tileIndex []uint16
@@ -121,6 +125,7 @@ func newTerrain(g *Game, name string) (terrain, error) {
 		ter.tileset = g.resources.Tilesets["DUNGEON.TIL"]
 		ter.pal = g.resources.Palettes["DUNGEON.PAL"]
 	}
+	ter.palAnim = time.NewTicker(paletteAnimationSpeed)
 
 	reader, err := g.resources.Archive.Open(name + ".TER")
 	if err != nil {
@@ -167,7 +172,24 @@ func (ter *terrainImpl) render(cullRect image.Rectangle, cameraPos image.Point) 
 	cullRect.Min = image.Point{}
 	cullRect = cullRect.Add(cameraPos)
 
+	ter.animatePalette()
 	ter.g.renderer.Blit(cullMin, ter.mapImage, cullRect, ter.pal)
+}
+
+func (ter *terrainImpl) animatePalette() {
+	const (
+		startFrame = 112
+		numFrames  = 7
+	)
+
+	select {
+	case <-ter.palAnim.C:
+		pal := ter.pal
+		tail := pal[startFrame+numFrames]
+		copy(pal[startFrame+1:startFrame+numFrames+1], pal[startFrame:startFrame+numFrames])
+		pal[startFrame] = tail
+	default:
+	}
 }
 
 func (ter *terrainImpl) createMap() (*image.Paletted, *image.RGBA) {
