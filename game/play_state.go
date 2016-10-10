@@ -48,7 +48,7 @@ type playState struct {
 func NewPlayState(g *Game) GameState {
 	ter, err := newTerrain(g, g.config.Debug.Map)
 	if err != nil {
-		log.Fatalln(err)
+		log.Panicln(err)
 	}
 
 	race := humanRace

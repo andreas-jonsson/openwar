@@ -29,7 +29,7 @@ import (
 func Start(cfg *game.Config, war *resource.Archive, exitCallback func()) {
 	builder := gtk.NewBuilder()
 	if _, err := builder.AddFromFile(platform.RootJoin("editor.glade")); err != nil {
-		log.Fatalln("could not load interface description:", err)
+		log.Panicln("could not load interface description:", err)
 	}
 
 	setupEditorWindow(builder, exitCallback)

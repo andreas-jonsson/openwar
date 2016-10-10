@@ -28,6 +28,7 @@ import (
 )
 
 func Start() {
+	banner()
 	js.Global.Call("addEventListener", "load", func() { go load() })
 }
 

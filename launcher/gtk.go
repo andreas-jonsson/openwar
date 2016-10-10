@@ -1,4 +1,4 @@
-// +build !nogui,!js,!mobile
+// +build !nogui,!js,!mobile,!tui
 
 /*
 Copyright (C) 2016 Andreas T Jonsson
@@ -44,7 +44,7 @@ func Start() {
 	builder := gtk.NewBuilder()
 
 	if _, err := builder.AddFromFile(platform.RootJoin("launcher.glade")); err != nil {
-		log.Fatalln("could not load interface description:", err)
+		log.Panicln("could not load interface description:", err)
 	}
 
 	debug.Start(cfg)

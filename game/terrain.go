@@ -202,7 +202,7 @@ func (ter *terrainImpl) createMap() (*image.Paletted, *image.RGBA) {
 			idx := int(ter.tileIndex[offset])
 
 			if idx > ter.tileset.NumTiles-1 {
-				log.Fatalln("index out of range", idx, ter.tileset.NumTiles-1)
+				log.Panicln("index out of range", idx, ter.tileset.NumTiles-1)
 			}
 
 			// Render minimap.

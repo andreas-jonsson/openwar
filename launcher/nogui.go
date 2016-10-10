@@ -27,6 +27,8 @@ import (
 )
 
 func Start() {
+	banner()
+
 	cfg := &game.Config{
 		Fullscreen: false,
 		Widescreen: false,
@@ -36,6 +38,6 @@ func Start() {
 	if war, err := resource.OpenArchive("DATA.WAR"); err == nil {
 		game.Start(cfg, war)
 	} else {
-		log.Fatalln(err)
+		log.Panicln(err)
 	}
 }

@@ -15,10 +15,29 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-package main
+package launcher
 
-import "github.com/andreas-jonsson/openwar/launcher"
+import (
+	"fmt"
 
-func main() {
-	launcher.Start()
+	"github.com/andreas-jonsson/openwar/game"
+)
+
+const logo = `________                       __      __
+\_____  \ ______   ____   ____/  \    /  \_____ _______
+ /   |   \\____ \_/ __ \ /    \   \/\/   /\__  \\_  __ \
+/    |    \  |_> >  ___/|   |  \        /  / __ \|  | \/
+\_______  /   __/ \___  >___|  /\__/\  /  (____  /__|
+        \/|__|        \/     \/      \/        \/`
+
+func banner() {
+	fmt.Print("\033[H\033[2J")
+	fmt.Print(logo)
+	fmt.Println(" Ver:", game.VersionString)
+
+	fmt.Println("\n\tAuthors:")
+	for _, author := range game.Authors {
+		fmt.Println("\t\t", author)
+	}
+	fmt.Println()
 }

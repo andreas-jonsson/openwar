@@ -44,6 +44,7 @@ import (
 )
 
 func Start() {
+	banner()
 	app.Main(func(a app.App) {
 		var (
 			glctx  gl.Context
@@ -76,7 +77,7 @@ func Start() {
 					if war, err := resource.OpenArchiveFrom(file, size); err == nil {
 						go game.Start(cfg, war)
 					} else {
-						log.Fatalln(err)
+						log.Panicln(err)
 					}
 
 					a.Send(paint.Event{})
@@ -131,23 +132,23 @@ func openAssets() (asset.File, int64) {
 		})
 
 		if err == nil {
-			log.Fatalln("Could not find DATA.WAR in your Download folder!")
+			log.Panicln("Could not find DATA.WAR in your Download folder!")
 		}
 
 		file, err = os.Open(err.Error())
 		if err != nil {
-			log.Fatalln(err)
+			log.Panicln(err)
 		}
 	}
 
 	size, err := file.Seek(0, io.SeekEnd)
 	if err != nil {
-		log.Fatalln(err)
+		log.Panicln(err)
 	}
 
 	_, err = file.Seek(0, io.SeekStart)
 	if err != nil {
-		log.Fatalln(err)
+		log.Panicln(err)
 	}
 
 	return file, size

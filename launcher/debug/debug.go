@@ -50,7 +50,7 @@ func Start(config *game.Config) {
 	cfg = config
 	builder = gtk.NewBuilder()
 	if _, err := builder.AddFromFile(platform.RootJoin("debug.glade")); err != nil {
-		log.Fatalln("could not load interface description:", err)
+		log.Panicln("could not load interface description:", err)
 	}
 	setupDebugWindow()
 }
