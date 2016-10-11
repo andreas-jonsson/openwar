@@ -35,8 +35,8 @@ install:
 script:
     - go build
 
-    # - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then ./tools/package/build_app.sh; fi
-    # - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then ./tools/dropbox/dropbox_uploader.sh upload openwar_$OPENWAR_VERSION-$TRAVIS_BUILD_NUMBER.zip Public/openwar_$OPENWAR_VERSION.zip; fi
+    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then ./tools/package/build_app.sh; fi
+    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then ./tools/dropbox/dropbox_uploader.sh upload OpenWar.zip Public; fi
 
     - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then ./tools/package/build_deb.sh; fi
     - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then ./tools/dropbox/dropbox_uploader.sh upload openwar_$OPENWAR_VERSION-$TRAVIS_BUILD_NUMBER.deb Public/openwar_$OPENWAR_VERSION.deb; fi
