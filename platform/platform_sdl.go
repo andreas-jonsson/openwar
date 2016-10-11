@@ -72,7 +72,7 @@ var mouseMapping = map[int]int{
 
 func init() {
 	isInvalid := func() bool {
-		_, err := os.Stat(path.Join(DataPath, "launcher.glade"))
+		_, err := os.Stat(path.Join(DataPath, "icon.png"))
 		return os.IsNotExist(err)
 	}
 

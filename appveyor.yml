@@ -31,7 +31,7 @@ install:
 build_script:
     - go get github.com/akavel/rsrc
     - rsrc -ico=tools/package/icon.ico -arch=amd64
-    - go get
+    - go get -v
     - go build
     # - go build -ldflags="-H windowsgui"
 
