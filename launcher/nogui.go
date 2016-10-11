@@ -35,6 +35,9 @@ func Start() {
 		WC2Input:   true,
 	}
 
+	cfg.Debug.Map = "HUMAN01"
+	cfg.Debug.Race = "Human"
+
 	if war, err := resource.OpenArchive("DATA.WAR"); err == nil {
 		game.Start(cfg, war)
 	} else {

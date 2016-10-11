@@ -1,21 +1,17 @@
 #!/bin/bash
 
-export PATH=$PREFIX/bin:~/.local/bin:~/gtk/inst/bin:$PATH
-export PKG_CONFIG_PATH=~/lib/pkgconfig:~/gtk/inst/lib/pkgconfig:$PKG_CONFIG_PATH
-# export SDL_PREFIX=~/.local/usr
+if [ -d OpenWar.app ]; then rm -rf OpenWar.app; fi
+cp -r "tools/package/OpenWar.app" OpenWar.app
 
-# ./tools/sdl_from_source.sh > /dev/null
+mkdir OpenWar.app/Contents/Resources
 
-export GOPATH=$HOME
+wget -q https://dl.dropboxusercontent.com/u/1955192/SDL2.framework.zip
+unzip -d OpenWar.app/Contents/Resources SDL2*.zip
 
-rm -rf $GOPATH/src/github.com/andreas-jonsson/openwar
-go get -u github.com/andreas-jonsson/openwar
+wget -q https://dl.dropboxusercontent.com/u/1955192/SDL2_mixer.framework.zip
+unzip -d OpenWar.app/Contents/Resources SDL2_mixer*.zip
 
-cd $GOPATH/src/github.com/andreas-jonsson/openwar
-go build openwar.go
+cp openwar OpenWar.app/Contents/MacOS
 
-cd tools/package/app-bundler
-gtk-mac-bundler OpenWar.bundle
-
-cd ../Output
-zip -r ../../OpenWar.zip OpenWar.app
+zip -r OpenWar.zip OpenWar.app
+rm -rf OpenWar.app

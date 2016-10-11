@@ -39,6 +39,9 @@ func load() {
 		WC2Input:   true,
 	}
 
+	cfg.Debug.Map = "HUMAN01"
+	cfg.Debug.Race = "Human"
+
 	_, data := openFile()
 	readSeeker := bytes.NewReader(data)
 

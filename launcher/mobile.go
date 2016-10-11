@@ -61,6 +61,9 @@ func Start() {
 			WC2Input:   true,
 		}
 
+		cfg.Debug.Map = "HUMAN01"
+		cfg.Debug.Race = "Human"
+
 		for e := range a.Events() {
 			switch e := a.Filter(e).(type) {
 			case lifecycle.Event:

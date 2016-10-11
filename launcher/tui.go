@@ -48,6 +48,8 @@ var (
 )
 
 func Start() {
+	banner()
+
 	cfg.Debug.Map = "HUMAN01"
 	cfg.Debug.Race = "Human"
 
@@ -73,17 +75,14 @@ func optionsToString() string {
 }
 
 func mainMenu() {
-	banner()
-
 	for i := 0; true; i++ {
-		menu := wmenu.NewMenu("\nSelect an option.")
+		menu := wmenu.NewMenu("\nSelect an option or press Ctrl+C to quit.")
 		menu.Option("Start Game", "0", war != nil, func() error {
 			if war == nil {
 				installArchiveMenu()
 			} else {
 				banner()
 				game.Start(cfg, war)
-				os.Exit(0)
 			}
 			return nil
 		})
