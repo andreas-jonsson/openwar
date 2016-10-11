@@ -1,3 +1,3 @@
 #!/bin/bash
 
-open Terminal.app -x openwar
+osascript -e 'tell app "Terminal" to do script "\"'"$(dirname "$0")/openwar"'\""'
