@@ -33,15 +33,8 @@ func Start() {
 }
 
 func load() {
-	cfg := &game.Config{
-		ConfigVersion: game.ConfigVersion,
-		Fullscreen:    false,
-		Widescreen:    false,
-		WC2Input:      true,
-	}
-
-	cfg.Debug.Map = "HUMAN01"
-	cfg.Debug.Race = "Human"
+	cfg := createNewConfig(false)
+	cfg.Widescreen = false
 
 	_, data := openFile()
 	readSeeker := bytes.NewReader(data)

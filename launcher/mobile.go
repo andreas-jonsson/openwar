@@ -55,7 +55,7 @@ func Start() {
 
 		paintDoneChan := make(chan struct{})
 
-		cfg := LoadConfig()
+		cfg := loadConfig()
 		cfg.Widescreen = false
 
 		for e := range a.Events() {

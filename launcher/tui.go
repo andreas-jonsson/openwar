@@ -69,7 +69,7 @@ func optionsToString() string {
 }
 
 func mainMenu() {
-	cfg = LoadConfig()
+	cfg = loadConfig()
 	archInCfg := platform.CfgRootJoin("DATA.WAR")
 	if archive, err := resource.OpenArchive(archInCfg); err == nil {
 		war = archive
@@ -130,7 +130,7 @@ func optionsMenu() error {
 		menu.Option("WC2Input", "2", cfg.WC2Input, nil)
 
 		if menu.Run() == nil {
-			SaveConfig(cfg)
+			saveConfig(cfg)
 			return nil
 		}
 	}
@@ -150,7 +150,7 @@ func raceMenu() error {
 		menu.Option("Orc", "1", false, nil)
 
 		if menu.Run() == nil {
-			SaveConfig(cfg)
+			saveConfig(cfg)
 			return nil
 		}
 	}
@@ -185,7 +185,7 @@ func mapMenu() error {
 		}
 
 		if menu.Run() == nil {
-			SaveConfig(cfg)
+			saveConfig(cfg)
 			return nil
 		}
 	}

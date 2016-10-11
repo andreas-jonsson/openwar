@@ -29,7 +29,7 @@ import (
 func Start() {
 	banner()
 	if war, err := resource.OpenArchive("DATA.WAR"); err == nil {
-		game.Start(LoadConfig(), war)
+		game.Start(loadConfig(), war)
 	} else {
 		log.Panicln(err)
 	}

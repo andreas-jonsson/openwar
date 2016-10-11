@@ -28,7 +28,7 @@ import (
 
 const configName = "config.json"
 
-func createNewConfig() *game.Config {
+func createNewConfig(save bool) *game.Config {
 	log.Println("Creating new config file.")
 
 	cfg := &game.Config{
@@ -41,25 +41,27 @@ func createNewConfig() *game.Config {
 	cfg.Debug.Map = "HUMAN01"
 	cfg.Debug.Race = "Human"
 
-	SaveConfig(cfg)
+	if save {
+		saveConfig(cfg)
+	}
 	return cfg
 }
 
-func LoadConfig() *game.Config {
+func loadConfig() *game.Config {
 	data, err := ioutil.ReadFile(platform.CfgRootJoin(configName))
 	if err != nil {
-		return createNewConfig()
+		return createNewConfig(true)
 	}
 
 	var cfg game.Config
 	if json.Unmarshal(data, &cfg) != nil || cfg.ConfigVersion != game.ConfigVersion {
-		return createNewConfig()
+		return createNewConfig(true)
 	}
 
 	return &cfg
 }
 
-func SaveConfig(cfg *game.Config) {
+func saveConfig(cfg *game.Config) {
 	if data, err := json.Marshal(cfg); err == nil {
 		ioutil.WriteFile(platform.CfgRootJoin(configName), data, 0755)
 	} else {
