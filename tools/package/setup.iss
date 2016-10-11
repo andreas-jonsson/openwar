@@ -37,8 +37,6 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"
 
 [Files]
-Source: "{#MyAppRoot}\tools\package\dependencies\gtk2-runtime-2.24.30-2016-04-09-ts-win64.exe"; DestDir: "{tmp}"; Flags: deleteafterinstall
-
 Source: "{#MyAppRoot}\openwar.exe"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#MyAppRoot}\tools\package\dependencies\libFLAC-8.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#MyAppRoot}\tools\package\dependencies\libmikmod-2.dll"; DestDir: "{app}"; Flags: ignoreversion
@@ -61,7 +59,3 @@ Name: "{commondesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: 
 
 [Run]
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
-Filename: "{tmp}\gtk2-runtime-2.24.30-2016-04-09-ts-win64.exe"; Parameters: "/sideeffects=no /dllpath=root /translations=no /compatdlls=no /S /D={app}"
-
-[UninstallRun]
-Filename: "{app}\gtk2_runtime_uninst.exe"; Parameters: "/remove_config=yes /sideeffects=no /dllpath=root /translations=no /compatdlls=no /S"

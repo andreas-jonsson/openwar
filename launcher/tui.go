@@ -1,4 +1,4 @@
-// +build tui
+// +build !nogui,!js,!mobile
 
 /*
 Copyright (C) 2016 Andreas T Jonsson
