@@ -19,6 +19,9 @@ package launcher
 
 import (
 	"fmt"
+	"os"
+	"os/exec"
+	"runtime"
 
 	"github.com/andreas-jonsson/openwar/game"
 )
@@ -31,7 +34,8 @@ const logo = `________                       __      __
         \/|__|        \/     \/      \/        \/`
 
 func banner() {
-	fmt.Print("\033[H\033[2J")
+	clearScreen()
+
 	fmt.Print(logo)
 	fmt.Println(" Ver:", game.VersionString)
 
@@ -40,4 +44,14 @@ func banner() {
 		fmt.Println("\t\t", author)
 	}
 	fmt.Println()
+}
+
+func clearScreen() {
+	if runtime.GOOS == "windows" {
+		cmd := exec.Command("cls")
+		cmd.Stdout = os.Stdout
+		cmd.Run()
+	} else {
+		fmt.Print("\033[H\033[2J")
+	}
 }
