@@ -22,6 +22,7 @@ package platform
 import (
 	"log"
 	"os"
+	"os/user"
 	"path"
 	"runtime"
 
@@ -93,6 +94,17 @@ func init() {
 	}
 
 	log.Println("Data path:", DataPath)
+
+	if runtime.GOOS == "windows" {
+		ConfigPath = path.Join(os.Getenv("LOCALAPPDATA"), "OpenWar")
+	} else {
+		if usr, err := user.Current(); err == nil {
+			ConfigPath = path.Join(usr.HomeDir, ".openwar")
+		}
+	}
+
+	os.MkdirAll(ConfigPath, 0755)
+	log.Println("Config path:", ConfigPath)
 }
 
 func Init() error {

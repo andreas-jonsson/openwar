@@ -22,6 +22,7 @@ package launcher
 import (
 	"errors"
 	"fmt"
+	"io"
 	"os"
 	"os/user"
 	"path"
@@ -30,6 +31,7 @@ import (
 	"strings"
 
 	"github.com/andreas-jonsson/openwar/game"
+	"github.com/andreas-jonsson/openwar/platform"
 	"github.com/andreas-jonsson/openwar/resource"
 
 	wmenu "gopkg.in/dixonwille/wmenu.v2"
@@ -39,19 +41,12 @@ const notInstalledText = "[Not Installed]"
 
 var (
 	arch = notInstalledText
-	war  *resource.Archive
 
-	cfg = &game.Config{
-		Fullscreen: false,
-		Widescreen: true,
-		WC2Input:   true,
-	}
+	war *resource.Archive
+	cfg *game.Config
 )
 
 func Start() {
-	cfg.Debug.Map = "HUMAN01"
-	cfg.Debug.Race = "Human"
-
 	mainMenu()
 }
 
@@ -74,6 +69,13 @@ func optionsToString() string {
 }
 
 func mainMenu() {
+	cfg = LoadConfig()
+	archInCfg := platform.CfgRootJoin("DATA.WAR")
+	if archive, err := resource.OpenArchive(archInCfg); err == nil {
+		war = archive
+		arch = archInCfg
+	}
+
 	for {
 		banner()
 
@@ -128,6 +130,7 @@ func optionsMenu() error {
 		menu.Option("WC2Input", "2", cfg.WC2Input, nil)
 
 		if menu.Run() == nil {
+			SaveConfig(cfg)
 			return nil
 		}
 	}
@@ -147,6 +150,7 @@ func raceMenu() error {
 		menu.Option("Orc", "1", false, nil)
 
 		if menu.Run() == nil {
+			SaveConfig(cfg)
 			return nil
 		}
 	}
@@ -181,6 +185,7 @@ func mapMenu() error {
 		}
 
 		if menu.Run() == nil {
+			SaveConfig(cfg)
 			return nil
 		}
 	}
@@ -221,12 +226,34 @@ func searchForArchive(searchPath string) bool {
 		} else if strings.ToUpper(filepath.Base(path)) == "DATA.WAR" {
 			if archive, err := resource.OpenArchive(path); err == nil {
 				war = archive
-				arch = path
-				return errors.New(path)
+				arch = copyArchive(path)
+				return errors.New(arch)
 			}
 		}
 		return nil
 	})
 
 	return war != nil
+}
+
+func copyArchive(path string) string {
+	dst := platform.CfgRootJoin("DATA.WAR")
+
+	in, err := os.Open(path)
+	if err != nil {
+		return path
+	}
+	defer in.Close()
+
+	out, err := os.Create(dst)
+	if err != nil {
+		return path
+	}
+	defer out.Close()
+
+	_, err = io.Copy(out, in)
+	if out.Close() != nil || err != nil {
+		return path
+	}
+	return dst
 }

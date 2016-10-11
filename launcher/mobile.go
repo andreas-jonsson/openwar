@@ -55,14 +55,8 @@ func Start() {
 
 		paintDoneChan := make(chan struct{})
 
-		cfg := &game.Config{
-			Fullscreen: false,
-			Widescreen: false,
-			WC2Input:   true,
-		}
-
-		cfg.Debug.Map = "HUMAN01"
-		cfg.Debug.Race = "Human"
+		cfg := LoadConfig()
+		cfg.Widescreen = false
 
 		for e := range a.Events() {
 			switch e := a.Filter(e).(type) {

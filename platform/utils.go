@@ -62,8 +62,15 @@ func blit(backBuffer *image.RGBA, dp image.Point, src *image.Paletted, sr image.
 	draw.Draw(backBuffer, r, &srcImage, sr.Min, draw.Over)
 }
 
-var DataPath string
+var (
+	DataPath,
+	ConfigPath string
+)
 
 func RootJoin(p ...string) string {
 	return path.Join(DataPath, path.Join(p...))
+}
+
+func CfgRootJoin(p ...string) string {
+	return path.Join(ConfigPath, path.Join(p...))
 }

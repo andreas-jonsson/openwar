@@ -28,7 +28,10 @@ import (
 	"github.com/andreas-jonsson/openwar/resource"
 )
 
+const ConfigVersion = 0
+
 type Config struct {
+	ConfigVersion int
 	Fullscreen,
 	Widescreen,
 	WC2Input bool

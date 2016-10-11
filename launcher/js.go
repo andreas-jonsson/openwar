@@ -34,9 +34,10 @@ func Start() {
 
 func load() {
 	cfg := &game.Config{
-		Fullscreen: false,
-		Widescreen: false,
-		WC2Input:   true,
+		ConfigVersion: game.ConfigVersion,
+		Fullscreen:    false,
+		Widescreen:    false,
+		WC2Input:      true,
 	}
 
 	cfg.Debug.Map = "HUMAN01"
