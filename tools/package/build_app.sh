@@ -3,7 +3,6 @@
 if [ -d OpenWar.app ]; then rm -rf OpenWar.app; fi
 cp -r "tools/package/OpenWar.app" OpenWar.app
 
-mkdir OpenWar.app/Contents/Resources
 mkdir OpenWar.app/Contents/Frameworks
 
 wget -q https://dl.dropboxusercontent.com/u/1955192/SDL2.framework.zip
