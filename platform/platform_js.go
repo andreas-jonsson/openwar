@@ -75,6 +75,10 @@ func Init() error {
 func Shutdown() {
 }
 
+func Mouse() MouseState {
+	return MouseState{}
+}
+
 func PollEvent() Event {
 	if mouseXRel != 0 || mouseYRel != 0 {
 		ev := &MouseMotionEvent{

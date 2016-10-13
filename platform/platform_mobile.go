@@ -38,6 +38,10 @@ func Init() error {
 func Shutdown() {
 }
 
+func Mouse() MouseState {
+	return MouseState{}
+}
+
 func PollEvent() Event {
 	select {
 	case ev, ok := <-InputEventChan:

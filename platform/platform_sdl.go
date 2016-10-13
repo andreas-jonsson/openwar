@@ -115,6 +115,31 @@ func Shutdown() {
 	sdl.Quit()
 }
 
+func Mouse() MouseState {
+	x, y, buttons := sdl.GetMouseState()
+
+	window := sdl.GetMouseFocus()
+	if window == nil {
+		return MouseState{}
+	}
+
+	w, h := window.GetSize()
+	y = int(200.0 * (float64(y) / float64(h)))
+	xw := (float64(x) / float64(w))
+
+	if ScreenScale == ScreenScale4x3 {
+		x = int(320.0 * xw)
+	} else {
+		x = int(416.0 * xw)
+	}
+
+	left := (buttons & sdl.ButtonLMask()) != 0
+	middle := (buttons & sdl.ButtonMMask()) != 0
+	right := (buttons & sdl.ButtonRMask()) != 0
+
+	return MouseState{X: x, Y: y, Buttons: [3]bool{left, middle, right}}
+}
+
 func PollEvent() Event {
 	event := sdl.PollEvent()
 	if event == nil {

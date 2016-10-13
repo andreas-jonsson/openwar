@@ -53,6 +53,11 @@ const (
 	MouseWheel
 )
 
+type MouseState struct {
+	X, Y    int
+	Buttons [3]bool
+}
+
 type (
 	Event     interface{}
 	QuitEvent struct{}

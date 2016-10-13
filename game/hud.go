@@ -43,7 +43,7 @@ type (
 	}
 
 	gameHud interface {
-		handleEvent(ev *platform.MouseButtonEvent) (image.Point, bool)
+		handleMouse(mouse platform.MouseState) (image.Point, bool)
 		render(miniMap *image.RGBA, cameraPos image.Point) error
 		viewport() image.Rectangle
 	}
@@ -102,15 +102,17 @@ func (hud *gameHudImpl) viewport() image.Rectangle {
 	return hud.viewportBounds
 }
 
-func (hud *gameHudImpl) handleEvent(ev *platform.MouseButtonEvent) (image.Point, bool) {
+func (hud *gameHudImpl) handleMouse(mouse platform.MouseState) (image.Point, bool) {
 	mmPos := image.Point{3, 6}
 	bounds := image.Rect(0, 0, 64, 64).Add(mmPos)
 
-	if bounds.Min.X <= ev.X && bounds.Max.X > ev.X && bounds.Min.Y <= ev.Y && bounds.Max.Y > ev.Y {
-		pos := image.Point{ev.X, ev.Y}
-		pos = pos.Sub(mmPos)
-		mmSize := hud.miniMapViewportBounds.Size().Div(2)
-		return pos.Sub(mmSize).Mul(16), true
+	if mouse.Buttons[0] {
+		if bounds.Min.X <= mouse.X && bounds.Max.X > mouse.X && bounds.Min.Y <= mouse.Y && bounds.Max.Y > mouse.Y {
+			pos := image.Point{mouse.X, mouse.Y}
+			pos = pos.Sub(mmPos)
+			mmSize := hud.miniMapViewportBounds.Size().Div(2)
+			return pos.Sub(mmSize).Mul(16), true
+		}
 	}
 
 	return mmPos, false

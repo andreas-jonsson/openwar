@@ -89,20 +89,11 @@ func (s *playState) Exit(to GameState) error {
 
 func (s *playState) Update() error {
 	g := s.g
+	g.PollAll()
 
-	for {
-		event := s.g.PollEvent()
-		if event == nil {
-			break
-		}
-
-		switch ev := event.(type) {
-		case *platform.MouseButtonEvent:
-			if pos, updateCamera := s.p.hud.handleEvent(ev); updateCamera {
-				s.cameraX = float64(pos.X)
-				s.cameraY = float64(pos.Y)
-			}
-		}
+	if pos, updateCamera := s.p.hud.handleMouse(platform.Mouse()); updateCamera {
+		s.cameraX = float64(pos.X)
+		s.cameraY = float64(pos.Y)
 	}
 
 	s.updateScroll(g.dt)
