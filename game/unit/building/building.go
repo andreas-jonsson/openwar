@@ -1,5 +1,3 @@
-// +build nogui
-
 /*
 Copyright (C) 2016 Andreas T Jonsson
 
@@ -17,21 +15,18 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-package launcher
+package building
 
 import (
-	"log"
+	"image"
 
-	"github.com/andreas-jonsson/openwar/game"
 	"github.com/andreas-jonsson/openwar/platform"
-	"github.com/andreas-jonsson/openwar/resource"
 )
 
-func Start() {
-	banner()
-	if war, err := resource.OpenArchive(platform.CfgRootJoin("DATA.WAR")); err == nil {
-		game.Start(loadConfig(), war)
-	} else {
-		log.Panicln(err)
-	}
+type Building interface {
+	SetPosition(pt image.Point)
+	Position() image.Point
+	Bounds() image.Rectangle
+	Update() error
+	Render(renderer platform.Renderer, cameraPos image.Point) error
 }

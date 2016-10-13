@@ -90,13 +90,7 @@ func NewGame(cfg *Config, rend platform.Renderer, player platform.AudioPlayer, r
 	g.resources = res
 	g.soundPlayer = player
 	g.musicPlayer, err = newMusicPlayer(res.Archive, player)
-
-	g.cursorPal = resource.ClonePalette(res.Palettes["CURSORS.PAL"])
-	for i := 0; i < len(g.cursorPal); i++ {
-		if cr, cg, cb, _ := g.cursorPal[i].RGBA(); cr == 0 && cg == 0 && cb == 0 {
-			g.cursorPal[i] = color.RGBA{}
-		}
-	}
+	g.cursorPal = resource.BlackToAlpha(resource.ClonePalette(res.Palettes["CURSORS.PAL"]))
 
 	g.cursors = []resource.Image{
 		res.Images["NORMAL.CUR"],

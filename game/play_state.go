@@ -22,6 +22,7 @@ import (
 	"log"
 	"time"
 
+	"github.com/andreas-jonsson/openwar/game/unit"
 	"github.com/andreas-jonsson/openwar/resource"
 )
 
@@ -41,8 +42,9 @@ type playState struct {
 	scrollDirection  int
 	cameraX, cameraY float64
 
-	ter terrain
-	res resource.Resources
+	ter   terrain
+	units *unit.Manager
+	res   resource.Resources
 }
 
 func NewPlayState(g *Game) GameState {
@@ -56,11 +58,14 @@ func NewPlayState(g *Game) GameState {
 		race = orcRace
 	}
 
+	unitManager := unit.NewManager(&g.resources, ter.terrainPalette())
+
 	return &playState{
-		g:   g,
-		p:   newPlay(g, race, ter.terrainPalette()),
-		res: g.resources,
-		ter: ter,
+		g:     g,
+		p:     newPlay(g, unitManager, race, ter.terrainPalette()),
+		res:   g.resources,
+		ter:   ter,
+		units: unitManager,
 	}
 }
 
@@ -181,6 +186,7 @@ func (s *playState) Render() error {
 	}
 
 	s.ter.render(vp, cameraPos)
+	s.units.Render(s.g.renderer, vp, cameraPos)
 	s.p.render(s.ter.miniMapImage(), cameraPos)
 	return nil
 }

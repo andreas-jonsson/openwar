@@ -101,7 +101,7 @@ func (s *menuState) Render() error {
 	bounds := bb.Bounds()
 	g := (*gradient)(&bounds)
 
-	draw.Draw(bb, bounds, g, image.Point{}, draw.Src)
+	draw.Draw(bb, bounds, g, image.ZP, draw.Src)
 
 	img := s.res.Images["TITLE.IMG"]
 	pal := s.res.Palettes["TITLE.PAL"]

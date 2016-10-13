@@ -31,7 +31,7 @@ type Renderer interface {
 	SetWindowTitle(title string)
 	BackBuffer() draw.Image
 
-	DrawRect(dest image.Rectangle, c color.Color)
+	DrawRect(dest image.Rectangle, c color.Color, fill bool)
 
 	BlitPaletted(dp image.Point, src *image.Paletted)
 	BlitImage(dp image.Point, src *image.Paletted, pal color.Palette)

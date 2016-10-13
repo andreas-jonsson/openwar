@@ -138,8 +138,8 @@ func (p *sdlRenderer) BackBuffer() draw.Image {
 	return p.backBuffer
 }
 
-func (p *sdlRenderer) DrawRect(dest image.Rectangle, c color.Color) {
-	drawRect(p.backBuffer, dest, c)
+func (p *sdlRenderer) DrawRect(dest image.Rectangle, c color.Color, fill bool) {
+	drawRect(p.backBuffer, dest, c, fill)
 }
 
 func (p *sdlRenderer) BlitPaletted(dp image.Point, src *image.Paletted) {

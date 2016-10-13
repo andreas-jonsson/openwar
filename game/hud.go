@@ -23,6 +23,7 @@ import (
 	"image/draw"
 	"strings"
 
+	"github.com/andreas-jonsson/openwar/game/unit"
 	"github.com/andreas-jonsson/openwar/resource"
 )
 
@@ -32,6 +33,7 @@ type (
 		race   playerRace
 		pal    color.Palette
 		images resource.Images
+		units  *unit.Manager
 
 		viewportBounds,
 		miniMapViewportBounds image.Rectangle
@@ -45,12 +47,12 @@ type (
 	}
 )
 
-func newGameHud(g *Game, race playerRace, envPal color.Palette) gameHud {
+func newGameHud(g *Game, units *unit.Manager, race playerRace, envPal color.Palette) gameHud {
 	res := g.resources
 
 	// Viewport is 240x176 in 4/3 mode and 336x176 in 16/9 mode.
 
-	hud := &gameHudImpl{g: g, race: race}
+	hud := &gameHudImpl{g: g, units: units, race: race}
 	hud.viewportBounds = image.Rectangle{
 		Min: image.Point{72, 12},
 		Max: image.Point{312, 188},
@@ -63,7 +65,7 @@ func newGameHud(g *Game, race playerRace, envPal color.Palette) gameHud {
 		hud.viewportBounds.Max.X = maxX
 	}
 
-	hud.miniMapViewportBounds = image.Rectangle{image.Point{}, hud.viewportBounds.Size().Div(16)}
+	hud.miniMapViewportBounds = image.Rectangle{image.ZP, hud.viewportBounds.Size().Div(16)}
 
 	hud.images = make(resource.Images)
 	hud.humanGfx = map[string]image.Point{
@@ -115,12 +117,24 @@ func (hud *gameHudImpl) render(miniMap *image.RGBA, cameraPos image.Point) error
 	}
 
 	mmPos := image.Point{3, 6}
-	draw.Draw(hud.g.renderer.BackBuffer(), image.Rect(0, 0, 64, 64).Add(mmPos), miniMap, image.Point{}, draw.Src)
+	draw.Draw(hud.g.renderer.BackBuffer(), image.Rect(0, 0, 64, 64).Add(mmPos), miniMap, image.ZP, draw.Src)
+
+	hud.renderMinimapUnits()
 
 	cameraPos = cameraPos.Div(16)
-	hud.g.renderer.DrawRect(hud.miniMapViewportBounds.Add(cameraPos).Add(mmPos), color.RGBA{0x0, 0xFF, 0x0, 0xFF})
+	hud.g.renderer.DrawRect(hud.miniMapViewportBounds.Add(cameraPos).Add(mmPos), color.RGBA{0x0, 0xFF, 0x0, 0xFF}, false)
 
 	return nil
+}
+
+func (hud *gameHudImpl) renderMinimapUnits() {
+	for _, unit := range hud.units.AllUnits() {
+		bounds := unit.Bounds()
+		bounds.Min = bounds.Min.Div(16)
+		bounds.Max = bounds.Max.Div(16)
+
+		hud.g.renderer.DrawRect(bounds.Add(image.Point{3, 6}), color.RGBA{0xFF, 0xFF, 0xFF, 0xFF}, true)
+	}
 }
 
 func (hud *gameHudImpl) renderImage(name string, gfx map[string]image.Point) {

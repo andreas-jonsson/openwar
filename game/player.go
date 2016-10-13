@@ -20,6 +20,8 @@ package game
 import (
 	"image"
 	"image/color"
+
+	"github.com/andreas-jonsson/openwar/game/unit"
 )
 
 type playerRace int
@@ -34,8 +36,8 @@ type player struct {
 	hud gameHud
 }
 
-func newPlay(g *Game, race playerRace, envPal color.Palette) *player {
-	return &player{g: g, hud: newGameHud(g, race, envPal)}
+func newPlay(g *Game, units *unit.Manager, race playerRace, envPal color.Palette) *player {
+	return &player{g: g, hud: newGameHud(g, units, race, envPal)}
 }
 
 func (p *player) render(miniMap *image.RGBA, cameraPos image.Point) error {

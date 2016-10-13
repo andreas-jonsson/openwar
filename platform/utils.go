@@ -41,9 +41,13 @@ func (r *noneSolidRect) At(x, y int) color.Color {
 	return color.Alpha{0}
 }
 
-func drawRect(backBuffer *image.RGBA, dest image.Rectangle, c color.Color) {
-	//TODO Optimize this!
-	draw.DrawMask(backBuffer, backBuffer.Bounds(), &image.Uniform{c}, image.ZP, (*noneSolidRect)(&dest), image.ZP, draw.Over)
+func drawRect(backBuffer *image.RGBA, dest image.Rectangle, c color.Color, fill bool) {
+	if fill {
+		draw.Draw(backBuffer, dest, &image.Uniform{c}, image.ZP, draw.Over)
+	} else {
+		//TODO Optimize this!
+		draw.DrawMask(backBuffer, backBuffer.Bounds(), &image.Uniform{c}, image.ZP, (*noneSolidRect)(&dest), image.ZP, draw.Over)
+	}
 }
 
 func blitPaletted(backBuffer *image.RGBA, dp image.Point, src *image.Paletted) {

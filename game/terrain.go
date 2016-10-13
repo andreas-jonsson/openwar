@@ -169,7 +169,7 @@ func (ter *terrainImpl) size() int {
 func (ter *terrainImpl) render(cullRect image.Rectangle, cameraPos image.Point) {
 	cullMin := cullRect.Min
 	cullRect.Max = cullRect.Size()
-	cullRect.Min = image.Point{}
+	cullRect.Min = image.ZP
 	cullRect = cullRect.Add(cameraPos)
 
 	ter.animatePalette()
@@ -218,7 +218,7 @@ func (ter *terrainImpl) createMap() (*image.Paletted, *image.RGBA) {
 			flags := ter.tileFlags[offset]
 			if flags != 0 {
 				rect = image.Rect(tilePos.X, tilePos.Y, tilePos.X+16, tilePos.Y+16)
-				ter.g.renderer.DrawRect(rect, color.RGBA{byte(flags & 0xFF), 0x0, 0x0, 0xFF})
+				ter.g.renderer.DrawRect(rect, color.RGBA{byte(flags & 0xFF), 0x0, 0x0, 0xFF}, false)
 			}
 		}
 	}

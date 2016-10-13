@@ -128,8 +128,8 @@ func (p *jsRenderer) BackBuffer() draw.Image {
 	return p.backBuffer
 }
 
-func (p *jsRenderer) DrawRect(dest image.Rectangle, c color.Color) {
-	drawRect(p.backBuffer, dest, c)
+func (p *jsRenderer) DrawRect(dest image.Rectangle, c color.Color, fill bool) {
+	drawRect(p.backBuffer, dest, c, fill)
 }
 
 func (p *jsRenderer) BlitPaletted(dp image.Point, src *image.Paletted) {

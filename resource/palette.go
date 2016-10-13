@@ -66,6 +66,18 @@ func LoadPalettes(arch *Archive) (Palettes, error) {
 	return palettes, nil
 }
 
+func BlackToAlpha(p color.Palette) color.Palette {
+	pal := make([]color.Color, len(p))
+	copy(pal, p)
+
+	for i := 0; i < len(pal); i++ {
+		if cr, cg, cb, _ := pal[i].RGBA(); cr == 0 && cg == 0 && cb == 0 {
+			pal[i] = color.RGBA{}
+		}
+	}
+	return pal
+}
+
 func ClonePalette(p color.Palette) color.Palette {
 	pal := make([]color.Color, 256)
 	copy(pal, p)

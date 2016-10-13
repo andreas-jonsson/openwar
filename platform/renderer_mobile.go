@@ -97,8 +97,8 @@ func (p *mobileRenderer) BackBuffer() draw.Image {
 	return p.backBuffer
 }
 
-func (p *mobileRenderer) DrawRect(dest image.Rectangle, c color.Color) {
-	drawRect(p.backBuffer, dest, c)
+func (p *mobileRenderer) DrawRect(dest image.Rectangle, c color.Color, fill bool) {
+	drawRect(p.backBuffer, dest, c, fill)
 }
 
 func (p *mobileRenderer) BlitPaletted(dp image.Point, src *image.Paletted) {
