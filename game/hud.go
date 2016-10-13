@@ -24,6 +24,7 @@ import (
 	"strings"
 
 	"github.com/andreas-jonsson/openwar/game/unit"
+	"github.com/andreas-jonsson/openwar/platform"
 	"github.com/andreas-jonsson/openwar/resource"
 )
 
@@ -42,6 +43,7 @@ type (
 	}
 
 	gameHud interface {
+		handleEvent(ev *platform.MouseButtonEvent) (image.Point, bool)
 		render(miniMap *image.RGBA, cameraPos image.Point) error
 		viewport() image.Rectangle
 	}
@@ -100,6 +102,20 @@ func (hud *gameHudImpl) viewport() image.Rectangle {
 	return hud.viewportBounds
 }
 
+func (hud *gameHudImpl) handleEvent(ev *platform.MouseButtonEvent) (image.Point, bool) {
+	mmPos := image.Point{3, 6}
+	bounds := image.Rect(0, 0, 64, 64).Add(mmPos)
+
+	if bounds.Min.X <= ev.X && bounds.Max.X > ev.X && bounds.Min.Y <= ev.Y && bounds.Max.Y > ev.Y {
+		pos := image.Point{ev.X, ev.Y}
+		pos = pos.Sub(mmPos)
+		mmSize := hud.miniMapViewportBounds.Size().Div(2)
+		return pos.Sub(mmSize).Mul(16), true
+	}
+
+	return mmPos, false
+}
+
 func (hud *gameHudImpl) render(miniMap *image.RGBA, cameraPos image.Point) error {
 	hud.patchWidescreen()
 	if hud.race == humanRace {
@@ -119,7 +135,7 @@ func (hud *gameHudImpl) render(miniMap *image.RGBA, cameraPos image.Point) error
 	mmPos := image.Point{3, 6}
 	draw.Draw(hud.g.renderer.BackBuffer(), image.Rect(0, 0, 64, 64).Add(mmPos), miniMap, image.ZP, draw.Src)
 
-	hud.renderMinimapUnits()
+	hud.renderMinimapUnits(mmPos)
 
 	cameraPos = cameraPos.Div(16)
 	hud.g.renderer.DrawRect(hud.miniMapViewportBounds.Add(cameraPos).Add(mmPos), color.RGBA{0x0, 0xFF, 0x0, 0xFF}, false)
@@ -127,13 +143,13 @@ func (hud *gameHudImpl) render(miniMap *image.RGBA, cameraPos image.Point) error
 	return nil
 }
 
-func (hud *gameHudImpl) renderMinimapUnits() {
+func (hud *gameHudImpl) renderMinimapUnits(mmPos image.Point) {
 	for _, unit := range hud.units.AllUnits() {
 		bounds := unit.Bounds()
 		bounds.Min = bounds.Min.Div(16)
 		bounds.Max = bounds.Max.Div(16)
 
-		hud.g.renderer.DrawRect(bounds.Add(image.Point{3, 6}), color.RGBA{0xFF, 0xFF, 0xFF, 0xFF}, true)
+		hud.g.renderer.DrawRect(bounds.Add(mmPos), color.RGBA{0xFF, 0xFF, 0xFF, 0xFF}, true)
 	}
 }
 
