@@ -60,6 +60,7 @@ var (
 )
 
 type Archive struct {
+	Type  string
 	Files map[string][]byte
 }
 
@@ -95,23 +96,26 @@ func OpenArchiveFrom(fp io.ReadSeeker, sz int64) (*Archive, error) {
 		return nil, err
 	}
 
+	arch := &Archive{"", make(map[string][]byte)}
+
 	Logger.Print("Archive ID: ")
 	switch archiveID {
 	case dosRetail:
-		Logger.Println("DOS Retail")
+		arch.Type = "DOS Retail"
+	case dosShareware:
+		arch.Type = "DOS Shareware"
 	default:
 		switch archiveID {
-		case dosShareware:
-			Logger.Println("DOS Shareware")
 		case macRetail:
-			Logger.Println("Mac Retail")
+			arch.Type = "Mac Retail"
 		case macShareware:
-			Logger.Println("Mac Shareware")
+			arch.Type = "Mac Shareware"
 		default:
 			return nil, errors.New("unknown version")
 		}
 		return nil, ErrUnsupportedVersion
 	}
+	Logger.Println(arch.Type)
 
 	var numFiles uint32
 	if err = binary.Read(fp, binary.LittleEndian, &numFiles); err != nil {
@@ -129,8 +133,6 @@ func OpenArchiveFrom(fp io.ReadSeeker, sz int64) (*Archive, error) {
 			return nil, err
 		}
 	}
-
-	arch := &Archive{make(map[string][]byte)}
 
 	for i, offset := range fileTable {
 		if isPlaceHolder(fileTable, offset, i) {

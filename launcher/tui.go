@@ -20,11 +20,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package launcher
 
 import (
+	"archive/zip"
+	"bufio"
+	"bytes"
 	"errors"
 	"fmt"
 	"io"
+	"net/http"
 	"os"
-	"os/user"
 	"path"
 	"path/filepath"
 	"sort"
@@ -70,10 +73,15 @@ func optionsToString() string {
 
 func mainMenu() {
 	cfg = loadConfig()
-	archInCfg := platform.CfgRootJoin("DATA.WAR")
-	if archive, err := resource.OpenArchive(archInCfg); err == nil {
+
+	dataPath := "DATA.WAR"
+	if _, err := os.Stat(dataPath); os.IsNotExist(err) {
+		dataPath = platform.CfgRootJoin(dataPath)
+	}
+
+	if archive, err := resource.OpenArchive(dataPath); err == nil {
 		war = archive
-		arch = archInCfg
+		arch = dataPath
 	}
 
 	for {
@@ -90,7 +98,12 @@ func mainMenu() {
 			return nil
 		})
 
-		menu.Option("Archive: "+arch, "1", war == nil, installArchiveMenu)
+		archText := arch
+		if war != nil {
+			archText = fmt.Sprintf("%s (%s)", arch, war.Type)
+		}
+
+		menu.Option("Archive: "+archText, "1", war == nil, installArchiveMenu)
 		menu.Option("Options: "+optionsToString(), "2", false, optionsMenu)
 		menu.Option("Race: "+cfg.Debug.Race, "3", false, raceMenu)
 		menu.Option("Map: "+cfg.Debug.Map, "4", false, mapMenu)
@@ -192,14 +205,24 @@ func mapMenu() error {
 }
 
 func installArchiveMenu() error {
+	msg := "Do you want to download the shareware version from internet?"
 	for {
 		banner()
 
-		usr, _ := user.Current()
-		menu := wmenu.NewMenu("Do you want to search for it in your home directory?")
+		menu := wmenu.NewMenu(msg)
 		menu.Action(func(opt wmenu.Opt) error {
 			if opt.ID == 0 {
-				searchForArchive(usr.HomeDir)
+				dst := filepath.Clean(platform.CfgRootJoin("DATA.WAR"))
+				if err := downloadAndExtract(dst, "https://sites.google.com/site/openwarengine/war1sw.zip?attredirects=0&d=1"); err != nil {
+					clearScreen()
+					msg = "Failed to download! Retry?"
+					return err
+				}
+
+				if archive, err := resource.OpenArchive(dst); err == nil {
+					war = archive
+					arch = dst
+				}
 			}
 			return nil
 		})
@@ -211,49 +234,61 @@ func installArchiveMenu() error {
 	}
 }
 
-func searchForArchive(searchPath string) bool {
-	war = nil
-	arch = notInstalledText
+func downloadAndExtract(dst, src string) error {
+	clearScreen()
+	fmt.Print("Contacting server...")
 
-	filepath.Walk(searchPath, func(path string, info os.FileInfo, err error) error {
-		if info == nil {
+	resp, err := http.Get(src)
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+
+	bufReader := bufio.NewReader(resp.Body)
+	var buf bytes.Buffer
+
+	for n, u := 0, 0.0; n < int(resp.ContentLength); n++ {
+		b, err := bufReader.ReadByte()
+		if err != nil {
+			return err
+		}
+
+		buf.WriteByte(b)
+
+		p := float64(n) / float64(resp.ContentLength)
+		if p > u {
+			u = p + 0.01
+			clearScreen()
+			fmt.Printf("Downloading... %d%%", int(p*100.0))
+		}
+	}
+
+	reader, err := zip.NewReader(bytes.NewReader(buf.Bytes()), resp.ContentLength)
+	if err != nil {
+		return err
+	}
+
+	for _, file := range reader.File {
+		if strings.ToUpper(filepath.Base(file.Name)) == "DATA.WAR" {
+			in, err := file.Open()
+			if err != nil {
+				return err
+			}
+			defer in.Close()
+
+			out, err := os.Create(dst)
+			if err != nil {
+				return err
+			}
+			defer out.Close()
+
+			if _, err := io.Copy(out, in); err != nil {
+				return err
+			}
+
 			return nil
 		}
-
-		if info.IsDir() {
-			clearScreen()
-			fmt.Print(path)
-		} else if strings.ToUpper(filepath.Base(path)) == "DATA.WAR" {
-			if archive, err := resource.OpenArchive(path); err == nil {
-				war = archive
-				arch = copyArchive(path)
-				return errors.New(arch)
-			}
-		}
-		return nil
-	})
-
-	return war != nil
-}
-
-func copyArchive(path string) string {
-	dst := platform.CfgRootJoin("DATA.WAR")
-
-	in, err := os.Open(path)
-	if err != nil {
-		return path
 	}
-	defer in.Close()
 
-	out, err := os.Create(dst)
-	if err != nil {
-		return path
-	}
-	defer out.Close()
-
-	_, err = io.Copy(out, in)
-	if out.Close() != nil || err != nil {
-		return path
-	}
-	return dst
+	return errors.New("could not locate DATA.WAR in archive")
 }
