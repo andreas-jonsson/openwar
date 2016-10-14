@@ -76,7 +76,7 @@ func mainMenu() {
 
 	dataPath := "DATA.WAR"
 	if _, err := os.Stat(dataPath); os.IsNotExist(err) {
-		dataPath = platform.CfgRootJoin(dataPath)
+		dataPath = filepath.Clean(platform.CfgRootJoin(dataPath))
 	}
 
 	if archive, err := resource.OpenArchive(dataPath); err == nil {
@@ -205,7 +205,7 @@ func mapMenu() error {
 }
 
 func installArchiveMenu() error {
-	msg := "Do you want to download the shareware version from internet?"
+	msg := "Do you want to download and install the content from\nWarcraft: Orcs & Humans shareware version?"
 	for {
 		banner()
 
@@ -216,6 +216,8 @@ func installArchiveMenu() error {
 				if err := downloadAndExtract(dst, "https://sites.google.com/site/openwarengine/war1sw.zip?attredirects=0&d=1"); err != nil {
 					clearScreen()
 					msg = "Failed to download! Retry?"
+					war = nil
+					arch = notInstalledText
 					return err
 				}
 
