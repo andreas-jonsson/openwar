@@ -32,6 +32,7 @@ import (
 	"path/filepath"
 	"sort"
 	"strings"
+	"time"
 
 	"github.com/andreas-jonsson/openwar/game"
 	"github.com/andreas-jonsson/openwar/platform"
@@ -237,35 +238,72 @@ func installArchiveMenu() error {
 }
 
 func downloadAndExtract(dst, src string) error {
+	const timeout = 10 * time.Second
+
 	clearScreen()
 	fmt.Print("Contacting server...")
 
-	resp, err := http.Get(src)
-	if err != nil {
-		return err
-	}
-	defer resp.Body.Close()
+	downChan := make(chan byte, 4096)
+	lenChan := make(chan int)
 
-	bufReader := bufio.NewReader(resp.Body)
-	var buf bytes.Buffer
+	go func() {
+		defer close(downChan)
+		defer close(lenChan)
 
-	for n, u := 0, 0.0; n < int(resp.ContentLength); n++ {
-		b, err := bufReader.ReadByte()
+		resp, err := http.Get(src)
 		if err != nil {
-			return err
+			return
+		}
+		defer resp.Body.Close()
+
+		icl := int(resp.ContentLength)
+		lenChan <- icl
+		buf := bufio.NewReader(resp.Body)
+
+		for n := 0; n < icl; n++ {
+			b, err := buf.ReadByte()
+			if err != nil {
+				return
+			}
+			downChan <- b
+		}
+	}()
+
+	var buf bytes.Buffer
+	contentLength := -1
+	downloadError := errors.New("could not download file")
+	n := 0
+	u := 0.0
+
+	for {
+		select {
+		case contentLength = <-lenChan:
+			lenChan = nil
+		case b, ok := <-downChan:
+			if !ok {
+				downChan = nil
+			}
+			buf.WriteByte(b)
+			n++
+		case <-time.After(timeout):
+			return downloadError
 		}
 
-		buf.WriteByte(b)
+		if n == contentLength {
+			return extractZip(&buf, contentLength, dst)
+		}
 
-		p := float64(n) / float64(resp.ContentLength)
+		p := float64(n) / float64(contentLength)
 		if p > u {
 			u = p + 0.01
 			clearScreen()
 			fmt.Printf("Downloading... %d%%", int(p*100.0))
 		}
 	}
+}
 
-	reader, err := zip.NewReader(bytes.NewReader(buf.Bytes()), resp.ContentLength)
+func extractZip(buf *bytes.Buffer, size int, dst string) error {
+	reader, err := zip.NewReader(bytes.NewReader(buf.Bytes()), int64(size))
 	if err != nil {
 		return err
 	}
