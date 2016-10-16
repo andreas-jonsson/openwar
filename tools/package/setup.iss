@@ -48,7 +48,6 @@ Source: "{#MyAppRoot}\tools\package\dependencies\SDL2.dll"; DestDir: "{app}"; Fl
 Source: "{#MyAppRoot}\tools\package\dependencies\SDL2_mixer.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#MyAppRoot}\tools\package\dependencies\smpeg2.dll"; DestDir: "{app}"; Flags: ignoreversion
 
-Source: "{#MyAppRoot}\data\*"; DestDir: "{app}\data"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "{#MyAppRoot}\tools\package\dependencies\timidity\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files

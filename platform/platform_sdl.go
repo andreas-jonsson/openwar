@@ -20,7 +20,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package platform
 
 import (
-	"log"
 	"os"
 	"os/user"
 	"path"
@@ -72,29 +71,6 @@ var mouseMapping = map[int]int{
 }
 
 func init() {
-	isInvalid := func() bool {
-		_, err := os.Stat(path.Join(DataPath, "icon.png"))
-		return os.IsNotExist(err)
-	}
-
-	wd, _ := os.Getwd()
-	DataPath = path.Join(wd, "data")
-
-	if isInvalid() {
-		DataPath = "/usr/local/share/openwar"
-		if runtime.GOOS == "darwin" {
-			if isInvalid() {
-				DataPath = path.Join(sdl.GetBasePath(), "data")
-			}
-		}
-	}
-
-	if isInvalid() {
-		log.Panicln("Could not locate data folder!")
-	}
-
-	log.Println("Data path:", DataPath)
-
 	if runtime.GOOS == "windows" {
 		ConfigPath = path.Join(os.Getenv("LOCALAPPDATA"), "OpenWar")
 	} else {
@@ -102,9 +78,7 @@ func init() {
 			ConfigPath = path.Join(usr.HomeDir, ".openwar")
 		}
 	}
-
 	os.MkdirAll(ConfigPath, 0755)
-	log.Println("Config path:", ConfigPath)
 }
 
 func Init() error {

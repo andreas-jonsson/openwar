@@ -1,3 +1,5 @@
+// +build ignore
+
 /*
 Copyright (C) 2016 Andreas T Jonsson
 
@@ -15,12 +17,31 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-//go:generate go run data/generate.go
-
 package main
 
-import "github.com/andreas-jonsson/openwar/launcher"
+import (
+	"log"
+	"net/http"
+
+	"github.com/shurcooL/vfsgen"
+)
+
+type fsWrapper struct {
+	internal http.FileSystem
+}
+
+func (fs fsWrapper) Open(name string) (http.File, error) {
+	return fs.internal.Open("data/src/" + name)
+}
 
 func main() {
-	launcher.Start()
+	fs := fsWrapper{http.Dir("")}
+	err := vfsgen.Generate(&fs, vfsgen.Options{
+		Filename:     "data/data.go",
+		PackageName:  "data",
+		VariableName: "FS",
+	})
+	if err != nil {
+		log.Fatalln(err)
+	}
 }

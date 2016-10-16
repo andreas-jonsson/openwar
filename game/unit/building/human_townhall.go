@@ -73,7 +73,5 @@ func (b *HumanTownhall) Update() error {
 func (b *HumanTownhall) Render(renderer platform.Renderer, cameraPos image.Point) error {
 	img := b.buildingSprite.Imgs[0]
 	renderer.BlitImage(b.worldPos.Add(cameraPos), img, b.palette)
-
-	//g.renderer.BlitImage(g.cursorPos.Sub(cur.Point()), cur.Data, g.cursorPal)
 	return nil
 }
