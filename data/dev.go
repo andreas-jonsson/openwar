@@ -1,4 +1,4 @@
-// +build ignore
+// +build dev
 
 /*
 Copyright (C) 2016 Andreas T Jonsson
@@ -17,14 +17,9 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-package main
+package data
 
-import (
-	"log"
-	"net/http"
-
-	"github.com/shurcooL/vfsgen"
-)
+import "net/http"
 
 type fsWrapper struct {
 	internal http.FileSystem
@@ -34,15 +29,6 @@ func (fs fsWrapper) Open(name string) (http.File, error) {
 	return fs.internal.Open("data/src/" + name)
 }
 
-func main() {
-	fs := fsWrapper{http.Dir("")}
-	err := vfsgen.Generate(&fs, vfsgen.Options{
-		Filename:     "data/data.go",
-		PackageName:  "data",
-		BuildTags:    "!dev",
-		VariableName: "FS",
-	})
-	if err != nil {
-		log.Fatalln(err)
-	}
+var FS = func() http.FileSystem {
+	return &fsWrapper{http.Dir("")}
 }

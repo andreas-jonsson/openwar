@@ -238,7 +238,7 @@ func installArchiveMenu() error {
 }
 
 func downloadAndExtract(dst, src string) error {
-	const timeout = 10 * time.Second
+	const timeout = 15 * time.Second
 
 	clearScreen()
 	fmt.Print("Contacting server...")
