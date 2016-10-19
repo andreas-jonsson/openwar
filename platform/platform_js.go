@@ -69,6 +69,7 @@ func setupCanvasInput(canvas *js.Object, w, h, resX, resY int) {
 }
 
 func Init() error {
+	idCounter = 0
 	return nil
 }
 

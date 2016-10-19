@@ -32,6 +32,7 @@ var (
 )
 
 func Init() error {
+	idCounter = 0
 	return nil
 }
 

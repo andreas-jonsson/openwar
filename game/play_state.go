@@ -80,6 +80,11 @@ func (s *playState) Enter(from GameState, args ...interface{}) error {
 	snd, _ := s.g.soundPlayer.Sound("OREADY.VOC")
 	snd.Play(-1, 0, 0)
 
+	s.units.SpawnBuilding("HumanTownhall", image.Point{10, 4})
+	s.units.SpawnBuilding("HumanFarm", image.Point{10, 8})
+	s.units.SpawnBuilding("HumanBarrack", image.Point{6, 7})
+	s.units.SpawnBuilding("HumanTower", image.Point{13, 8})
+
 	return nil
 }
 

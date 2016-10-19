@@ -82,6 +82,7 @@ func init() {
 }
 
 func Init() error {
+	idCounter = 0
 	// Looks like we can't reinitialize SDL after all. :(
 	if sdl.WasInit(0) == 0 {
 		return sdl.Init(sdl.INIT_EVERYTHING)

@@ -1,5 +1,3 @@
-// +build dev
-
 /*
 Copyright (C) 2016 Andreas T Jonsson
 
@@ -17,18 +15,27 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-package data
+package collision
 
-import "net/http"
+import "image"
 
-type fsWrapper struct {
-	internal http.FileSystem
+type (
+	Shape struct {
+		Bounds image.Rectangle
+	}
+
+	Manager interface {
+		CreateShape(bounds image.Rectangle) Shape
+	}
+
+	managerImpl struct {
+	}
+)
+
+func NewCollisionManager(tileProp []uint16) Manager {
+	return &managerImpl{}
 }
 
-func (fs fsWrapper) Open(name string) (http.File, error) {
-	return fs.internal.Open("data/src/" + name)
+func (mgr *managerImpl) CreateShape(bounds image.Rectangle) Shape {
+	return Shape{}
 }
-
-var FS = func() http.FileSystem {
-	return &fsWrapper{http.Dir("")}
-}()

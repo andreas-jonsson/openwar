@@ -21,7 +21,10 @@ import (
 	"image"
 	"image/color"
 	"image/draw"
+	"log"
+	"math"
 	"path"
+	"sync/atomic"
 )
 
 type noneSolidRect image.Rectangle
@@ -70,4 +73,13 @@ var ConfigPath string
 
 func CfgRootJoin(p ...string) string {
 	return path.Join(ConfigPath, path.Join(p...))
+}
+
+var idCounter uint64
+
+func NewId64() uint64 {
+	if idCounter == math.MaxUint64 {
+		log.Panicln("id space exhausted")
+	}
+	return atomic.AddUint64(&idCounter, 1) - 1
 }

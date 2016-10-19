@@ -1,5 +1,3 @@
-// +build dev
-
 /*
 Copyright (C) 2016 Andreas T Jonsson
 
@@ -17,18 +15,14 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-package data
+package resource
 
-import "net/http"
+import "testing"
 
-type fsWrapper struct {
-	internal http.FileSystem
+func TestFileMap(t *testing.T) {
+	for _, name := range fileMap {
+		if len(name) > 12 {
+			t.Log(name, "is more then 12 characters")
+		}
+	}
 }
-
-func (fs fsWrapper) Open(name string) (http.File, error) {
-	return fs.internal.Open("data/src/" + name)
-}
-
-var FS = func() http.FileSystem {
-	return &fsWrapper{http.Dir("")}
-}()

@@ -18,28 +18,57 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package unit
 
 import (
+	"encoding/json"
 	"image"
 	"image/color"
+	"io/ioutil"
+	"log"
 
-	"github.com/andreas-jonsson/openwar/game/unit/building"
+	"github.com/andreas-jonsson/openwar/data"
 	"github.com/andreas-jonsson/openwar/platform"
 	"github.com/andreas-jonsson/openwar/resource"
 )
 
-type Unit interface {
-	building.Building
-}
+type (
+	UnitConfigs struct {
+		Buildings map[string]BuildingConfig
+	}
 
-type Manager struct {
-	units []Unit
-}
+	Manager struct {
+		terrainPal  color.Palette
+		resources   *resource.Resources
+		units       []Unit
+		unitConfigs UnitConfigs
+	}
+)
 
 func NewManager(res *resource.Resources, terrainPal color.Palette) *Manager {
-	pal := resource.BlackToAlpha(resource.CombinePalettes(terrainPal, res.Palettes["SPRITE0.PAL"]))
-	testBuilding := building.NewHumanTownhall(res, pal)
-	testBuilding.SetTilePosition(image.Point{10, 4})
+	fp, err := data.FS.Open("units.json")
+	if err != nil {
+		log.Panicln(err)
+	}
+	defer fp.Close()
 
-	return &Manager{[]Unit{testBuilding}}
+	data, err := ioutil.ReadAll(fp)
+	if err != nil {
+		log.Panicln(err)
+	}
+
+	mgr := &Manager{terrainPal: terrainPal, resources: res}
+	if err := json.Unmarshal(data, &mgr.unitConfigs); err != nil {
+		log.Panicln(err)
+	}
+	return mgr
+}
+
+func (mgr *Manager) SpawnBuilding(name string, pos image.Point) Unit {
+	pal := resource.BlackToAlpha(resource.CombinePalettes(mgr.terrainPal, mgr.resources.Palettes["SPRITE0.PAL"]))
+	cfg := mgr.unitConfigs.Buildings[name]
+	unit := NewBuilding(name, &cfg, mgr.resources, pal)
+	unit.SetTilePosition(pos)
+
+	mgr.units = append(mgr.units, unit)
+	return unit
 }
 
 func (mgr *Manager) Render(renderer platform.Renderer, vp image.Rectangle, cameraPos image.Point) error {

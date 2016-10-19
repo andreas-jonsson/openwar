@@ -15,7 +15,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-package building
+package unit
 
 import (
 	"image"
@@ -23,7 +23,18 @@ import (
 	"github.com/andreas-jonsson/openwar/platform"
 )
 
-type Building interface {
+type UnitType int
+
+const (
+	BuildingType UnitType = iota
+	CreatureType
+	GoldMineType
+)
+
+type Unit interface {
+	Id() uint64
+	Type() UnitType
+	Name() string
 	SetPosition(pt image.Point)
 	Position() image.Point
 	Bounds() image.Rectangle
