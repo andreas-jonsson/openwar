@@ -94,7 +94,9 @@ func mainMenu() {
 				installArchiveMenu()
 			} else {
 				banner()
+				p := StartProfiler()
 				game.Start(cfg, war)
+				p()
 			}
 			return nil
 		})
