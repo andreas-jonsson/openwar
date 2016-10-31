@@ -23,6 +23,7 @@ import (
 	"time"
 
 	"github.com/andreas-jonsson/openwar/game/unit"
+	"github.com/andreas-jonsson/openwar/network"
 	"github.com/andreas-jonsson/openwar/platform"
 	"github.com/andreas-jonsson/openwar/resource"
 )
@@ -45,6 +46,7 @@ type playState struct {
 
 	ter   terrain
 	units *unit.Manager
+	net   *network.Manager
 	res   resource.Resources
 }
 
@@ -61,12 +63,20 @@ func NewPlayState(g *Game) GameState {
 
 	unitManager := unit.NewManager(&g.resources, ter.terrainPalette())
 
+	/*
+		netManager, err := setupNetwork()
+		if err != nil {
+			log.Panicln("could not create network game")
+		}
+	*/
+
 	return &playState{
 		g:     g,
 		p:     newPlay(g, unitManager, race, ter.terrainPalette()),
 		res:   g.resources,
 		ter:   ter,
 		units: unitManager,
+		//net:   netManager,
 	}
 }
 
