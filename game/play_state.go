@@ -62,7 +62,13 @@ func NewPlayState(g *Game) GameState {
 	}
 
 	unitManager := unit.NewManager(&g.resources, ter.terrainPalette())
-	netManager := setupNetwork()
+
+	/*
+		netManager, err := setupNetwork()
+		if err != nil {
+			log.Panicln("could not create network game")
+		}
+	*/
 
 	return &playState{
 		g:     g,
@@ -70,7 +76,7 @@ func NewPlayState(g *Game) GameState {
 		res:   g.resources,
 		ter:   ter,
 		units: unitManager,
-		net:   netManager,
+		//net:   netManager,
 	}
 }
 

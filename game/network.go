@@ -17,8 +17,34 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 package game
 
-import "github.com/andreas-jonsson/openwar/network"
+import (
+	"net"
 
-func setupNetwork() *network.Manager {
-	return nil
+	"github.com/andreas-jonsson/openwar/network"
+)
+
+func setupNetwork(addrs []net.TCPAddr, listenPort int) (*network.Manager, error) {
+	/*
+		l, err := net.Listen("tcp4", fmt.Sprintf(":%d", listenPort))
+		if err != nil {
+			return nil, err
+		}
+
+		incommingChan := make(chan net.Conn, len(addrs))
+		go func() {
+			for _, addr := range addrs {
+				conn, err := l.Accept()
+				if err != nil {
+					close(incommingChan)
+					return
+				}
+				incommingChan <- conn
+			}
+		}()
+
+		for _, addr := range addrs {
+
+		}
+	*/
+	return nil, nil
 }
