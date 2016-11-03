@@ -104,9 +104,15 @@ func (s *playState) Exit(to GameState) error {
 
 func (s *playState) Update() error {
 	g := s.g
-	g.PollAll()
+	hud := s.p.hud
 
-	if pos, updateCamera := s.p.hud.handleMouse(platform.Mouse()); updateCamera {
+	for ev := g.PollEvent(); ev != nil; ev = g.PollEvent() {
+		if mbe, ok := ev.(*platform.MouseButtonEvent); ok {
+			hud.handleMouseButton(mbe)
+		}
+	}
+
+	if pos, updateCamera := hud.handleMouse(platform.Mouse()); updateCamera {
 		s.cameraX = float64(pos.X)
 		s.cameraY = float64(pos.Y)
 	}

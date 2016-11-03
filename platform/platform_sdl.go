@@ -163,7 +163,15 @@ func PollEvent() Event {
 		ev.Button = int(t.Button)
 		ev.X = int(t.X)
 		ev.Y = int(float64(t.Y) * ScreenScale)
-		ev.Type = int(t.Type)
+
+		switch t.Type {
+		case sdl.MOUSEBUTTONDOWN:
+			ev.Type = MouseButtonDown
+		case sdl.MOUSEBUTTONUP:
+			ev.Type = MouseButtonUp
+		case sdl.MOUSEWHEEL:
+			ev.Type = MouseWheel
+		}
 		return ev
 	case *sdl.MouseMotionEvent:
 		ev := &MouseMotionEvent{}
