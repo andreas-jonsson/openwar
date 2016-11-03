@@ -38,7 +38,9 @@ type (
 
 		viewportBounds,
 		miniMapViewportBounds image.Rectangle
-		minimapFocus bool
+
+		minimapFocus,
+		viewportFocus bool
 
 		humanGfx, orcGfx map[string]image.Point
 	}
@@ -113,10 +115,22 @@ func (hud *gameHudImpl) viewport() image.Rectangle {
 func (hud *gameHudImpl) handleMouseButton(ev *platform.MouseButtonEvent) {
 	bounds := minimapRect()
 
-	if ev.Type == platform.MouseButtonDown && (image.Point{ev.X, ev.Y}).In(bounds) {
-		hud.minimapFocus = true
-	} else if ev.Type == platform.MouseButtonUp {
-		hud.minimapFocus = false
+	if ev.Type == platform.MouseButtonDown {
+		pos := image.Point{ev.X, ev.Y}
+		if pos.In(bounds) {
+			hud.minimapFocus = true
+			return
+		} else if pos.In(hud.viewportBounds) {
+			hud.viewportFocus = true
+			return
+		}
+	}
+
+	hud.minimapFocus = false
+	if hud.viewportFocus {
+		hud.viewportFocus = false
+
+		// Retrive selection
 	}
 }
 
