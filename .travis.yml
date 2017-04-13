@@ -47,15 +47,15 @@ script:
     #- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then ./tools/dropbox/dropbox_uploader.sh upload openwar.js Public && ./tools/dropbox/dropbox_uploader.sh upload openwar.js.map Public; fi
 
 deploy:
-      provider: releases
-      api_key:
-          secure: Z3YiITEQs6Yncy6hl6CO62JRivun1tAQF0K7EwQm+QMxrDxY1uEfoZBKcnOH/pw7SDpqdnRTUzV4vR41ek6Fy73Q5Kq5A7f1LWEQjc6YjKoDuE4lYNV4WiGJcjCmTjHPfA5zquutjq7mmg+i1Ljp2jxtf51cSlaQYdtyLP2oUU9zQsyaS51GANtINZYzSnK5KfT5z6QXzRJXSYf6WGGrd2i5Z5GRalh0lEnfGHBCaLASpmr1Zc7q7kkMl5f2B+bSWUGFO0Tc7NGlr2TsXC6BLh1NYD1sxyiScmqFO1l6fAEWoXd/ybUafmVmwUolFXV7yqflTRckkfyYuMNma3biXhNt694oYPm9/zvq3scNNv6krXTbMmW73Qn3xLZh2eVZ+neRhHn8GGqlQrglokS7GGVTvM1VY7T0MBZfixNL+TxTT/B0Mdgu6zwkglQDL6L+5CBDl4Z5+TT/PcYJBwcWI+OtzBcRcnldxXeVqnSghfAH0LRbiJMRZzdG1CF9pRyDsKrgYQdoOfDp9Zr1U3YUh1DE1jwF6b3tippecSSUCbA/vmCzstFhqrlcpjqufxWTOV3MSDkVy2+KACTJmehVoYzdtK3ELWwrDIN9xyU9IS0L9HT2GzhKiskbdx73S9NBJOlMXg55edzjdPr8P+DjfR5c5SEdeTrSjqbM8LzZnKU=
-      file:
-          #- openwar_$OPENWAR_VERSION.deb
-          #- OpenWar.zip
-          - README.md
-      skip_cleanup: true
-      overwrite: true
-      on:
-          tags: false
-          repo: andreas-jonsson/openwar
+    provider: releases
+    api_key:
+        secure: "JJ5d8VtxmX8MyMwszXlWiDl4Iu2YWJW75WCQnIOM2LjU2RPpu3ORJjHjBPW/l6MiWt/iwrXIm/IYAUbU95EI9QWlpj2P8SZ9pyQsHKT405t51YVrVn5EWR6T7IAeIYQb5ohKIEGQUscah+X211VmE35cic41/Sxqd8LdOCM/ZLoV7uvoO0Avfk70zAT1rZOLPoSal9hiRHmhMBgrJ069frYV0Z4AKgQU2evryP484uUnSmRhNSkPiv+r19GF2aygH8RJJahrOY5TGkG5sXuADIBlEgN+f1dM3Rr5tCjo/wfXIffW99hGhchji+m2rti+E+UChx9Ou76qCcVXudYM9lsjM7pPVMRN7XI6Zi8Z13kCznj8V2oeMTvedDVEB1QiAX6t2LPNEglUfyIwteunUlGKg7Mztg2DodqhQ0VJbxBhJXqdCx4IY1YHLzsMKK+s0521OLyMx+aXRcX/o2ZvavcEX+ePlDFouk6JBDnvgoIupLC53eF8pxI5sp5n1XXvRmP6nK4YhjWZrBXFt9pap91L1D4JoyrUXnBIzwMf3fUAbqxAUbMSW4YP51aFz1eAgw2EyRMiyXwaZ59tY8QcsVZDMELTUM3z9Js7MZRuIna5R0/eYwsgQQJvmvFIVlx+L3cmBYxLvsshDvXEda7OHyDOAv74Jfswv1vlLaicMQA="
+    file:
+        #- openwar_$OPENWAR_VERSION.deb
+        #- OpenWar.zip
+        - README.md
+    skip_cleanup: true
+    overwrite: true
+    on:
+        tags: false
+        repo: andreas-jonsson/openwar
