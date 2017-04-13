@@ -54,6 +54,9 @@ deploy:
       file:
           - openwar_$OPENWAR_VERSION.deb
           - OpenWar.zip
+          - README.md
       skip_cleanup: true
+      overwrite: true
       on:
           tags: true
+          repo: andreas-jonsson/openwar
