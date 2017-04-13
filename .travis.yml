@@ -48,15 +48,14 @@ script:
 
 deploy:
     provider: releases
-    file:
-        #- openwar_$OPENWAR_VERSION.deb
-        #- OpenWar.zip
-        - README.md
     skip_cleanup: true
     overwrite: true
     prerelease: true
+    api_key:
+        secure: fk34yPXR/uvnwSwyJaOBMdWOjDu/r3lCqljIYsivv6vqSRFIwKUXogHqSKQWbipK2wV4pI5btY0zQG+Tv9K37mVG3y+jJM+DtCjhVeiVNIpOJSm23YE5tH5EB3ozVW86wutvvbxIUH1fDrtErucCk9lZJbNOR9EM818fOOf4H3xwAanIQrvSrmOK3NW4FReNvLR/uykcnuUVsTym3NjRV5ByS/vG/zJEkBynGmRhw4VKNf+U/J24/escuuZhRAiXaY/U9QES04qA05GzciPVf2D1HadEC6PmCOdpvnwOq1UY/xsd7zUDSiYzdX3XiO9SzR4BD18W3MFvaewWXqYb6mmf6PhanZSg6wD78BvtgpIVbx092HWRm51GTRZZ6QTBRV/YJDay06qOR2F9+Yk5LD1X4n6XjmE/E/ygkQBZGNmbReZIrYbSTINBrESPfvsd1AI3wkOyPMvZw5gYVvnsCqZLbqvjyDmvYoRhoqXSSTRMDzSuHjHUCS04pWzSH7mMWJC7DKg9xO8vcVXf8zf4HsXM0/KHHpbkWqDj/e+WDA05gm3i1oXQzEzeD3CTVe5GmM7zSFJqWqngh4JqKPG/EEvgkMuVKpFUUXiAANSqP7Zoqqb9ezOGDznzuJA+din2iXLEJ+wqzbJpaTC06nBzE9qp6439I0WYQbouhofnP6M=
+    file: README.md
+        #- openwar_$OPENWAR_VERSION.deb
+        #- OpenWar.zip
     on:
         tags: false
         repo: andreas-jonsson/openwar
-    api-key:
-        secure: NoWX5qDkRyayNXBlesH5sgcNYtxOdYLp5LK6Fmk93dLxSy69nAzUJsYTC5Sscv3XRwn0FeMbaos8vaip06JAxpxBWrKPvqNG1f4M5cMHY8Pmn9jaSknQbW+6Mdi8Opa6oEJzFRNd5Tc4S6wt7wzvByZyA9rZFdYLbOdxsI+oOWEXtkHPtf+Va9NlaERBhukEU7vmE553JzP6P/urEH3jjPcR9Z7f5Q3IoVUkRFHp+9oUWf/GPTJ/XMbmG5LKLGNqpGT4IF7zXsnocniB2HGsB+bXk93+5X8q7zD7HLb/EkRYD+GetCeWnEUYXHICumy37Dbpk4vJ3r82yPYPG0ngiVFaS8vorP3NV/HYNV72vDlltHGSJyE5dxvfBRedvFsg/lDO/Uo4jPx0rRd19kRPdk012kMMVADxAfjdCw0Xba7b6Jh0eEMKVFswGFcSxSzw6A9cwJhBfI01aKe9fgfVtHFlH1k1TxqUAmCeYBQZxGCqS6DiYJfkjYk5XaEhPUMgApCE4+awxgeQUnGagFw6AcyseCS17dfydz6unW68/axdzAEYsNDT62zMgar3DME8kY0dKZbiu5fjQqkC/yXwQ37fxotAiPgwnuQpe7uHC3khFSltgy/+xWFouTkr5I922ygSPz/YRbx74n2vnZcsJIqpm2M+1/4g5ivorWthOzY=
