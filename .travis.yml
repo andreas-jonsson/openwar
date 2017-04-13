@@ -13,11 +13,10 @@ notifications:
         on_success: never
         on_failure: always
 
-env:
-    - OPENWAR_VERSION=0.0.1
-    - NDK_VERSION=r10e
-
 install:
+    - export NDK_VERSION=r10e
+    - export OPENWAR_VERSION=0.0.1
+
     - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install dylibbundler; fi
     - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install -y rpl; fi
 
