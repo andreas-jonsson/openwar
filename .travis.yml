@@ -22,8 +22,8 @@ install:
 
     - export SDL_PREFIX=/usr/local && ./tools/sdl_from_source.sh
 
-    #- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then go get golang.org/x/mobile/cmd/gomobile && go get github.com/gopherjs/gopherjs; fi
-    #- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then gomobile init; fi
+    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then go get golang.org/x/mobile/cmd/gomobile && gomobile init; fi
+    # - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then go get github.com/gopherjs/gopherjs; fi
 
     - go get -v
 
@@ -33,7 +33,7 @@ script:
     - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then ./tools/package/build_app.sh; fi
 
     - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then ./tools/package/build_deb.sh; fi
-    # - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then cp ./tools/package/AndroidManifest.xml ./ && gomobile build -target=android -tags=mobile; fi
+    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then cp ./tools/package/AndroidManifest.xml ./ && gomobile build -target=android -tags=mobile; fi
     # - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then $GOPATH/bin/gopherjs build openwar.go; fi
 
 before_deploy:
