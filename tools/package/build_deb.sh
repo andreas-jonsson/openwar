@@ -1,6 +1,7 @@
 #!/bin/bash
 
-DIR=openwar_0.0.1-$TRAVIS_BUILD_NUMBER
+#DIR=openwar_0.0.1-$TRAVIS_BUILD_NUMBER
+DIR=openwar_0.0.1
 
 if [ -d "$DIR" ]; then rm -rf "$DIR"; fi
 cp -r "tools/package/openwar_0.0.1-x" $DIR
