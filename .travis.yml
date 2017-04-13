@@ -22,8 +22,6 @@ env:
     - OPENWAR_VERSION=0.0.1
 
 install:
-    #- '[ "$TRAVIS_SECURE_ENV_VARS" == "false" ] || openssl aes-256-cbc -K $encrypted_2a6a96d3c45a_key -iv $encrypted_2a6a96d3c45a_iv -in tools/dropbox/.dropbox_uploader.enc -out ~/.dropbox_uploader -d'
-
     - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install dylibbundler; fi
     - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install -y rpl; fi
 
