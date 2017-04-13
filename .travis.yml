@@ -53,8 +53,8 @@ deploy:
     api_key:
         secure: fk34yPXR/uvnwSwyJaOBMdWOjDu/r3lCqljIYsivv6vqSRFIwKUXogHqSKQWbipK2wV4pI5btY0zQG+Tv9K37mVG3y+jJM+DtCjhVeiVNIpOJSm23YE5tH5EB3ozVW86wutvvbxIUH1fDrtErucCk9lZJbNOR9EM818fOOf4H3xwAanIQrvSrmOK3NW4FReNvLR/uykcnuUVsTym3NjRV5ByS/vG/zJEkBynGmRhw4VKNf+U/J24/escuuZhRAiXaY/U9QES04qA05GzciPVf2D1HadEC6PmCOdpvnwOq1UY/xsd7zUDSiYzdX3XiO9SzR4BD18W3MFvaewWXqYb6mmf6PhanZSg6wD78BvtgpIVbx092HWRm51GTRZZ6QTBRV/YJDay06qOR2F9+Yk5LD1X4n6XjmE/E/ygkQBZGNmbReZIrYbSTINBrESPfvsd1AI3wkOyPMvZw5gYVvnsCqZLbqvjyDmvYoRhoqXSSTRMDzSuHjHUCS04pWzSH7mMWJC7DKg9xO8vcVXf8zf4HsXM0/KHHpbkWqDj/e+WDA05gm3i1oXQzEzeD3CTVe5GmM7zSFJqWqngh4JqKPG/EEvgkMuVKpFUUXiAANSqP7Zoqqb9ezOGDznzuJA+din2iXLEJ+wqzbJpaTC06nBzE9qp6439I0WYQbouhofnP6M=
     file:
-        - openwar_$OPENWAR_VERSION.deb
-        - OpenWar.zip
+        - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; openwar_$OPENWAR_VERSION.deb; fi
+        - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; OpenWar.zip; fi
     on:
         tags: true
         repo: andreas-jonsson/openwar
