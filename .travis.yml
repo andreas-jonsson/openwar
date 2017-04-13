@@ -51,11 +51,11 @@ deploy:
       api_key:
           secure: Z3YiITEQs6Yncy6hl6CO62JRivun1tAQF0K7EwQm+QMxrDxY1uEfoZBKcnOH/pw7SDpqdnRTUzV4vR41ek6Fy73Q5Kq5A7f1LWEQjc6YjKoDuE4lYNV4WiGJcjCmTjHPfA5zquutjq7mmg+i1Ljp2jxtf51cSlaQYdtyLP2oUU9zQsyaS51GANtINZYzSnK5KfT5z6QXzRJXSYf6WGGrd2i5Z5GRalh0lEnfGHBCaLASpmr1Zc7q7kkMl5f2B+bSWUGFO0Tc7NGlr2TsXC6BLh1NYD1sxyiScmqFO1l6fAEWoXd/ybUafmVmwUolFXV7yqflTRckkfyYuMNma3biXhNt694oYPm9/zvq3scNNv6krXTbMmW73Qn3xLZh2eVZ+neRhHn8GGqlQrglokS7GGVTvM1VY7T0MBZfixNL+TxTT/B0Mdgu6zwkglQDL6L+5CBDl4Z5+TT/PcYJBwcWI+OtzBcRcnldxXeVqnSghfAH0LRbiJMRZzdG1CF9pRyDsKrgYQdoOfDp9Zr1U3YUh1DE1jwF6b3tippecSSUCbA/vmCzstFhqrlcpjqufxWTOV3MSDkVy2+KACTJmehVoYzdtK3ELWwrDIN9xyU9IS0L9HT2GzhKiskbdx73S9NBJOlMXg55edzjdPr8P+DjfR5c5SEdeTrSjqbM8LzZnKU=
       file:
-          - openwar_$OPENWAR_VERSION.deb
-          - OpenWar.zip
+          #- openwar_$OPENWAR_VERSION.deb
+          #- OpenWar.zip
           - README.md
       skip_cleanup: true
       overwrite: true
       on:
-          tags: true
+          tags: false
           repo: andreas-jonsson/openwar
