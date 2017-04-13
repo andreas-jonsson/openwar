@@ -37,3 +37,16 @@ after_build:
 artifacts:
     # - path: openwar-%APPVEYOR_BUILD_VERSION%-win64.exe
     - path: openwar-0.0.1-win64.exe
+
+deploy:
+    # release: myproduct-v$(appveyor_build_version)
+    description: 'Windows release'
+    provider: GitHub
+    auth_token:
+        secure: tIlnLG7PbcjIDRCmagHNpJ8DdhKpZ9DBsHOypQJHO0ma5Nz3WWu6F4klCOuaNOSd
+    artifact: openwar-0.0.1-win64.exe
+    draft: false
+    prerelease: true
+    on:
+        # branch: master
+        appveyor_repo_tag: true
