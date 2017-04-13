@@ -39,8 +39,7 @@ artifacts:
     - path: openwar-0.0.1-win64.exe
 
 deploy:
-    # release: myproduct-v$(appveyor_build_version)
-    description: 'Windows release'
+    description: 'OpenWar'
     provider: GitHub
     auth_token:
         secure: tIlnLG7PbcjIDRCmagHNpJ8DdhKpZ9DBsHOypQJHO0ma5Nz3WWu6F4klCOuaNOSd
@@ -48,5 +47,4 @@ deploy:
     draft: false
     prerelease: true
     on:
-        # branch: master
         appveyor_repo_tag: true
