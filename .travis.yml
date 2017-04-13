@@ -54,8 +54,9 @@ deploy:
         - README.md
     skip_cleanup: true
     overwrite: true
+    prerelease: true
     on:
         tags: false
         repo: andreas-jonsson/openwar
     api-key:
-        secure: "LQO4pK+Cq31JIBV9U9qGkPjxTDnj+vc7xgOxQ/LhI7QCbGLAaW2+GjI/1cf60JukIeVIwjWnPjpLE/Foeoy4krpuKjRUsouoBOEDit36bITsxQvpExLYBnOAcFGiZOojmHOGT3L7+KNlEdkdv7ZpN0zSrzaBJzzKmTxrMxNLoZmQwZTB6v1NGDXa71LHZBVcxh77iWiUR0J7pmU6lunflemYmxpcYpiJOpyPQUlNZl8CHupchcmwwkN9pi26W6rqp38IEqvDWnD3jMNGnY+rUUCVuc2ItwPxGTpvAVQnUs9iuNlWyX0tSc5tt4S2i0H9wRFVG1Spa3AbA6uD5kKxwC1+zCefZCmo1+HJhAbmAXG/AXvqKfq9OioFDOKNm8pRr7VYGbbHcCwrqNkW33P+E6L3kyNHp7X1x4X/4HxTFZrCyUarNvgh1tA1lbw2/LpdFmpWxX1U3yFXxAvnkXW2uKNM/lmaCvmIgdUdZuU1WHzZdIeUsMoq4dc1IdYI+NRVoaTT+6mMe5ijmnxOnBmScVZD55GjJwt+9BKrwpxNgOamAN6sJGuW0CfglEYnWZQJw9DE/JLoZI8bPrshNMaHuGE1cHrMcIns3XQPRxnmxKradknvKs3hfif1KKphkHyzjFqxuubjAsmUbMBtOGLbi3z2cFKRKUwTkySfwRjQU1E="
+        secure: NoWX5qDkRyayNXBlesH5sgcNYtxOdYLp5LK6Fmk93dLxSy69nAzUJsYTC5Sscv3XRwn0FeMbaos8vaip06JAxpxBWrKPvqNG1f4M5cMHY8Pmn9jaSknQbW+6Mdi8Opa6oEJzFRNd5Tc4S6wt7wzvByZyA9rZFdYLbOdxsI+oOWEXtkHPtf+Va9NlaERBhukEU7vmE553JzP6P/urEH3jjPcR9Z7f5Q3IoVUkRFHp+9oUWf/GPTJ/XMbmG5LKLGNqpGT4IF7zXsnocniB2HGsB+bXk93+5X8q7zD7HLb/EkRYD+GetCeWnEUYXHICumy37Dbpk4vJ3r82yPYPG0ngiVFaS8vorP3NV/HYNV72vDlltHGSJyE5dxvfBRedvFsg/lDO/Uo4jPx0rRd19kRPdk012kMMVADxAfjdCw0Xba7b6Jh0eEMKVFswGFcSxSzw6A9cwJhBfI01aKe9fgfVtHFlH1k1TxqUAmCeYBQZxGCqS6DiYJfkjYk5XaEhPUMgApCE4+awxgeQUnGagFw6AcyseCS17dfydz6unW68/axdzAEYsNDT62zMgar3DME8kY0dKZbiu5fjQqkC/yXwQ37fxotAiPgwnuQpe7uHC3khFSltgy/+xWFouTkr5I922ygSPz/YRbx74n2vnZcsJIqpm2M+1/4g5ivorWthOzY=
