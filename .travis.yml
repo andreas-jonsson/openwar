@@ -37,9 +37,12 @@ script:
     - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then ./tools/package/build_deb.sh; fi
     - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then cp ./tools/package/AndroidManifest.xml ./ && gomobile build -target=android -tags=mobile; fi
     # - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then $GOPATH/bin/gopherjs build openwar.go; fi
+    
+    - ls
 
 before_deploy:
-    - export FINAL_PACKAGE=$(ls openwar_*.deb openwar.apk OpenWar.zip)
+    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then export FINAL_PACKAGE=OpenWar.zip; fi
+    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then export FINAL_PACKAGE=$(ls openwar_*.deb openwar.apk); fi
     - echo "deploying $FINAL_PACKAGE to GitHub releases"
 
 deploy:
