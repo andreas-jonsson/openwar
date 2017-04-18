@@ -24,7 +24,7 @@ install:
     - ./tools/sdl_from_source.sh
     - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then ./tools/install_ndk.sh; fi
 
-    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then go get golang.org/x/mobile/cmd/gomobile && gomobile init; fi
+    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then go get golang.org/x/mobile/cmd/gomobile && gomobile init -ndk ~/android-ndk-r10e; fi
     # - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then go get github.com/gopherjs/gopherjs; fi
 
     - go get -v
