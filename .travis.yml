@@ -40,7 +40,7 @@ script:
 
 before_deploy:
     - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then export FINAL_PACKAGE=OpenWar.zip; fi
-    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then export FINAL_PACKAGE=$(ls -b openwar_*.deb openwar.apk); fi
+    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then export FINAL_PACKAGE=$(ls openwar_*.deb openwar.apk | tr '\n' ' '); fi
     - echo "deploying $FINAL_PACKAGE to GitHub releases"
 
 deploy:
