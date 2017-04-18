@@ -39,8 +39,8 @@ script:
     # - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then $GOPATH/bin/gopherjs build openwar.go; fi
 
 before_deploy:
-    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then export FINAL_PACKAGE=openwar_$OPENWAR_VERSION.deb; fi
-    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then export FINAL_PACKAGE=OpenWar.zip; fi
+    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then export FINAL_PACKAGE="openwar_$OPENWAR_VERSION.deb openwar.apk"; fi
+    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then export FINAL_PACKAGE="OpenWar.zip"; fi
 
 deploy:
     provider: releases
