@@ -14,7 +14,7 @@ notifications:
         on_failure: always
 
 install:
-    - export NDK_VERSION=r10e
+    - export NDK_VERSION=r14b
     - export OPENWAR_VERSION=0.0.1
     - export SDL_PREFIX=/usr/local
 
