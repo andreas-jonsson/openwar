@@ -36,14 +36,14 @@ after_build:
 
 artifacts:
     # - path: openwar-%APPVEYOR_BUILD_VERSION%-win64.exe
-    - path: openwar-0.0.1-win64.exe
+    - path: openwar_0.0.1.exe
 
 deploy:
     description: 'OpenWar'
     provider: GitHub
     auth_token:
         secure: tIlnLG7PbcjIDRCmagHNpJ8DdhKpZ9DBsHOypQJHO0ma5Nz3WWu6F4klCOuaNOSd
-    artifact: openwar-0.0.1-win64.exe
+    artifact: openwar_0.0.1.exe
     draft: false
     prerelease: true
     on:
