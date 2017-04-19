@@ -25,11 +25,11 @@ brew tap andreas-jonsson/tap
 brew install openwar
 ```
 
-Or the good old fashioned way.
+or the good old fashioned way.
 
 ```bash
 # Start by installing all external dependencies:
-# GCC/LLVM/Mingw, Go1.6, Git, SDL2, SDL2_mixer (with Timidity support).
+# GCC/LLVM/Mingw, Go1.8, Git, SDL2, SDL2_mixer (with Timidity support).
 
 export GOPATH=$HOME                               # Make sure you have a GOPATH set to your Go workspace.
 go get github.com/andreas-jonsson/openwar         # Download the project using Go.
