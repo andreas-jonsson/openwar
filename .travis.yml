@@ -8,9 +8,6 @@ os:
     - linux
     - osx
 
-dist: trusty
-sudo: required
-
 notifications:
     email:
         on_success: never
@@ -22,7 +19,7 @@ install:
     - export SDL_PREFIX=/usr/local
 
     - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install dylibbundler; fi
-    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install -y rpl snapcraft; fi
+    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install -y rpl; fi
 
     - ./tools/sdl_from_source.sh
     - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then source ./tools/install_ndk.sh; fi
@@ -37,7 +34,7 @@ script:
 
     - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then ./tools/package/build_app.sh; fi
 
-    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then ./tools/package/build_snap.sh; fi
+    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then ./tools/package/build_deb.sh; fi
     - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then cp ./tools/package/AndroidManifest.xml ./ && gomobile build -o openwar_$OPENWAR_VERSION.apk -target=android -tags=mobile; fi
     # - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then $GOPATH/bin/gopherjs build openwar.go; fi
 
