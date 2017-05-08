@@ -18,7 +18,6 @@ install:
     - go env
 
     - 7z x %APPVEYOR_BUILD_FOLDER%\tools\build\dependencies.7z -o%APPVEYOR_BUILD_FOLDER%\tools\package
-    # - 7z x %APPVEYOR_BUILD_FOLDER%\tools\build\inno.7z -o"c:\Program Files (x86)"
     - 7z x %APPVEYOR_BUILD_FOLDER%\tools\build\TDM-GCC-64.7z -oc:\
 
     - set PATH="c:\Program Files (x86)\Inno Setup 5";"%GOPATH%\bin";c:\TDM-GCC-64\bin;%PATH%
