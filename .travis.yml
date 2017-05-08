@@ -19,7 +19,7 @@ install:
     - export SDL_PREFIX=/usr/local
 
     - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install dylibbundler; fi
-    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install -y rpl; fi
+    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install -y rpl snapcraft; fi
 
     - ./tools/sdl_from_source.sh
     - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then source ./tools/install_ndk.sh; fi
