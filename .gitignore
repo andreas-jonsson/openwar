@@ -25,8 +25,6 @@ _testmain.go
 
 .DS_Store
 
-prime/**
-stage/**
 img/**
 archive/**
 tools/package/dependencies/**
@@ -36,5 +34,3 @@ openwar
 *.WAR
 *.syso
 *.apk
-
-*.snap
