@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2016-2017 Andreas T Jonsson
+Copyright (C) 2016-2018 Andreas T Jonsson
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -19,5 +19,4 @@ package game
 
 var Authors = []string{
 	"Andreas T Jonsson",
-	"Joakim Jonsson",
 }
