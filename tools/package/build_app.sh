@@ -6,5 +6,5 @@ cp -r "tools/package/OpenWar.app" OpenWar.app
 cp openwar OpenWar.app/Contents/MacOS
 dylibbundler -od -b -x OpenWar.app/Contents/MacOS/openwar -d OpenWar.app/Contents/libs
 
-zip -rq openwar_${OPENWAR_VERSION}_osx.zip OpenWar.app
+zip -rq openwar_${OPENWAR_VERSION}.zip OpenWar.app
 rm -rf OpenWar.app
