@@ -1,8 +1,7 @@
 # OpenWar
 
 [![OSX & Linux Build](https://travis-ci.org/andreas-jonsson/openwar.svg?branch=master)](https://travis-ci.org/andreas-jonsson/openwar) [![Windows Build](https://ci.appveyor.com/api/projects/status/erhgfi08p3amtaec?svg=true)](https://ci.appveyor.com/project/andreas-t-jonsson/openwar)
-[![Donate](https://img.shields.io/badge/donate-Gratipay-yellow.svg)](https://gratipay.com/OpenWar)
-[![Website](https://img.shields.io/badge/project-website-red.svg)](http://www.openwar.io)
+[![Donate](https://img.shields.io/badge/donate-itch.io-red.svg)](http://www.openwar.io)
 
 ## About
 
