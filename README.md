@@ -1,3 +1,5 @@
+### This project has moved to [https://gitlab.com/openwar/openwar](https://gitlab.com/openwar/openwar).
+
 # OpenWar
 
 [![OSX & Linux Build](https://travis-ci.org/andreas-jonsson/openwar.svg?branch=master)](https://travis-ci.org/andreas-jonsson/openwar) [![Windows Build](https://ci.appveyor.com/api/projects/status/erhgfi08p3amtaec?svg=true)](https://ci.appveyor.com/project/andreas-t-jonsson/openwar)
