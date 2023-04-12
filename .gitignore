@@ -3,6 +3,10 @@
 /.vscode
 
 *.war
+*.WAR
 
 /Makefile
 /*.make
+
+openwar_libretro.so
+openwar_libretro.dll
